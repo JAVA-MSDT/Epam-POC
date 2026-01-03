@@ -1,0 +1,13 @@
+server:
+  port: 8080
+
+elasticsearch:
+  host: localhost
+  port: 9200
+
+langchain4j:
+  openai:
+    api-key: YOUR_OPENAI_API_KEY
+
+codebase:
+  path: src/main/java
