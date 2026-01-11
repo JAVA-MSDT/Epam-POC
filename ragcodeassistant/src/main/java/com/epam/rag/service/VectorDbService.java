@@ -2,14 +2,13 @@ package com.epam.rag.service;
 
 import com.epam.rag.model.CodeDocument;
 import com.epam.rag.model.SearchRequest;
+import com.epam.rag.repository.VectorDbRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -17,8 +16,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class VectorDbService {
     
-    private final Map<String, CodeDocument> documentStore = new ConcurrentHashMap<>();
     private final EmbeddingService embeddingService;
+    private final VectorDbRepository vectorDbRepository;
     
     public String addDocument(CodeDocument document) {
         log.info("Adding document: {}", document.getFileName());
@@ -32,12 +31,16 @@ public class VectorDbService {
             document.setEmbeddings(embeddings);
         }
         
-        documentStore.put(document.getId(), document);
-        return document.getId();
+        // Set additional metadata
+        document.setLastModified(System.currentTimeMillis());
+        document.setLineCount(document.getContent() != null ? document.getContent().split("\n").length : 0);
+        
+        // Store in repository
+        return vectorDbRepository.store(document);
     }
     
     public CodeDocument getDocument(String id) {
-        return documentStore.get(id);
+        return vectorDbRepository.retrieve(id);
     }
     
     public void updateDocument(CodeDocument document) {
@@ -49,12 +52,17 @@ public class VectorDbService {
             document.setEmbeddings(embeddings);
         }
         
-        documentStore.put(document.getId(), document);
+        // Update metadata
+        document.setLastModified(System.currentTimeMillis());
+        document.setLineCount(document.getContent() != null ? document.getContent().split("\n").length : 0);
+        
+        // Update in repository
+        vectorDbRepository.update(document);
     }
     
     public void deleteDocument(String id) {
         log.info("Deleting document: {}", id);
-        documentStore.remove(id);
+        vectorDbRepository.delete(id);
     }
     
     public List<CodeDocument> search(SearchRequest request) {
@@ -63,7 +71,11 @@ public class VectorDbService {
         // Generate embedding for search query
         float[] queryEmbedding = embeddingService.generateEmbedding(request.getQuery());
         
-        return documentStore.values().stream()
+        // Search using repository
+        List<CodeDocument> results = vectorDbRepository.findSimilar(queryEmbedding, request.getLimit() * 2, request.getThreshold());
+        
+        // Apply additional filters and sorting
+        return results.stream()
                 .filter(doc -> request.getLanguage() == null || request.getLanguage().equals(doc.getLanguage()))
                 .filter(doc -> doc.getEmbeddings() != null)
                 .filter(doc -> {
@@ -82,7 +94,9 @@ public class VectorDbService {
     public List<CodeDocument> searchSimilar(float[] queryEmbedding, int limit, double threshold) {
         log.info("Searching for similar documents with limit: {} and threshold: {}", limit, threshold);
         
-        return documentStore.values().stream()
+        List<CodeDocument> results = vectorDbRepository.findSimilar(queryEmbedding, limit * 2, threshold);
+        
+        return results.stream()
                 .filter(doc -> doc.getEmbeddings() != null)
                 .filter(doc -> {
                     double similarity = embeddingService.calculateSimilarity(queryEmbedding, doc.getEmbeddings());
@@ -98,6 +112,14 @@ public class VectorDbService {
     }
     
     public List<CodeDocument> getAllDocuments() {
-        return List.copyOf(documentStore.values());
+        return vectorDbRepository.findAll();
+    }
+    
+    public boolean documentExists(String id) {
+        return vectorDbRepository.exists(id);
+    }
+    
+    public long getDocumentCount() {
+        return vectorDbRepository.count();
     }
 }

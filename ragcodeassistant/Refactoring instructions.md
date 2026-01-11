@@ -112,3 +112,4 @@ ragcodeassistant/
 [ONNX]     [Qdrant]  [Ollama] [JavaParser]
 ```
 
+[//]: # (in the  Refactoring instructions.md there are instructions of how to build the project as it should be, can you double check it then complete what is not finished yet)

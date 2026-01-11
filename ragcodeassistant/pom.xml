@@ -11,7 +11,7 @@
     </parent>
 
     <groupId>com.epam</groupId>
-    <artifactId>ragcodeassistant</artifactId>
+    <artifactId>rag</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -19,7 +19,6 @@
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <javaparser.version>3.25.8</javaparser.version>
-        <qdrant.version>1.7.0</qdrant.version>
         <onnxruntime.version>1.16.3</onnxruntime.version>
     </properties>
 
@@ -29,19 +28,17 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
         
         <!-- JavaParser -->
         <dependency>
             <groupId>com.github.javaparser</groupId>
             <artifactId>javaparser-core</artifactId>
             <version>${javaparser.version}</version>
-        </dependency>
-        
-        <!-- Qdrant Java Client -->
-        <dependency>
-            <groupId>io.qdrant</groupId>
-            <artifactId>client</artifactId>
-            <version>${qdrant.version}</version>
         </dependency>
         
         <!-- ONNX Runtime -->

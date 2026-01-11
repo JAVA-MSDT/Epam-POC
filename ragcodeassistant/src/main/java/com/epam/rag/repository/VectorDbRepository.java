@@ -1,56 +1,54 @@
 package com.epam.rag.repository;
 
 import com.epam.rag.model.CodeDocument;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
 @Repository
-@RequiredArgsConstructor
 @Slf4j
 public class VectorDbRepository {
     
     private final Map<String, CodeDocument> documentStore = new ConcurrentHashMap<>();
-    private final String qdrantClient; // Injected from QdrantConfig
-    private final String qdrantCollectionName; // Injected from QdrantConfig
     
     public String store(CodeDocument document) {
-        log.info("Storing document in vector database: {}", document.getId());
-        // In a real implementation, this would interact with actual Qdrant client
-        // For now, using in-memory storage as stub
+        log.debug("Storing document: {}", document.getId());
         documentStore.put(document.getId(), document);
         return document.getId();
     }
     
     public CodeDocument retrieve(String id) {
-        log.info("Retrieving document from vector database: {}", id);
         return documentStore.get(id);
     }
     
     public void update(CodeDocument document) {
-        log.info("Updating document in vector database: {}", document.getId());
         documentStore.put(document.getId(), document);
     }
     
     public void delete(String id) {
-        log.info("Deleting document from vector database: {}", id);
         documentStore.remove(id);
     }
     
     public List<CodeDocument> findSimilar(float[] queryVector, int limit, double threshold) {
-        log.info("Finding similar documents with limit: {} and threshold: {}", limit, threshold);
-        // In a real implementation, this would use Qdrant's vector similarity search
-        // For now, returning all documents as stub
-        return List.copyOf(documentStore.values());
+        if (queryVector == null) {
+            return documentStore.values().stream().limit(limit).collect(Collectors.toList());
+        }
+        
+        return documentStore.values().stream()
+            .filter(doc -> doc.getEmbeddings() != null)
+            .map(doc -> new SimilarityResult(doc, cosineSimilarity(queryVector, doc.getEmbeddings())))
+            .filter(result -> result.similarity >= threshold)
+            .sorted((a, b) -> Double.compare(b.similarity, a.similarity))
+            .limit(limit)
+            .map(result -> result.document)
+            .collect(Collectors.toList());
     }
     
     public List<CodeDocument> findAll() {
-        log.info("Retrieving all documents from vector database");
-        return List.copyOf(documentStore.values());
+        return new ArrayList<>(documentStore.values());
     }
     
     public boolean exists(String id) {
@@ -61,14 +59,33 @@ public class VectorDbRepository {
         return documentStore.size();
     }
     
-    public void createCollection() {
-        log.info("Creating collection: {}", qdrantCollectionName);
-        // In a real implementation, this would create a Qdrant collection
-        log.warn("Using stub implementation - collection creation not implemented");
+    public void clear() {
+        documentStore.clear();
     }
     
-    public void deleteCollection() {
-        log.info("Deleting collection: {}", qdrantCollectionName);
-        documentStore.clear();
+    private double cosineSimilarity(float[] a, float[] b) {
+        if (a.length != b.length) return 0.0;
+        
+        double dotProduct = 0.0;
+        double normA = 0.0;
+        double normB = 0.0;
+        
+        for (int i = 0; i < a.length; i++) {
+            dotProduct += a[i] * b[i];
+            normA += a[i] * a[i];
+            normB += b[i] * b[i];
+        }
+        
+        return dotProduct / (Math.sqrt(normA) * Math.sqrt(normB));
+    }
+    
+    private static class SimilarityResult {
+        final CodeDocument document;
+        final double similarity;
+        
+        SimilarityResult(CodeDocument document, double similarity) {
+            this.document = document;
+            this.similarity = similarity;
+        }
     }
 }

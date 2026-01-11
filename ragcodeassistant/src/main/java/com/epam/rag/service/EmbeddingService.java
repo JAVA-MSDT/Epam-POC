@@ -1,9 +1,12 @@
 package com.epam.rag.service;
 
 import ai.onnxruntime.*;
+import com.epam.rag.config.EmbeddingConfig;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.PreDestroy;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,24 +16,25 @@ import java.util.Map;
 @Slf4j
 public class EmbeddingService {
     
-    private static final int EMBEDDING_DIMENSION = 384; // MiniLM embedding size
+    private final EmbeddingConfig embeddingConfig;
     private OrtEnvironment env;
     private OrtSession session;
-    private final String modelPath = "models/sentence-transformers-all-MiniLM-L6-v2.onnx";
     
-    public EmbeddingService() {
+    @Autowired
+    public EmbeddingService(EmbeddingConfig embeddingConfig) {
+        this.embeddingConfig = embeddingConfig;
         initializeModel();
     }
     
     private void initializeModel() {
         try {
             env = OrtEnvironment.getEnvironment();
-            Path path = Paths.get(modelPath);
+            Path path = Paths.get(embeddingConfig.getModelPath());
             if (Files.exists(path)) {
-                session = env.createSession(modelPath, new OrtSession.SessionOptions());
-                log.info("ONNX model loaded successfully from: {}", modelPath);
+                session = env.createSession(embeddingConfig.getModelPath(), new OrtSession.SessionOptions());
+                log.info("ONNX model loaded successfully from: {}", embeddingConfig.getModelPath());
             } else {
-                log.warn("ONNX model not found at: {}. Using stub implementation.", modelPath);
+                log.warn("ONNX model not found at: {}. Using stub implementation.", embeddingConfig.getModelPath());
             }
         } catch (Exception e) {
             log.error("Failed to initialize ONNX model: {}", e.getMessage());
@@ -62,7 +66,7 @@ public class EmbeddingService {
     
     private long[] tokenize(String text) {
         String[] words = text.toLowerCase().split("\\s+");
-        long[] tokens = new long[Math.min(words.length, 512)];
+        long[] tokens = new long[Math.min(words.length, embeddingConfig.getMaxSequenceLength())];
         for (int i = 0; i < tokens.length; i++) {
             tokens[i] = Math.abs(words[i].hashCode()) % 30000;
         }
@@ -70,29 +74,49 @@ public class EmbeddingService {
     }
     
     private float[] generateStubEmbedding(String text) {
-        log.info("Generating stub embedding for text of length: {}", text.length());
-        float[] embedding = new float[EMBEDDING_DIMENSION];
+        log.debug("Generating stub embedding for text of length: {}", text.length());
+        float[] embedding = new float[embeddingConfig.getDimension()];
         int hash = text.hashCode();
-        for (int i = 0; i < EMBEDDING_DIMENSION; i++) {
+        for (int i = 0; i < embeddingConfig.getDimension(); i++) {
             embedding[i] = (float) Math.sin(hash + i) * 0.1f;
         }
         return embedding;
     }
     
     public float[] generateCodeEmbedding(String code, String language) {
-        log.info("Generating code embedding for {} code", language);
+        log.debug("Generating code embedding for {} code", language);
         String processedCode = preprocessCode(code, language);
         return generateEmbedding(processedCode);
     }
     
     private String preprocessCode(String code, String language) {
-        return code.replaceAll("//.*", "")
-                  .replaceAll("/\\*[\\s\\S]*?\\*/", "")
-                  .replaceAll("\\s+", " ")
-                  .trim();
+        if (code == null) {
+            return "";
+        }
+        
+        // Remove comments and normalize whitespace
+        String processed = code
+                .replaceAll("//.*", "")
+                .replaceAll("/\\*[\\s\\S]*?\\*/", "")
+                .replaceAll("\\s+", " ")
+                .trim();
+        
+        // Language-specific preprocessing
+        if ("java".equalsIgnoreCase(language)) {
+            // Remove package and import statements for better semantic matching
+            processed = processed.replaceAll("package\\s+[\\w\\.]+;?", "")
+                               .replaceAll("import\\s+[\\w\\.\\*]+;?", "")
+                               .trim();
+        }
+        
+        return processed;
     }
     
     public double calculateSimilarity(float[] embedding1, float[] embedding2) {
+        if (embedding1 == null || embedding2 == null) {
+            return 0.0;
+        }
+        
         if (embedding1.length != embedding2.length) {
             throw new IllegalArgumentException("Embeddings must have the same dimension");
         }
@@ -107,13 +131,21 @@ public class EmbeddingService {
             norm2 += embedding2[i] * embedding2[i];
         }
         
-        return dotProduct / (Math.sqrt(norm1) * Math.sqrt(norm2));
+        double denominator = Math.sqrt(norm1) * Math.sqrt(norm2);
+        return denominator == 0.0 ? 0.0 : dotProduct / denominator;
     }
     
+    @PreDestroy
     public void close() {
         try {
-            if (session != null) session.close();
-            if (env != null) env.close();
+            if (session != null) {
+                session.close();
+                log.info("ONNX session closed");
+            }
+            if (env != null) {
+                env.close();
+                log.info("ONNX environment closed");
+            }
         } catch (Exception e) {
             log.error("Error closing ONNX resources: {}", e.getMessage());
         }

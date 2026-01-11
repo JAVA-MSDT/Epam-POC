@@ -32,3 +32,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### RAG Code Assistant ###
+# ONNX models (large files)
+models/*.onnx
+# Qdrant data
+data/
+# Logs
+logs/
