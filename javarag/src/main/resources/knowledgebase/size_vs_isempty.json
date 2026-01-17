@@ -1,0 +1,8 @@
+{
+  "title": "Use isEmpty() instead of size() == 0",
+  "type": "Best Practice",
+  "description": "Using isEmpty() is more readable and expressive than checking if size() equals zero. It clearly indicates the intent to check if a collection is empty.",
+  "example": "Instead of: if (list.size() == 0) Use: if (list.isEmpty())",
+  "reference": "Effective Java by Joshua Bloch",
+  "tags": ["size", "isEmpty", "collection", "readability", "best-practice"]
+}

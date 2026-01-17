@@ -61,6 +61,35 @@ public class KnowledgeBaseSearcher {
     }
 
     /**
+     * Gets all available knowledge base topics for suggestions.
+     * 
+     * @return List of available knowledge base topic titles
+     * @throws Exception If search fails
+     */
+    public List<String> getAllTopics() throws Exception {
+        List<String> topics = new ArrayList<>();
+        
+        Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
+        try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
+            IndexSearcher searcher = new IndexSearcher(reader);
+            
+            // Get all documents
+            Query query = new MatchAllDocsQuery();
+            TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
+            
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document doc = searcher.doc(scoreDoc.doc);
+                String title = doc.get("title");
+                if (title != null) {
+                    topics.add(title);
+                }
+            }
+        }
+        
+        return topics;
+    }
+
+    /**
      * Builds a multi-field query to search across title, description, and tags.
      * 
      * @param queryStr The search query string
@@ -72,7 +101,7 @@ public class KnowledgeBaseSearcher {
         String[] fields = {"title", "description", "tags"};
         QueryParser parser = new QueryParser("tags", analyzer);
         
-        // Escape special characters and create query
+        // Escape special characters and create a query
         String escapedQuery = QueryParser.escape(queryStr);
         return parser.parse(escapedQuery);
     }

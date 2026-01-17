@@ -27,47 +27,55 @@ public class CheckstyleAnalyzer {
     public List<AnalysisFinding> analyze(File javaFile, File configFile) throws Exception {
         List<AnalysisFinding> findings = new ArrayList<>();
         
-        // Load Checkstyle configuration
-        Configuration config = ConfigurationLoader.loadConfiguration(
-            configFile.getAbsolutePath(),
-            new PropertiesExpander(System.getProperties()),
-            ConfigurationLoader.IgnoredModulesOptions.OMIT
-        );
-        
-        // Create and configure Checkstyle checker
-        Checker checker = new Checker();
-        checker.setModuleClassLoader(Checker.class.getClassLoader());
-        checker.configure(config);
+        try {
+            // Load Checkstyle configuration
+            Configuration config = ConfigurationLoader.loadConfiguration(
+                configFile.getAbsolutePath(),
+                new PropertiesExpander(System.getProperties()),
+                ConfigurationLoader.IgnoredModulesOptions.OMIT
+            );
+            
+            // Create and configure Checkstyle checker
+            Checker checker = new Checker();
+            checker.setModuleClassLoader(Checker.class.getClassLoader());
+            checker.configure(config);
 
-        // Add listener to collect audit events as findings
-        checker.addListener(new AuditListener() {
-            @Override
-            public void auditStarted(AuditEvent event) {}
-            
-            @Override
-            public void auditFinished(AuditEvent event) {}
-            
-            @Override
-            public void fileStarted(AuditEvent event) {}
-            
-            @Override
-            public void fileFinished(AuditEvent event) {}
-            
-            @Override
-            public void addError(AuditEvent event) {
-                findings.add(new AnalysisFinding(
-                    event.getViolation().getKey(), 
-                    event.getFileName() + ":" + event.getLine() + " - " + event.getMessage()
-                ));
-            }
-            
-            @Override
-            public void addException(AuditEvent event, Throwable throwable) {}
-        });
+            // Add listener to collect audit events as findings
+            checker.addListener(new AuditListener() {
+                @Override
+                public void auditStarted(AuditEvent event) {}
+                
+                @Override
+                public void auditFinished(AuditEvent event) {}
+                
+                @Override
+                public void fileStarted(AuditEvent event) {}
+                
+                @Override
+                public void fileFinished(AuditEvent event) {}
+                
+                @Override
+                public void addError(AuditEvent event) {
+                    findings.add(new AnalysisFinding(
+                        event.getViolation().getKey(), 
+                        event.getFileName() + ":" + event.getLine() + " - " + event.getMessage()
+                    ));
+                }
+                
+                @Override
+                public void addException(AuditEvent event, Throwable throwable) {}
+            });
 
-        // Process the Java file
-        checker.process(List.of(javaFile));
-        checker.destroy();
+            // Process the Java file
+            checker.process(List.of(javaFile));
+            checker.destroy();
+            
+        } catch (Exception e) {
+            findings.add(new AnalysisFinding(
+                "Checkstyle Analysis Error", 
+                "Could not analyze " + javaFile.getName() + ": " + e.getMessage()
+            ));
+        }
         
         return findings;
     }

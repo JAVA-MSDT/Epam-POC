@@ -73,6 +73,7 @@ public class Main {
         System.out.println("=================================================");
         
         String[] testFiles = {
+            "samples/KnowledgeBaseTestExample.java",
             "samples/BadCodeExample.java",
             "samples/AnotherBadExample.java", 
             "samples/GoodCodeExample.java"
@@ -121,6 +122,18 @@ public class Main {
      */
     private static void indexKnowledgeBase(String kbDir, String indexDir) throws Exception {
         System.out.println("Indexing knowledge base...");
+        File kbDirectory = new File(kbDir);
+        File[] jsonFiles = kbDirectory.listFiles((dir, name) -> name.endsWith(".json"));
+        
+        if (jsonFiles != null && jsonFiles.length > 0) {
+            System.out.println("Found " + jsonFiles.length + " knowledge base files:");
+            for (File file : jsonFiles) {
+                System.out.println("  - " + file.getName());
+            }
+        } else {
+            System.out.println("WARNING: No JSON files found in knowledge base directory: " + kbDir);
+        }
+        
         KnowledgeBaseIndexer indexer = new KnowledgeBaseIndexer();
         indexer.indexKnowledgeBase(kbDir, indexDir);
         System.out.println("Knowledge base indexed successfully.");
@@ -165,23 +178,43 @@ public class Main {
     private static void generateFeedback(List<AnalysisFinding> findings, String indexDir) throws Exception {
         System.out.println("\nGenerating feedback using RAG pipeline...");
         
+        if (findings.isEmpty()) {
+            System.out.println("No issues found - code looks good!");
+            return;
+        }
+        
         KnowledgeBaseSearcher searcher = new KnowledgeBaseSearcher(indexDir);
         FeedbackGenerator feedbackGen = new FeedbackGenerator();
         
+        int knowledgeMatches = 0;
+        
         for (AnalysisFinding finding : findings) {
+            System.out.println("\n--- Processing finding: " + finding.getIssue() + " ---");
+            
             // RAG: Retrieve relevant knowledge entries
             List<KnowledgeEntry> entries = searcher.search(finding.getIssue(), 1);
             
             // RAG: Generate feedback combining finding + knowledge
             if (!entries.isEmpty()) {
+                knowledgeMatches++;
                 KnowledgeEntry entry = entries.get(0);
+                System.out.println("✓ Knowledge base match found for: " + finding.getIssue());
                 String feedback = feedbackGen.generateFeedback(finding, entry);
                 System.out.println(feedback);
             } else {
-                String basicFeedback = feedbackGen.generateBasicFeedback(finding);
+                System.out.println("✗ No knowledge base match for: " + finding.getIssue());
+                
+                // Get available topics for context
+                List<String> availableTopics = searcher.getAllTopics();
+                String basicFeedback = feedbackGen.generateBasicFeedback(finding, availableTopics);
                 System.out.println(basicFeedback);
             }
         }
+        
+        System.out.println("\n=== RAG PIPELINE SUMMARY ===");
+        System.out.println("Total findings: " + findings.size());
+        System.out.println("Knowledge base matches: " + knowledgeMatches);
+        System.out.println("Match rate: " + (findings.size() > 0 ? (knowledgeMatches * 100 / findings.size()) : 0) + "%");
     }
     
     /**
