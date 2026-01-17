@@ -24,6 +24,12 @@ public class Main {
      * @param args Command line arguments: [JavaFile] [CheckstyleConfig] [PMDRuleset] [KnowledgeBaseDir] [IndexDir]
      */
     public static void main(String[] args) {
+        // If no arguments provided, run with default test samples
+        if (args.length == 0) {
+            runTestSamples();
+            return;
+        }
+        
         if (args.length < 5) {
             printUsage();
             return;
@@ -57,6 +63,53 @@ public class Main {
             System.err.println("Error during code review: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Runs test samples when no arguments are provided.
+     */
+    private static void runTestSamples() {
+        System.out.println("Running Java RAG Code Review with test samples...");
+        System.out.println("=================================================");
+        
+        String[] testFiles = {
+            "samples/BadCodeExample.java",
+            "samples/AnotherBadExample.java", 
+            "samples/GoodCodeExample.java"
+        };
+        
+        String checkstyleConfig = "src/main/resources/checkstyle.xml";
+        String pmdRuleset = "src/main/resources/pmd-ruleset.xml";
+        String kbDir = "src/main/resources/knowledgebase";
+        String indexDir = "index";
+        
+        for (String testFile : testFiles) {
+            System.out.println("\n" + "=".repeat(50));
+            System.out.println("Testing: " + testFile);
+            System.out.println("=".repeat(50));
+            
+            try {
+                File javaFile = new File(testFile);
+                if (!javaFile.exists()) {
+                    System.out.println("Test file not found: " + testFile);
+                    continue;
+                }
+                
+                // Index knowledge base
+                indexKnowledgeBase(kbDir, indexDir);
+                
+                // Run analysis
+                List<AnalysisFinding> findings = runStaticAnalysis(javaFile, new File(checkstyleConfig), new File(pmdRuleset));
+                
+                // Generate feedback
+                generateFeedback(findings, indexDir);
+                
+            } catch (Exception e) {
+                System.err.println("Error analyzing " + testFile + ": " + e.getMessage());
+            }
+        }
+        
+        System.out.println("\nAll test samples completed!");
     }
     
     /**
@@ -160,8 +213,12 @@ public class Main {
      */
     private static void printUsage() {
         System.out.println("Java RAG Code Review System");
-        System.out.println("Usage: java -jar javarag.jar <JavaFile> <CheckstyleConfig> <PMDRuleset> <KnowledgeBaseDir> <IndexDir>");
+        System.out.println("Usage: java com.epam.Main [JavaFile] [CheckstyleConfig] [PMDRuleset] [KnowledgeBaseDir] [IndexDir]");
         System.out.println();
+        System.out.println("Run without arguments to test with sample files:");
+        System.out.println("  java com.epam.Main");
+        System.out.println();
+        System.out.println("Or specify custom files:");
         System.out.println("Arguments:");
         System.out.println("  JavaFile         - Path to Java source file to analyze");
         System.out.println("  CheckstyleConfig - Path to Checkstyle configuration XML file");
