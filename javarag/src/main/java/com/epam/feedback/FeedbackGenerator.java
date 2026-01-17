@@ -49,11 +49,13 @@ public class FeedbackGenerator {
      */
     public String generateBasicFeedback(AnalysisFinding finding) {
         return String.format(
-            "=== CODE REVIEW FEEDBACK ===\n" +
-            "Issue Detected: %s\n" +
-            "Location: %s\n" +
-            "Note: No specific guidance found in knowledge base.\n" +
-            "=============================\n",
+                """
+                        === CODE REVIEW FEEDBACK ===
+                        Issue Detected: %s
+                        Location: %s
+                        Note: No specific guidance found in knowledge base.
+                        =============================
+                        """,
             finding.getIssue(),
             finding.getDetails()
         );
