@@ -219,14 +219,14 @@ Reference: [Documentation source]
 
 ## Key Classes and Responsibilities
 
-| Class | Responsibility | Input | Output |
-|-------|---------------|-------|--------|
-| `Main` | Orchestrates entire pipeline | Command line args | Console output |
-| `KnowledgeBaseIndexer` | Creates searchable index | JSON files | Lucene index |
-| `CheckstyleAnalyzer` | Runs Checkstyle analysis | Java file + config | AnalysisFinding list |
-| `PMDAnalyzer` | Runs PMD analysis | Java file + ruleset | AnalysisFinding list |
-| `KnowledgeBaseSearcher` | Searches indexed knowledge | Query string | KnowledgeEntry list |
-| `FeedbackGenerator` | Creates formatted feedback | Finding + Knowledge | Formatted text |
+| Class                   | Responsibility               | Input               | Output               |
+|-------------------------|------------------------------|---------------------|----------------------|
+| `Main`                  | Orchestrates entire pipeline | Command line args   | Console output       |
+| `KnowledgeBaseIndexer`  | Creates searchable index     | JSON files          | Lucene index         |
+| `CheckstyleAnalyzer`    | Runs Checkstyle analysis     | Java file + config  | AnalysisFinding list |
+| `PMDAnalyzer`           | Runs PMD analysis            | Java file + ruleset | AnalysisFinding list |
+| `KnowledgeBaseSearcher` | Searches indexed knowledge   | Query string        | KnowledgeEntry list  |
+| `FeedbackGenerator`     | Creates formatted feedback   | Finding + Knowledge | Formatted text       |
 
 ## Error Handling Strategy
 
@@ -237,7 +237,7 @@ Reference: [Documentation source]
 - File access issues → Clear error messages with paths
 
 **Continuation Policy:**
-- Single tool failure doesn't stop entire pipeline
+- A single tool failure doesn't stop an entire pipeline
 - Missing knowledge entries don't prevent basic feedback
 - Partial results are still useful for code review
 

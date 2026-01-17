@@ -3,44 +3,66 @@ package com.epam.feedback;
 import com.epam.model.AnalysisFinding;
 import com.epam.model.KnowledgeEntry;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
  * Generates actionable feedback by combining static analysis findings with knowledge base entries.
  * This is the "Generation" part of the RAG (Retrieval-Augmented Generation) pipeline.
+ * Uses template-based generation for flexible output formatting.
  */
 public class FeedbackGenerator {
+    private static final String TEMPLATE_PATH = "src/main/resources/templates/feedback_template.txt";
+    private String template;
+
+    public FeedbackGenerator() {
+        loadTemplate();
+    }
 
     /**
-     * Generates formatted feedback by combining an analysis finding with relevant knowledge.
+     * Loads the feedback template from file with fallback to hardcoded template.
+     */
+    private void loadTemplate() {
+        try {
+            template = Files.readString(Paths.get(TEMPLATE_PATH));
+        } catch (IOException e) {
+            // Fallback to hardcoded template if file not found
+            template = """
+                    === CODE REVIEW FEEDBACK ===
+                    Issue Detected: ${issue}
+                    Location: ${details}
+
+                    Knowledge Base Guidance:
+                    Title: ${title}
+                    Type: ${type}
+                    Description: ${description}
+
+                    Example/Suggestion: ${example}
+
+                    Reference: ${reference}
+                    =============================
+                    """;
+        }
+    }
+
+    /**
+     * Generates formatted feedback using template with variable substitution.
      * 
      * @param finding The static analysis finding (issue detected)
      * @param entry The relevant knowledge base entry (best practice/guidance)
-     * @return Formatted feedback string combining finding and knowledge
+     * @return Formatted feedback string using template
      */
     public String generateFeedback(AnalysisFinding finding, KnowledgeEntry entry) {
-        StringBuilder feedback = new StringBuilder();
-        
-        feedback.append("=== CODE REVIEW FEEDBACK ===\n");
-        feedback.append("Issue Detected: ").append(finding.getIssue()).append("\n");
-        feedback.append("Location: ").append(finding.getDetails()).append("\n\n");
-        
-        feedback.append("Knowledge Base Guidance:\n");
-        feedback.append("Title: ").append(entry.getTitle()).append("\n");
-        feedback.append("Type: ").append(entry.getType()).append("\n");
-        feedback.append("Description: ").append(entry.getDescription()).append("\n\n");
-        
-        if (entry.getExample() != null && !entry.getExample().trim().isEmpty()) {
-            feedback.append("Example/Suggestion: ").append(entry.getExample()).append("\n\n");
-        }
-        
-        if (entry.getReference() != null && !entry.getReference().trim().isEmpty()) {
-            feedback.append("Reference: ").append(entry.getReference()).append("\n");
-        }
-        
-        feedback.append("=============================\n");
-        
-        return feedback.toString();
+        return template
+            .replace("${issue}", finding.issue())
+            .replace("${details}", finding.details())
+            .replace("${title}", entry.getTitle())
+            .replace("${type}", entry.getType())
+            .replace("${description}", entry.getDescription())
+            .replace("${example}", entry.getExample() != null ? entry.getExample() : "N/A")
+            .replace("${reference}", entry.getReference() != null ? entry.getReference() : "N/A");
     }
 
     /**
@@ -54,11 +76,11 @@ public class FeedbackGenerator {
         StringBuilder feedback = new StringBuilder();
         
         feedback.append("=== CODE REVIEW FEEDBACK ===\n");
-        feedback.append("Issue Detected: ").append(finding.getIssue()).append("\n");
-        feedback.append("Location: ").append(finding.getDetails()).append("\n\n");
+        feedback.append("Issue Detected: ").append(finding.issue()).append("\n");
+        feedback.append("Location: ").append(finding.details()).append("\n\n");
         
         feedback.append("Knowledge Base Status:\n");
-        feedback.append("No specific guidance found for '").append(finding.getIssue()).append("'\n");
+        feedback.append("No specific guidance found for '").append(finding.issue()).append("'\n");
         
         if (!availableTopics.isEmpty()) {
             feedback.append("\nAvailable knowledge base topics:\n");

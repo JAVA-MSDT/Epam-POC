@@ -1,56 +1,83 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<ruleset name="Custom Java Rules"
+<ruleset name="Enhanced Java Rules for RAG Demo"
          xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
                              http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
     
-    <description>Custom PMD ruleset for Java code analysis</description>
+    <description>Enhanced PMD ruleset to detect legacy patterns for RAG knowledge base matching</description>
 
     <!-- Best Practices -->
     <rule ref="category/java/bestpractices.xml/UseCollectionIsEmpty"/>
     <rule ref="category/java/bestpractices.xml/UseStringBufferForStringAppends"/>
-    <rule ref="category/java/bestpractices.xml/UseUtilityClass"/>
     <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters"/>
     <rule ref="category/java/bestpractices.xml/SwitchStmtsShouldHaveDefault"/>
     <rule ref="category/java/bestpractices.xml/DefaultLabelNotLastInSwitchStmt"/>
 
-    <!-- Code Style -->
-    <rule ref="category/java/codestyle.xml/UnnecessaryLocalBeforeReturn"/>
-    <rule ref="category/java/codestyle.xml/UnnecessaryReturn"/>
-    <rule ref="category/java/codestyle.xml/UselessParentheses"/>
-    <rule ref="category/java/codestyle.xml/UselessQualifiedThis"/>
-    <rule ref="category/java/codestyle.xml/FieldNamingConventions"/>
-    <rule ref="category/java/codestyle.xml/MethodNamingConventions"/>
-    <rule ref="category/java/codestyle.xml/ClassNamingConventions"/>
-
-    <!-- Design -->
-    <rule ref="category/java/design.xml/SimplifyBooleanReturns"/>
-    <rule ref="category/java/design.xml/SimplifyBooleanExpressions"/>
-    <rule ref="category/java/design.xml/UselessOverridingMethod"/>
-    <rule ref="category/java/design.xml/UseUtilityClass"/>
+    <!-- Performance Issues -->
+    <rule ref="category/java/performance.xml/StringInstantiation"/>
+    <rule ref="category/java/performance.xml/StringToString"/>
+    <rule ref="category/java/performance.xml/UnnecessaryWrapperObjectCreation"/>
+    <rule ref="category/java/performance.xml/UseStringBufferForStringAppends"/>
 
     <!-- Error Prone -->
     <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
     <rule ref="category/java/errorprone.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/>
-    <rule ref="category/java/errorprone.xml/AvoidMultipleUnaryOperators"/>
-    <rule ref="category/java/errorprone.xml/AvoidUsingOctalValues"/>
-    <rule ref="category/java/errorprone.xml/BrokenNullCheck"/>
-    <rule ref="category/java/errorprone.xml/CheckSkipResult"/>
-    <rule ref="category/java/errorprone.xml/ClassCastExceptionWithToArray"/>
-    <rule ref="category/java/errorprone.xml/DontUseFloatTypeForLoopIndices"/>
     <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
     <rule ref="category/java/errorprone.xml/JumbledIncrementer"/>
 
-    <!-- Performance -->
-    <rule ref="category/java/performance.xml/BigIntegerInstantiation"/>
-    <rule ref="category/java/performance.xml/BooleanInstantiation"/>
-    <rule ref="category/java/performance.xml/ByteInstantiation"/>
-    <rule ref="category/java/performance.xml/IntegerInstantiation"/>
-    <rule ref="category/java/performance.xml/LongInstantiation"/>
-    <rule ref="category/java/performance.xml/ShortInstantiation"/>
-    <rule ref="category/java/performance.xml/StringInstantiation"/>
-    <rule ref="category/java/performance.xml/StringToString"/>
-    <rule ref="category/java/performance.xml/UnnecessaryWrapperObjectCreation"/>
+    <!-- Custom Rules for Legacy Collections -->
+    <rule name="AvoidVector"
+          language="java"
+          message="Vector is legacy, use ArrayList instead"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            Vector is a legacy collection that should be replaced with ArrayList for better performance.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //ClassOrInterfaceType[@Image='Vector'] |
+                    //ImportDeclaration/Name[@Image='java.util.Vector']
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="AvoidEnumeration"
+          language="java"
+          message="Enumeration is outdated, use Iterator instead"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            Enumeration is an outdated interface. Use Iterator for modern code compatibility.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //ClassOrInterfaceType[@Image='Enumeration'] |
+                    //PrimaryExpression[PrimaryPrefix/Name[ends-with(@Image, '.elements')]]
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="AvoidSynchronizedCollections"
+          language="java"
+          message="Prefer concurrent collections over synchronized wrappers"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            Use java.util.concurrent collections instead of Collections.synchronized* methods.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //PrimaryExpression[PrimaryPrefix/Name[starts-with(@Image, 'Collections.synchronized')]]
+                </value>
+            </property>
+        </properties>
+    </rule>
 
 </ruleset>

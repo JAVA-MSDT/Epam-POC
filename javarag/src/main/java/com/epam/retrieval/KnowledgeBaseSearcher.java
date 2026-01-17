@@ -5,6 +5,7 @@ import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.Term;
 import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
@@ -47,13 +48,20 @@ public class KnowledgeBaseSearcher {
             IndexSearcher searcher = new IndexSearcher(reader);
             Analyzer analyzer = new StandardAnalyzer();
 
+            // Debug: Print what we're searching for
+            System.out.println("    Searching knowledge base for: '" + queryStr + "'");
+            
             // Search across multiple fields for better matching
             Query query = buildMultiFieldQuery(queryStr, analyzer);
             
             TopDocs topDocs = searcher.search(query, maxResults);
+            System.out.println("    Found " + topDocs.totalHits.value + " potential matches");
+            
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 Document doc = searcher.doc(scoreDoc.doc);
-                results.add(documentToKnowledgeEntry(doc));
+                KnowledgeEntry entry = documentToKnowledgeEntry(doc);
+                System.out.println("    Match: " + entry.getTitle() + " (score: " + scoreDoc.score + ")");
+                results.add(entry);
             }
         }
         
@@ -91,6 +99,7 @@ public class KnowledgeBaseSearcher {
 
     /**
      * Builds a multi-field query to search across title, description, and tags.
+     * Enhanced to match common static analysis rule names with knowledge base entries.
      * 
      * @param queryStr The search query string
      * @param analyzer Lucene analyzer for query processing
@@ -98,12 +107,68 @@ public class KnowledgeBaseSearcher {
      * @throws Exception If query parsing fails
      */
     private Query buildMultiFieldQuery(String queryStr, Analyzer analyzer) throws Exception {
-        String[] fields = {"title", "description", "tags"};
-        QueryParser parser = new QueryParser("tags", analyzer);
+        BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
         
-        // Escape special characters and create a query
-        String escapedQuery = QueryParser.escape(queryStr);
-        return parser.parse(escapedQuery);
+        // Normalize query string
+        String normalizedQuery = queryStr.toLowerCase();
+        
+        // Search in multiple fields with different strategies
+        String[] fields = {"title", "description", "tags"};
+        
+        for (String field : fields) {
+            // Exact term search
+            Query exactQuery = new TermQuery(new Term(field, normalizedQuery));
+            booleanQuery.add(exactQuery, BooleanClause.Occur.SHOULD);
+            
+            // Partial match with wildcards
+            if (normalizedQuery.length() > 2) {
+                Query wildcardQuery = new WildcardQuery(new Term(field, "*" + normalizedQuery + "*"));
+                booleanQuery.add(wildcardQuery, BooleanClause.Occur.SHOULD);
+            }
+            
+            // Handle common rule name patterns
+            addPatternQueries(booleanQuery, field, normalizedQuery);
+        }
+        
+        return booleanQuery.build();
+    }
+    
+    /**
+     * Adds pattern-based queries to improve matching between rule names and knowledge entries.
+     * 
+     * @param booleanQuery The boolean query builder
+     * @param field The field to search in
+     * @param queryStr The normalized query string
+     */
+    private void addPatternQueries(BooleanQuery.Builder booleanQuery, String field, String queryStr) {
+        // Map common static analysis rule patterns to knowledge base terms
+        if (queryStr.contains("vector") || queryStr.contains("legacy collection") || queryStr.contains("avoivector")) {
+            booleanQuery.add(new TermQuery(new Term(field, "vector")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "arraylist")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "legacy")), BooleanClause.Occur.SHOULD);
+        }
+        
+        if (queryStr.contains("enumeration") || queryStr.contains("elements") || queryStr.contains("iterator")) {
+            booleanQuery.add(new TermQuery(new Term(field, "enumeration")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "iterator")), BooleanClause.Occur.SHOULD);
+        }
+        
+        if (queryStr.contains("synchronized") || queryStr.contains("concurrent")) {
+            booleanQuery.add(new TermQuery(new Term(field, "synchronized")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "concurrent")), BooleanClause.Occur.SHOULD);
+        }
+        
+        if (queryStr.contains("size") || queryStr.contains("empty") || queryStr.contains("isempty")) {
+            booleanQuery.add(new TermQuery(new Term(field, "size")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "isempty")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "empty")), BooleanClause.Occur.SHOULD);
+        }
+        
+        if (queryStr.contains("string") && (queryStr.contains("concat") || queryStr.contains("append"))) {
+            booleanQuery.add(new TermQuery(new Term(field, "string")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "stringbuilder")), BooleanClause.Occur.SHOULD);
+            booleanQuery.add(new TermQuery(new Term(field, "concatenation")), BooleanClause.Occur.SHOULD);
+        }
     }
 
     /**

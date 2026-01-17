@@ -4,8 +4,12 @@ import com.epam.model.KnowledgeEntry;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
-import org.apache.lucene.document.*;
-import org.apache.lucene.index.*;
+import org.apache.lucene.document.Document;
+import org.apache.lucene.document.Field;
+import org.apache.lucene.document.StringField;
+import org.apache.lucene.document.TextField;
+import org.apache.lucene.index.IndexWriter;
+import org.apache.lucene.index.IndexWriterConfig;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
@@ -14,14 +18,14 @@ import java.nio.file.Paths;
 
 /**
  * Indexes knowledge base entries using Apache Lucene for fast retrieval.
- * Processes JSON files containing knowledge entries and creates searchable index.
+ * Processes JSON files containing knowledge entries and creates a searchable index.
  */
 public class KnowledgeBaseIndexer {
 
     /**
      * Indexes all JSON knowledge base files from a directory into a Lucene index.
      * 
-     * @param kbDirPath Path to directory containing JSON knowledge base files
+     * @param kbDirPath Path to a directory containing JSON knowledge base files
      * @param indexDirPath Path where Lucene index will be created/stored
      * @throws Exception If indexing fails due to I/O or parsing errors
      */
@@ -34,7 +38,7 @@ public class KnowledgeBaseIndexer {
             ObjectMapper mapper = new ObjectMapper();
             File kbDir = new File(kbDirPath);
             
-            // Process all JSON files in knowledge base directory
+            // Process all JSON files in the knowledge base directory
             File[] jsonFiles = kbDir.listFiles((dir, name) -> name.endsWith(".json"));
             if (jsonFiles != null) {
                 for (File file : jsonFiles) {

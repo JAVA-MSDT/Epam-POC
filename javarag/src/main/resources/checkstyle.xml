@@ -8,12 +8,33 @@
     <property name="severity" value="warning"/>
     <property name="fileExtensions" value="java, properties, xml"/>
 
-    <!-- Size Violations at Checker level -->
-    <module name="LineLength">
-        <property name="max" value="120"/>
-    </module>
-
     <module name="TreeWalker">
+        <!-- Detect legacy patterns with regex -->
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="Vector&lt;"/>
+            <property name="message" value="Vector usage detected - consider using ArrayList"/>
+        </module>
+        
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="Enumeration&lt;"/>
+            <property name="message" value="Enumeration usage detected - use Iterator instead"/>
+        </module>
+        
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.elements\(\)"/>
+            <property name="message" value="elements() method detected - use Iterator instead"/>
+        </module>
+        
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="Collections\.synchronized"/>
+            <property name="message" value="synchronized collections detected - consider concurrent collections"/>
+        </module>
+        
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.size\(\)\s*==\s*0"/>
+            <property name="message" value="size() == 0 detected - use isEmpty() instead"/>
+        </module>
+
         <!-- Naming Conventions -->
         <module name="ConstantName"/>
         <module name="LocalFinalVariableName"/>
@@ -34,18 +55,6 @@
         <!-- Size Violations -->
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
-
-        <!-- Whitespace -->
-        <module name="EmptyForIteratorPad"/>
-        <module name="GenericWhitespace"/>
-        <module name="MethodParamPad"/>
-        <module name="NoWhitespaceAfter"/>
-        <module name="NoWhitespaceBefore"/>
-        <module name="OperatorWrap"/>
-        <module name="ParenPad"/>
-        <module name="TypecastParenPad"/>
-        <module name="WhitespaceAfter"/>
-        <module name="WhitespaceAround"/>
 
         <!-- Modifier Checks -->
         <module name="ModifierOrder"/>
@@ -68,16 +77,14 @@
         <module name="SimplifyBooleanExpression"/>
         <module name="SimplifyBooleanReturn"/>
 
-        <!-- Class Design -->
-        <module name="FinalClass"/>
-        <module name="HideUtilityClassConstructor"/>
-        <module name="InterfaceIsType"/>
-        <module name="VisibilityModifier"/>
-
         <!-- Miscellaneous -->
         <module name="ArrayTypeStyle"/>
-        <module name="FinalParameters"/>
         <module name="TodoComment"/>
         <module name="UpperEll"/>
+    </module>
+    
+    <!-- Line Length at Checker level -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
     </module>
 </module>
