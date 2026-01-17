@@ -1,13 +1,15 @@
 server:
   port: 8080
 
-elasticsearch:
-  host: localhost
-  port: 9200
+ollama:
+  url: http://localhost:11434
+  model: mistral
 
-langchain4j:
-  openai:
-    api-key: YOUR_OPENAI_API_KEY
+embedding:
+  model-path: models/sentence-transformers-all-MiniLM-L6-v2.onnx
+  dimension: 384
 
-codebase:
-  path: src/main/java
+logging:
+  level:
+    com.epam.rag: INFO
+    root: WARN

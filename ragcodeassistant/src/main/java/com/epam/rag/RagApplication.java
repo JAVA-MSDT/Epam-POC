@@ -1,13 +1,11 @@
-package com.epam;
-
+package com.epam.rag;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class RagCodeAssistantApplication {
-
+public class RagApplication {
     public static void main(String[] args) {
-        SpringApplication.run(RagCodeAssistantApplication.class, args);
+        SpringApplication.run(RagApplication.class, args);
     }
 }
