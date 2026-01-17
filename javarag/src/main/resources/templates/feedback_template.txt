@@ -1,0 +1,13 @@
+=== CODE REVIEW FEEDBACK ===
+Issue Detected: ${issue}
+Location: ${details}
+
+Knowledge Base Guidance:
+Title: ${title}
+Type: ${type}
+Description: ${description}
+
+Example/Suggestion: ${example}
+
+Reference: ${reference}
+=============================

@@ -1,0 +1,8 @@
+{
+  "title": "Enumeration is outdated, use Iterator",
+  "type": "Anti-pattern",
+  "description": "Enumeration is an outdated interface from Java 1.0. Use Iterator for modern code compatibility, better API support, and fail-fast behavior. Iterator provides remove() method and better exception handling.",
+  "example": "Instead of: Enumeration<String> e = vector.elements(); while(e.hasMoreElements()) { String s = e.nextElement(); } Use: Iterator<String> it = list.iterator(); while(it.hasNext()) { String s = it.next(); }",
+  "reference": "Java SE Documentation - Collections Framework",
+  "tags": ["Enumeration", "Iterator", "legacy", "collection", "iteration", "fail-fast"]
+}
