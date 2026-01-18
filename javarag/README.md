@@ -40,8 +40,9 @@ javarag/
 
 - **Static Analysis Integration**: Uses Checkstyle and PMD for comprehensive code analysis
 - **RAG Pipeline**: Combines findings with knowledge base entries for contextual feedback
-- **Lucene-based Search**: Fast retrieval of relevant knowledge entries
+- **Intelligent Search**: Dynamic pattern matching that automatically learns from knowledge base entries
 - **Extensible Knowledge Base**: JSON-based knowledge entries for easy maintenance
+- **Template-based Feedback**: Customizable output formatting through templates
 - **Configurable Rules**: Customizable Checkstyle and PMD rulesets
 
 ## Build and Run
@@ -102,10 +103,10 @@ Create JSON files in the `knowledgebase` directory with this structure:
 
 ## How It Works
 
-1. **Indexing**: Knowledge base entries are indexed using Apache Lucene
+1. **Indexing**: Knowledge base entries are indexed using Apache Lucene with automatic pattern extraction
 2. **Analysis**: Checkstyle and PMD analyze the Java code for issues
-3. **Retrieval**: For each finding, relevant knowledge entries are retrieved
-4. **Generation**: Contextual feedback is generated combining findings with knowledge
+3. **Retrieval**: Intelligent search automatically matches findings with relevant knowledge entries
+4. **Generation**: Template-based feedback generation combines findings with knowledge
 5. **Output**: Formatted feedback is displayed to the user
 
 ## Example Output

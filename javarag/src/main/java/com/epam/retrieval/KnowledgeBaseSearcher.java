@@ -6,15 +6,13 @@ import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
-import org.apache.lucene.queryparser.classic.QueryParser;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Searches the indexed knowledge base for entries relevant to analysis findings.
@@ -22,6 +20,7 @@ import java.util.List;
  */
 public class KnowledgeBaseSearcher {
     private final String indexDirPath;
+    private final Map<String, Set<String>> patternCache = new HashMap<>();
 
     /**
      * Creates a new knowledge base searcher.
@@ -126,49 +125,101 @@ public class KnowledgeBaseSearcher {
                 booleanQuery.add(wildcardQuery, BooleanClause.Occur.SHOULD);
             }
             
-            // Handle common rule name patterns
-            addPatternQueries(booleanQuery, field, normalizedQuery);
+            // Handle dynamic pattern matching
+            addDynamicPatternQueries(booleanQuery, field, normalizedQuery);
         }
         
         return booleanQuery.build();
     }
     
     /**
-     * Adds pattern-based queries to improve matching between rule names and knowledge entries.
-     * 
-     * @param booleanQuery The boolean query builder
-     * @param field The field to search in
-     * @param queryStr The normalized query string
+     * Dynamically adds pattern-based queries by extracting keywords from knowledge base entries.
      */
-    private void addPatternQueries(BooleanQuery.Builder booleanQuery, String field, String queryStr) {
-        // Map common static analysis rule patterns to knowledge base terms
-        if (queryStr.contains("vector") || queryStr.contains("legacy collection") || queryStr.contains("avoivector")) {
-            booleanQuery.add(new TermQuery(new Term(field, "vector")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "arraylist")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "legacy")), BooleanClause.Occur.SHOULD);
+    private void addDynamicPatternQueries(BooleanQuery.Builder booleanQuery, String field, String queryStr) {
+        try {
+            if (patternCache.isEmpty()) {
+                buildPatternCache();
+            }
+            
+            // Find matching patterns for the query
+            for (Map.Entry<String, Set<String>> entry : patternCache.entrySet()) {
+                String pattern = entry.getKey();
+                Set<String> relatedTerms = entry.getValue();
+                
+                if (queryStr.contains(pattern)) {
+                    for (String term : relatedTerms) {
+                        booleanQuery.add(new TermQuery(new Term(field, term)), BooleanClause.Occur.SHOULD);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Warning: Could not build dynamic patterns: " + e.getMessage());
+        }
+    }
+    
+    /**
+     * Builds a cache of patterns by extracting keywords from all knowledge base entries.
+     */
+    private void buildPatternCache() throws Exception {
+        Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
+        try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
+            IndexSearcher searcher = new IndexSearcher(reader);
+            
+            Query query = new MatchAllDocsQuery();
+            TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
+            
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document doc = searcher.doc(scoreDoc.doc);
+                extractPatternsFromDocument(doc);
+            }
+        }
+    }
+    
+    /**
+     * Extracts searchable patterns from a knowledge base document.
+     */
+    private void extractPatternsFromDocument(Document doc) {
+        String title = doc.get("title");
+        String description = doc.get("description");
+        String tags = doc.get("tags");
+        
+        Set<String> allTerms = new HashSet<>();
+        
+        // Extract terms from title, description, and tags
+        if (title != null) {
+            allTerms.addAll(extractKeywords(title));
+        }
+        if (description != null) {
+            allTerms.addAll(extractKeywords(description));
+        }
+        if (tags != null) {
+            allTerms.addAll(Arrays.asList(tags.split(" ")));
         }
         
-        if (queryStr.contains("enumeration") || queryStr.contains("elements") || queryStr.contains("iterator")) {
-            booleanQuery.add(new TermQuery(new Term(field, "enumeration")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "iterator")), BooleanClause.Occur.SHOULD);
+        // Create bidirectional mappings between terms
+        for (String term : allTerms) {
+            patternCache.computeIfAbsent(term.toLowerCase(), k -> new HashSet<>()).addAll(
+                allTerms.stream().map(String::toLowerCase).collect(Collectors.toSet())
+            );
         }
-        
-        if (queryStr.contains("synchronized") || queryStr.contains("concurrent")) {
-            booleanQuery.add(new TermQuery(new Term(field, "synchronized")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "concurrent")), BooleanClause.Occur.SHOULD);
-        }
-        
-        if (queryStr.contains("size") || queryStr.contains("empty") || queryStr.contains("isempty")) {
-            booleanQuery.add(new TermQuery(new Term(field, "size")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "isempty")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "empty")), BooleanClause.Occur.SHOULD);
-        }
-        
-        if (queryStr.contains("string") && (queryStr.contains("concat") || queryStr.contains("append"))) {
-            booleanQuery.add(new TermQuery(new Term(field, "string")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "stringbuilder")), BooleanClause.Occur.SHOULD);
-            booleanQuery.add(new TermQuery(new Term(field, "concatenation")), BooleanClause.Occur.SHOULD);
-        }
+    }
+    
+    /**
+     * Extracts meaningful keywords from text.
+     */
+    private Set<String> extractKeywords(String text) {
+        return Arrays.stream(text.toLowerCase().split("[\\s,.-]+"))
+                .filter(word -> word.length() > 2)
+                .filter(word -> !isStopWord(word))
+                .collect(Collectors.toSet());
+    }
+    
+    /**
+     * Simple stop word filter.
+     */
+    private boolean isStopWord(String word) {
+        Set<String> stopWords = Set.of("the", "and", "for", "are", "but", "not", "you", "all", "can", "had", "her", "was", "one", "our", "out", "day", "get", "has", "him", "his", "how", "its", "may", "new", "now", "old", "see", "two", "who", "boy", "did", "she", "use", "way", "will", "with");
+        return stopWords.contains(word);
     }
 
     /**
