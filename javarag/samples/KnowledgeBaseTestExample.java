@@ -36,6 +36,9 @@ public class KnowledgeBaseTestExample {
         if (legacyVector.size() == 0) {  // Should use isEmpty()
             System.out.println("Vector is empty");
         }
+
+        // This pattern is NOT detected by current Checkstyle/PMD but is in KB via the new tag
+        String test = "badCodePatternForTest";
     }
     
     // Method using Vector in parameter - more Vector usage

@@ -1,8 +1,7 @@
 package com.epam.retrieval;
 
+import com.epam.model.AnalysisFinding;
 import com.epam.model.KnowledgeEntry;
-import org.apache.lucene.analysis.Analyzer;
-import org.apache.lucene.analysis.standard.StandardAnalyzer;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
 import org.apache.lucene.index.Term;
@@ -32,6 +31,58 @@ public class KnowledgeBaseSearcher {
     }
 
     /**
+     * Searches for knowledge entries that match patterns in the provided source code.
+     * 
+     * @param sourceCode The Java source code to analyze
+     * @param fileName The name of the file being analyzed
+     * @return List of findings based on knowledge base patterns
+     */
+    public List<AnalysisFinding> searchInCode(String sourceCode, String fileName) throws Exception {
+        List<AnalysisFinding> findings = new ArrayList<>();
+        
+        Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
+        try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
+            IndexSearcher searcher = new IndexSearcher(reader);
+            
+            Query query = new MatchAllDocsQuery();
+            TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
+            
+            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                Document doc = searcher.doc(scoreDoc.doc);
+                String tags = doc.get("tags");
+                String title = doc.get("title");
+                
+                if (tags != null) {
+                    String[] tagArray = tags.split(" ");
+                    for (String tag : tagArray) {
+                        if (tag.length() > 3 && sourceCode.toLowerCase().contains(tag.toLowerCase())) {
+                            // Find line number
+                            int lineNum = findLineNumber(sourceCode, tag);
+                            findings.add(new AnalysisFinding(
+                                title,
+                                fileName + ":" + lineNum + " - Knowledge base pattern '" + tag + "' detected in code."
+                            ));
+                            break; // Avoid multiple findings for the same entry
+                        }
+                    }
+                }
+            }
+        }
+        
+        return findings;
+    }
+
+    private int findLineNumber(String sourceCode, String pattern) {
+        String[] lines = sourceCode.split("\r?\n");
+        for (int i = 0; i < lines.length; i++) {
+            if (lines[i].toLowerCase().contains(pattern.toLowerCase())) {
+                return i + 1;
+            }
+        }
+        return 1;
+    }
+
+    /**
      * Searches the knowledge base for entries matching the query string.
      * 
      * @param queryStr Search query (typically from analysis finding)
@@ -45,13 +96,12 @@ public class KnowledgeBaseSearcher {
         Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
         try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
             IndexSearcher searcher = new IndexSearcher(reader);
-            Analyzer analyzer = new StandardAnalyzer();
 
             // Debug: Print what we're searching for
             System.out.println("    Searching knowledge base for: '" + queryStr + "'");
             
             // Search across multiple fields for better matching
-            Query query = buildMultiFieldQuery(queryStr, analyzer);
+            Query query = buildMultiFieldQuery(queryStr);
             
             TopDocs topDocs = searcher.search(query, maxResults);
             System.out.println("    Found " + topDocs.totalHits.value + " potential matches");
@@ -101,11 +151,9 @@ public class KnowledgeBaseSearcher {
      * Enhanced to match common static analysis rule names with knowledge base entries.
      * 
      * @param queryStr The search query string
-     * @param analyzer Lucene analyzer for query processing
      * @return Lucene Query object for searching
-     * @throws Exception If query parsing fails
      */
-    private Query buildMultiFieldQuery(String queryStr, Analyzer analyzer) throws Exception {
+    private Query buildMultiFieldQuery(String queryStr) {
         BooleanQuery.Builder booleanQuery = new BooleanQuery.Builder();
         
         // Normalize query string

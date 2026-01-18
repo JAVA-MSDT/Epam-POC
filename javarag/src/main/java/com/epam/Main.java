@@ -9,6 +9,7 @@ import com.epam.retrieval.KnowledgeBaseIndexer;
 import com.epam.retrieval.KnowledgeBaseSearcher;
 
 import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,8 +61,12 @@ public class Main {
                     continue;
                 }
 
-                // Step 2: Run static analysis (Checkstyle + PMD)
+                // Step 2: Run static analysis (Checkstyle + PMD) LLM like.
                 List<AnalysisFinding> findings = runStaticAnalysis(javaFile, new File(checkstyleConfig), new File(pmdRuleset));
+
+                // Step 2.5: Run KB-driven analysis (RAG proactive detection) Retrieval like
+                List<AnalysisFinding> kbFindings = runKBAnalysis(javaFile, indexDir);
+                findings.addAll(kbFindings);
 
                 // Step 3: Generate feedback using RAG (Retrieval + Generation)
                 generateFeedback(findings, indexDir);
@@ -129,6 +134,24 @@ public class Main {
     }
     
     /**
+     * Runs KB-driven analysis by searching for knowledge base patterns directly in the code.
+     * 
+     * @param javaFile The Java source file to analyze
+     * @param indexDir Directory containing the Lucene index
+     * @return List of findings based on knowledge base patterns
+     * @throws Exception If analysis fails
+     */
+    private static List<AnalysisFinding> runKBAnalysis(File javaFile, String indexDir) throws Exception {
+        System.out.println("Running KB-driven analysis...");
+        String sourceCode = Files.readString(javaFile.toPath());
+        KnowledgeBaseSearcher searcher = new KnowledgeBaseSearcher(indexDir);
+        List<AnalysisFinding> findings = searcher.searchInCode(sourceCode, javaFile.getName());
+        System.out.println("KB analysis found " + findings.size() + " issues.");
+        findings.forEach(f -> System.out.println("KB-driven - " + f.issue()));
+        return findings;
+    }
+
+    /**
      * Generates actionable feedback by combining findings with knowledge base entries.
      * 
      * @param findings List of static analysis findings
@@ -142,13 +165,17 @@ public class Main {
             System.out.println("No issues found - code looks good!");
             return;
         }
-        
+
+        List<AnalysisFinding> distinctFindings = findings.stream()
+                .distinct()
+                .toList();
+
         KnowledgeBaseSearcher searcher = new KnowledgeBaseSearcher(indexDir);
         FeedbackGenerator feedbackGen = new FeedbackGenerator();
         
         int knowledgeMatches = 0;
         
-        for (AnalysisFinding finding : findings) {
+        for (AnalysisFinding finding : distinctFindings) {
             System.out.println("\n--- Processing finding: " + finding.issue() + " ---");
             
             // RAG: Retrieve relevant knowledge entries
@@ -172,9 +199,9 @@ public class Main {
         }
         
         System.out.println("\n=== RAG PIPELINE SUMMARY ===");
-        System.out.println("Total findings: " + findings.size());
+        System.out.println("Total distinctFindings: " + distinctFindings.size());
         System.out.println("Knowledge base matches: " + knowledgeMatches);
-        System.out.println("Match rate: " + (!findings.isEmpty() ? (knowledgeMatches * 100 / findings.size()) : 0) + "%");
+        System.out.println("Match rate: " + (!distinctFindings.isEmpty() ? (knowledgeMatches * 100 / distinctFindings.size()) : 0) + "%");
     }
 
 }

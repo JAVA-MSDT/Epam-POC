@@ -22,13 +22,13 @@ public class FeedbackGenerator {
     }
 
     /**
-     * Loads the feedback template from file with fallback to hardcoded template.
+     * Loads the feedback template from a file with fallback to the hardcoded template.
      */
     private void loadTemplate() {
         try {
             template = Files.readString(Paths.get(TEMPLATE_PATH));
         } catch (IOException e) {
-            // Fallback to hardcoded template if file not found
+            // Fallback to hardcoded template if a file not found
             template = """
                     === CODE REVIEW FEEDBACK ===
                     Issue Detected: ${issue}
@@ -48,7 +48,7 @@ public class FeedbackGenerator {
     }
 
     /**
-     * Generates formatted feedback using template with variable substitution.
+     * Generates formatted feedback using a template with variable substitution.
      * 
      * @param finding The static analysis finding (issue detected)
      * @param entry The relevant knowledge base entry (best practice/guidance)
