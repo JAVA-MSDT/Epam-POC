@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="Enhanced Java Rules for RAG Demo"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0
+                             http://pmd.sourceforge.net/ruleset_2_0_0.xsd">
+    
+    <description>Enhanced PMD ruleset to detect legacy patterns for RAG knowledge base matching</description>
+
+    <!-- Best Practices -->
+    <rule ref="category/java/bestpractices.xml/UseCollectionIsEmpty"/>
+    <rule ref="category/java/bestpractices.xml/UseStringBufferForStringAppends"/>
+    <rule ref="category/java/bestpractices.xml/AvoidReassigningParameters"/>
+    <rule ref="category/java/bestpractices.xml/SwitchStmtsShouldHaveDefault"/>
+    <rule ref="category/java/bestpractices.xml/DefaultLabelNotLastInSwitchStmt"/>
+
+    <!-- Performance Issues -->
+    <rule ref="category/java/performance.xml/StringInstantiation"/>
+    <rule ref="category/java/performance.xml/StringToString"/>
+    <rule ref="category/java/performance.xml/UnnecessaryWrapperObjectCreation"/>
+    <rule ref="category/java/performance.xml/UseStringBufferForStringAppends"/>
+
+    <!-- Error Prone -->
+    <rule ref="category/java/errorprone.xml/AvoidBranchingStatementAsLastInLoop"/>
+    <rule ref="category/java/errorprone.xml/AvoidDecimalLiteralsInBigDecimalConstructor"/>
+    <rule ref="category/java/errorprone.xml/EmptyCatchBlock"/>
+    <rule ref="category/java/errorprone.xml/JumbledIncrementer"/>
+
+    <!-- Custom Rules for Legacy Collections -->
+    <rule name="AvoidVector"
+          language="java"
+          message="Vector is legacy, use ArrayList instead"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            Vector is a legacy collection that should be replaced with ArrayList for better performance.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //ClassOrInterfaceType[@Image='Vector'] |
+                    //ImportDeclaration/Name[@Image='java.util.Vector']
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="AvoidEnumeration"
+          language="java"
+          message="Enumeration is outdated, use Iterator instead"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            Enumeration is an outdated interface. Use Iterator for modern code compatibility.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //ClassOrInterfaceType[@Image='Enumeration'] |
+                    //PrimaryExpression[PrimaryPrefix/Name[ends-with(@Image, '.elements')]]
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+    <rule name="AvoidSynchronizedCollections"
+          language="java"
+          message="Prefer concurrent collections over synchronized wrappers"
+          class="net.sourceforge.pmd.lang.rule.xpath.XPathRule">
+        <description>
+            Use java.util.concurrent collections instead of Collections.synchronized* methods.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="xpath">
+                <value>
+                    //PrimaryExpression[PrimaryPrefix/Name[starts-with(@Image, 'Collections.synchronized')]]
+                </value>
+            </property>
+        </properties>
+    </rule>
+
+</ruleset>

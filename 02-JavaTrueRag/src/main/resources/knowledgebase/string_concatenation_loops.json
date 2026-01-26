@@ -1,0 +1,8 @@
+{
+  "title": "Use StringBuilder for string concatenation in loops",
+  "type": "Performance Issue",
+  "description": "String concatenation using + operator in loops creates multiple intermediate String objects, leading to poor performance. StringBuilder is mutable and more efficient for building strings.",
+  "example": "Instead of: String result = ''; for(int i=0; i<10; i++) result += 'item' + i; Use: StringBuilder sb = new StringBuilder(); for(int i=0; i<10; i++) sb.append('item').append(i); String result = sb.toString();",
+  "reference": "Java Performance Tuning Guide",
+  "tags": ["string", "concatenation", "loop", "performance", "StringBuilder"]
+}

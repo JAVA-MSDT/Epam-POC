@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Checkstyle//DTD Checkstyle Configuration 1.3//EN"
+    "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+    <property name="charset" value="UTF-8"/>
+    <property name="severity" value="warning"/>
+    <property name="fileExtensions" value="java, properties, xml"/>
+
+    <module name="TreeWalker">
+        <!-- Detect legacy patterns with regex -->
+<!--        <module name="RegexpSinglelineJava">-->
+<!--            <property name="format" value="Vector&lt;"/>-->
+<!--            <property name="message" value="Vector usage detected - consider using ArrayList"/>-->
+<!--        </module>-->
+        
+<!--        <module name="RegexpSinglelineJava">-->
+<!--            <property name="format" value="Enumeration&lt;"/>-->
+<!--            <property name="message" value="Enumeration usage detected - use Iterator instead"/>-->
+<!--        </module>-->
+        
+<!--        <module name="RegexpSinglelineJava">-->
+<!--            <property name="format" value="\.elements\(\)"/>-->
+<!--            <property name="message" value="elements() method detected - use Iterator instead"/>-->
+<!--        </module>-->
+        
+<!--        <module name="RegexpSinglelineJava">-->
+<!--            <property name="format" value="Collections\.synchronized"/>-->
+<!--            <property name="message" value="synchronized collections detected - consider concurrent collections"/>-->
+<!--        </module>-->
+        
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="\.size\(\)\s*==\s*0"/>
+            <property name="message" value="size() == 0 detected - use isEmpty() instead"/>
+        </module>
+
+        <!-- Naming Conventions -->
+        <module name="ConstantName"/>
+        <module name="LocalFinalVariableName"/>
+        <module name="LocalVariableName"/>
+        <module name="MemberName"/>
+        <module name="MethodName"/>
+        <module name="PackageName"/>
+        <module name="ParameterName"/>
+        <module name="StaticVariableName"/>
+        <module name="TypeName"/>
+
+        <!-- Imports -->
+        <module name="AvoidStarImport"/>
+        <module name="IllegalImport"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+
+        <!-- Size Violations -->
+        <module name="MethodLength"/>
+        <module name="ParameterNumber"/>
+
+        <!-- Modifier Checks -->
+        <module name="ModifierOrder"/>
+        <module name="RedundantModifier"/>
+
+        <!-- Blocks -->
+        <module name="AvoidNestedBlocks"/>
+        <module name="EmptyBlock"/>
+        <module name="LeftCurly"/>
+        <module name="NeedBraces"/>
+        <module name="RightCurly"/>
+
+        <!-- Common Coding Problems -->
+        <module name="EmptyStatement"/>
+        <module name="EqualsHashCode"/>
+        <module name="HiddenField"/>
+        <module name="IllegalInstantiation"/>
+        <module name="InnerAssignment"/>
+        <module name="MissingSwitchDefault"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+
+        <!-- Miscellaneous -->
+        <module name="ArrayTypeStyle"/>
+        <module name="TodoComment"/>
+        <module name="UpperEll"/>
+    </module>
+    
+    <!-- Line Length at Checker level -->
+    <module name="LineLength">
+        <property name="max" value="120"/>
+    </module>
+</module>

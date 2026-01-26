@@ -1,0 +1,8 @@
+{
+  "title": "Prefer concurrent collections over synchronized methods",
+  "type": "Best Practice",
+  "description": "For thread safety, prefer java.util.concurrent collections over synchronized wrapper methods for better scalability, performance, and maintainability. Concurrent collections use more sophisticated locking mechanisms.",
+  "example": "Instead of: List<String> list = Collections.synchronizedList(new ArrayList<>()); Use: CopyOnWriteArrayList<String> list = new CopyOnWriteArrayList<>(); Or: ConcurrentHashMap instead of Collections.synchronizedMap(new HashMap<>())",
+  "reference": "Java Concurrency in Practice by Brian Goetz",
+  "tags": ["synchronized", "concurrent", "thread-safety", "collections", "performance", "scalability"]
+}

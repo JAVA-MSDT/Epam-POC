@@ -1,0 +1,8 @@
+{
+  "title": "Vector is legacy, prefer ArrayList",
+  "type": "Anti-pattern",
+  "description": "The Vector class is considered legacy and should be replaced with ArrayList for better performance and modern code style. Vector is synchronized by default which adds unnecessary overhead in single-threaded scenarios.",
+  "example": "Instead of: Vector<String> v = new Vector<>(); Use: ArrayList<String> list = new ArrayList<>(); For thread safety, use: Collections.synchronizedList(new ArrayList<>()) or CopyOnWriteArrayList",
+  "reference": "Effective Java by Joshua Bloch, Item 6",
+  "tags": ["Vector", "ArrayList", "legacy", "collection", "performance", "synchronization"]
+}

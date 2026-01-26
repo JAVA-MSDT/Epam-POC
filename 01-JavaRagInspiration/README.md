@@ -5,7 +5,7 @@ A Retrieval-Augmented Generation (RAG) system for Java code review that combines
 ## Project Structure
 
 ```
-javarag/
+javaraginspiration/
 ├── pom.xml                                  # Maven build file
 ├── src/
 │   ├── main/
@@ -53,7 +53,7 @@ javarag/
 
 ### Build
 ```bash
-cd javarag
+cd javaraginspiration
 mvn clean compile
 ```
 
@@ -65,13 +65,13 @@ mvn exec:java -Dexec.mainClass="com.epam.Main" -Dexec.args="TestClass.java src/m
 ### Package as JAR
 ```bash
 mvn clean package
-java -jar target/javarag-1.0-SNAPSHOT.jar TestClass.java src/main/resources/checkstyle.xml src/main/resources/pmd-ruleset.xml src/main/resources/knowledgebase index
+java -jar target/javaraginspiration-1.0-SNAPSHOT.jar TestClass.java src/main/resources/checkstyle.xml src/main/resources/pmd-ruleset.xml src/main/resources/knowledgebase index
 ```
 
 ## Usage
 
 ```
-java -jar javarag.jar <JavaFile> <CheckstyleConfig> <PMDRuleset> <KnowledgeBaseDir> <IndexDir>
+java -jar javaraginspiration.jar <JavaFile> <CheckstyleConfig> <PMDRuleset> <KnowledgeBaseDir> <IndexDir>
 ```
 
 **Arguments:**
