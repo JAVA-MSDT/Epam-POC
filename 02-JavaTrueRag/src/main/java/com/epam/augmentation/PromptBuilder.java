@@ -7,7 +7,7 @@ import java.util.List;
 
 /**
  * Builds prompts for the LLM by combining user queries, code context, and knowledge base entries.
- * This is the Augmentation part of RAG - enriching prompts with retrieved context.
+ * This is the Augmentation part of RAG-enriching prompts with retrieved context.
  */
 public class PromptBuilder {
     

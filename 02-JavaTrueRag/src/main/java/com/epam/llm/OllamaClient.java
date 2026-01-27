@@ -15,14 +15,14 @@ public class OllamaClient {
     
     /**
      * Creates an Ollama client with default settings.
-     * Uses codellama:7b model on localhost:11434
+     * Uses codellama:7b model on localhost: 11434
      */
     public OllamaClient() {
         this("codellama:7b");
     }
     
     /**
-     * Creates an Ollama client with specified model.
+     * Creates an Ollama client with a specified model.
      * 
      * @param modelName Name of the Ollama model (e.g., "codellama:7b", "llama3:8b")
      */

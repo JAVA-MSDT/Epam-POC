@@ -18,7 +18,7 @@ public class RAGPipeline {
     private final KnowledgeBaseSearcher searcher;
     
     /**
-     * Creates a RAG pipeline with default Ollama model.
+     * Creates a RAG pipeline with a default Ollama model.
      * 
      * @param indexDir Directory containing the knowledge base index
      */
@@ -27,7 +27,7 @@ public class RAGPipeline {
     }
     
     /**
-     * Creates a RAG pipeline with specified Ollama model.
+     * Creates a RAG pipeline with a specified Ollama model.
      * 
      * @param indexDir Directory containing the knowledge base index
      * @param modelName Ollama model name
