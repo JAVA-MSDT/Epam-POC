@@ -3,6 +3,7 @@
 ## Overview
 
 This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review that combines:
+
 - Static analysis (Checkstyle + PMD)
 - Knowledge base retrieval (Lucene)
 - LLM generation (Ollama)
@@ -34,33 +35,33 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ├─────────────────────────────────────────────────────────┤
 │                                                         │
 │  STEP 1: RETRIEVAL                                      │
-│  ┌──────────────────────────────────────┐              │
-│  │  Knowledge Base Searcher             │              │
-│  │  • Lucene-powered search             │              │
-│  │  • Finds relevant KB entries         │              │
-│  │  • Returns top matches               │              │
-│  └──────────────────────────────────────┘              │
+│  ┌──────────────────────────────────────┐               │
+│  │  Knowledge Base Searcher             │               │
+│  │  • Lucene-powered search             │               │
+│  │  • Finds relevant KB entries         │               │
+│  │  • Returns top matches               │               │
+│  └──────────────────────────────────────┘               │
 │                    ↓                                    │
 │              Context Retrieved                          │
 │                    ↓                                    │
 │  STEP 2: AUGMENTATION                                   │
-│  ┌──────────────────────────────────────┐              │
-│  │  Prompt Builder                      │              │
-│  │  • Combines user query               │              │
-│  │  • Adds findings                     │              │
-│  │  • Adds KB context                   │              │
-│  │  • Adds code snippet                 │              │
-│  └──────────────────────────────────────┘              │
+│  ┌──────────────────────────────────────┐               │
+│  │  Prompt Builder                      │               │
+│  │  • Combines user query               │               │ 
+│  │  • Adds findings                     │               │
+│  │  • Adds KB context                   │               │
+│  │  • Adds code snippet                 │               │
+│  └──────────────────────────────────────┘               │
 │                    ↓                                    │
 │              Enriched Prompt                            │
 │                    ↓                                    │
 │  STEP 3: GENERATION                                     │
-│  ┌──────────────────────────────────────┐              │
-│  │  Ollama Client                       │              │
-│  │  • Sends prompt to LLM               │              │
-│  │  • CodeLlama 7B generates response   │              │
-│  │  • Returns natural language feedback │              │
-│  └──────────────────────────────────────┘              │
+│  ┌──────────────────────────────────────┐               │
+│  │  Ollama Client                       │               │
+│  │  • Sends prompt to LLM               │               │
+│  │  • CodeLlama 7B generates response   │               │
+│  │  • Returns natural language feedback │               │
+│  └──────────────────────────────────────┘               │
 │                                                         │
 └────────────────────────┬────────────────────────────────┘
                          │
@@ -80,6 +81,7 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 **Purpose**: Detect code issues using rule-based tools
 
 **Components**:
+
 - `CheckstyleAnalyzer.java`: Style and convention checks
 - `PMDAnalyzer.java`: Bug detection and code quality
 
@@ -92,6 +94,7 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 **Purpose**: Store and retrieve best practices
 
 **Components**:
+
 - `KnowledgeBaseIndexer.java`: Indexes JSON entries with Lucene
 - `KnowledgeBaseSearcher.java`: Searches for relevant entries
 - JSON files in `resources/knowledgebase/`
@@ -103,23 +106,29 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ### 3. RAG Layer (Core)
 
 #### 3.1 Retrieval
+
 **Class**: `KnowledgeBaseSearcher`
+
 - Searches KB based on findings
 - Returns top 3 relevant entries
 - Uses keyword matching
 
 #### 3.2 Augmentation
+
 **Class**: `PromptBuilder`
+
 - Constructs prompts with:
-  - System instructions
-  - User query
-  - Code context
-  - Findings
-  - KB entries
+    - System instructions
+    - User query
+    - Code context
+    - Findings
+    - KB entries
 - Truncates code to avoid token limits
 
 #### 3.3 Generation
+
 **Class**: `OllamaClient`
+
 - Connects to Ollama (localhost:11434)
 - Sends prompt to CodeLlama 7B
 - Returns LLM-generated response
@@ -130,17 +139,19 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ### 4. Orchestration Layer
 
 **Class**: `RAGGenerator`
+
 - Coordinates the 3-step RAG pipeline
 - Two modes:
-  - `generateFeedback()`: With static analysis
-  - `answerQuestion()`: Direct Q&A
+    - `generateFeedback()`: With static analysis
+    - `answerQuestion()`: Direct Q&A
 - Error handling and logging
 
 **Class**: `Main`
+
 - Entry point
 - Two modes:
-  - Test mode (no args)
-  - RAG mode (file + query)
+    - Test mode (no args)
+    - RAG mode (file + query)
 - User interface
 
 ---
@@ -190,36 +201,40 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 
 ## Technology Stack
 
-| Layer | Technology | Purpose |
-|-------|-----------|---------|
-| **Analysis** | Checkstyle, PMD | Rule-based code analysis |
-| **Storage** | JSON files | Knowledge base entries |
-| **Indexing** | Apache Lucene | Fast text search |
-| **Retrieval** | Lucene queries | Find relevant context |
-| **Generation** | Ollama + CodeLlama | LLM-powered responses |
-| **Integration** | LangChain4j | Java LLM framework |
-| **Build** | Maven | Dependency management |
+| Layer           | Technology         | Purpose                  |
+|-----------------|--------------------|--------------------------|
+| **Analysis**    | Checkstyle, PMD    | Rule-based code analysis |
+| **Storage**     | JSON files         | Knowledge base entries   |
+| **Indexing**    | Apache Lucene      | Fast text search         |
+| **Retrieval**   | Lucene queries     | Find relevant context    |
+| **Generation**  | Ollama + CodeLlama | LLM-powered responses    |
+| **Integration** | LangChain4j        | Java LLM framework       |
+| **Build**       | Maven              | Dependency management    |
 
 ---
 
 ## Key Design Decisions
 
 ### 1. Local-First Architecture
+
 - No cloud dependencies
 - No API keys required
 - Privacy-focused
 - Runs offline
 
 ### 2. Modular Design
+
 - Each component is swappable
 - Clear interfaces
-- Easy to extend
+- Effortless to extend
 
 ### 3. Two-Mode Operation
+
 - Test mode: Automated demos
 - RAG mode: Interactive queries
 
 ### 4. Graceful Degradation
+
 - Clear error messages
 - Fallback handling
 - User-friendly feedback
@@ -230,13 +245,13 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 
 ### Easy to Replace:
 
-| Component | Current | Alternatives |
-|-----------|---------|-------------|
-| **Static Analysis** | Checkstyle/PMD | SpotBugs, SonarQube |
-| **Knowledge Store** | JSON files | Database, API |
-| **Search** | Lucene | Elasticsearch, Vector DB |
-| **LLM** | Ollama/CodeLlama | OpenAI, Claude, Llama3 |
-| **Embeddings** | None | Sentence-transformers |
+| Component           | Current          | Alternatives             |
+|---------------------|------------------|--------------------------|
+| **Static Analysis** | Checkstyle/PMD   | SpotBugs, SonarQube      |
+| **Knowledge Store** | JSON files       | Database, API            |
+| **Search**          | Lucene           | Elasticsearch, Vector DB |
+| **LLM**             | Ollama/CodeLlama | OpenAI, Claude, Llama3   |
+| **Embeddings**      | None             | Sentence-transformers    |
 
 ### Easy to Add:
 
@@ -252,32 +267,37 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ## Performance Characteristics
 
 ### Static Analysis
-- **Speed**: 100-500ms per file
+
+- **Speed**: 100–500 ms per file
 - **Deterministic**: Same input = same output
 - **Scalable**: Can analyze many files
 
 ### Knowledge Retrieval
+
 - **Speed**: 10-50ms per query
 - **Accuracy**: Keyword-based matching
 - **Scalable**: Lucene handles large KBs
 
 ### LLM Generation
-- **First query**: 10-30 seconds (model loading)
-- **Subsequent**: 2-10 seconds
+
+- **First query**: 10–30 seconds (model loading)
+- **Subsequent**: 2–10 seconds
 - **Quality**: Good for code review
-- **Resource**: 2-4GB RAM
+- **Resource**: 2–4GB RAM
 
 ---
 
 ## Security Considerations
 
 ### ✅ Secure:
+
 - All processing local
-- No data sent to cloud
+- No data sent to the cloud
 - No API keys to leak
-- Code stays on machine
+- Code stays on the machine
 
 ### ⚠️ Consider:
+
 - Input validation (file paths)
 - Resource limits (prevent DoS)
 - Sanitize LLM outputs
@@ -288,12 +308,14 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ## Scalability
 
 ### Current Limitations:
+
 - Single-threaded processing
 - One file at a time
 - Synchronous LLM calls
 - In-memory knowledge base
 
 ### To Scale:
+
 - Add async processing
 - Batch file analysis
 - Distributed knowledge base
@@ -304,11 +326,13 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ## Monitoring & Observability
 
 ### Current:
+
 - Console logging
 - Basic error messages
 - Pipeline step indicators
 
 ### Production Needs:
+
 - Structured logging (SLF4J)
 - Metrics (Prometheus)
 - Tracing (OpenTelemetry)
@@ -319,16 +343,19 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ## Testing Strategy
 
 ### Unit Tests (TODO):
+
 - Test each component independently
 - Mock external dependencies
 - Verify prompt construction
 
 ### Integration Tests (TODO):
+
 - Test RAG pipeline end-to-end
 - Verify Ollama integration
 - Test error handling
 
 ### Manual Testing:
+
 - Run test mode
 - Try various queries
 - Verify output quality
@@ -338,12 +365,14 @@ This is a TRUE Retrieval-Augmented Generation (RAG) system for Java code review 
 ## Deployment
 
 ### Local Development:
+
 ```bash
 mvn clean compile
 mvn exec:java
 ```
 
 ### Production Considerations:
+
 - Package as JAR
 - Docker container
 - Environment configuration
@@ -355,18 +384,21 @@ mvn exec:java
 ## Future Enhancements
 
 ### Short Term:
+
 1. Add vector embeddings
 2. Improve prompt templates
 3. Add more KB entries
 4. Better error handling
 
 ### Medium Term:
+
 1. REST API
 2. Web UI
 3. Multi-file analysis
 4. Custom model support
 
 ### Long Term:
+
 1. Fine-tuned models
 2. Feedback loop
 3. A/B testing
@@ -374,21 +406,25 @@ mvn exec:java
 
 ---
 
-## Comparison: Before vs After
+## Comparison: Before vs. After
 
 ### Before (Template-Based):
+
 ```
 File → Analysis → Findings → Template Fill → Report
 ```
+
 - Fast (100ms)
 - Rigid output
 - No user queries
 - Not TRUE RAG
 
 ### After (LLM-Based):
+
 ```
 Query + File → Analysis → Retrieval → Prompt → LLM → Response
 ```
+
 - Slower (10s)
 - Natural language
 - User queries

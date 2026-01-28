@@ -3,7 +3,7 @@ package com.epam.model;
 import java.util.List;
 
 /**
- * Represents a knowledge base entry containing best practices, anti-patterns, or coding guidelines.
+ * Represents a knowledge base entry containing best practices, antipatterns, or coding guidelines.
  * Used in the RAG system to provide contextual feedback for static analysis findings.
  */
 public class KnowledgeEntry {

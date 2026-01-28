@@ -35,7 +35,7 @@ public class CheckstyleAnalyzer {
                 ConfigurationLoader.IgnoredModulesOptions.OMIT
             );
             
-            // Create and configure Checkstyle checker
+            // Create and configure a Checkstyle checker
             Checker checker = new Checker();
             checker.setModuleClassLoader(Checker.class.getClassLoader());
             checker.configure(config);
