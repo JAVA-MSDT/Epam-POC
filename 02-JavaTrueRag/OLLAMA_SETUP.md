@@ -7,23 +7,26 @@ This guide will help you set up Ollama for local LLM integration in the Java RAG
 ## What is Ollama?
 
 Ollama is a tool that lets you run large language models (LLMs) locally on your machine:
-- ✅ **Completely free** - No API keys or subscriptions
-- ✅ **Runs offline** - No internet required after download
+
+- ✅ **Completely free** – No API keys or subscriptions
+- ✅ **Runs offline** – No internet required after download
 - ✅ **Privacy-focused** - Your code never leaves your machine
-- ✅ **Easy to use** - Simple CLI interface
-- ✅ **Multiple models** - Choose the best model for your needs
+- ✅ **Easy to use** – Simple CLI interface
+- ✅ **Multiple models** – Choose the best model for your needs
 
 ---
 
 ## System Requirements
 
 ### Minimum Requirements:
+
 - **RAM**: 8GB (16GB recommended)
-- **Disk Space**: 5-10GB free (for model storage)
+- **Disk Space**: 5–10GB free (for model storage)
 - **OS**: macOS, Linux, or Windows
-- **CPU**: Modern multi-core processor (GPU optional but faster)
+- **CPU**: Modern multicore processor (GPU optional but faster)
 
 ### Recommended for Best Performance:
+
 - **RAM**: 16GB or more
 - **GPU**: NVIDIA GPU with 8GB+ VRAM (optional)
 - **Disk**: SSD for faster model loading
@@ -35,6 +38,7 @@ Ollama is a tool that lets you run large language models (LLMs) locally on your 
 ### macOS
 
 #### Option 1: Using Homebrew (Recommended)
+
 ```bash
 # Install Ollama
 brew install ollama
@@ -44,9 +48,10 @@ ollama --version
 ```
 
 #### Option 2: Direct Download
+
 1. Download from: https://ollama.ai/download
 2. Open the downloaded `.dmg` file
-3. Drag Ollama to Applications folder
+3. Drag Ollama to the Applications folder
 4. Open Ollama from Applications
 
 ### Linux
@@ -61,10 +66,11 @@ ollama --version
 
 ### Windows
 
-1. Download installer from: https://ollama.ai/download
+1. Download the installer from: https://ollama.ai/download
 2. Run the installer
-3. Follow installation wizard
+3. Follow the installation wizard
 4. Verify installation:
+
 ```powershell
 ollama --version
 ```
@@ -104,13 +110,13 @@ curl http://localhost:11434/api/tags
 
 ### Recommended Models for Code Review
 
-| Model | Size | RAM Needed | Speed | Quality | Best For |
-|-------|------|------------|-------|---------|----------|
-| **codellama:7b** | 3.8GB | 8GB | Fast | Good | Code-specific tasks ⭐ |
-| **llama3:8b** | 4.7GB | 8GB | Fast | Excellent | General purpose ⭐ |
-| **mistral:7b** | 4.1GB | 8GB | Very Fast | Good | Quick responses |
-| **codellama:13b** | 7.3GB | 16GB | Medium | Better | More accurate code review |
-| **llama3:70b** | 40GB | 64GB | Slow | Best | Production quality |
+| Model             | Size  | RAM Needed | Speed     | Quality   | Best For                  |
+|-------------------|-------|------------|-----------|-----------|---------------------------|
+| **codellama:7b**  | 3.8GB | 8GB        | Fast      | Good      | Code-specific tasks ⭐     |
+| **llama3:8b**     | 4.7GB | 8GB        | Fast      | Excellent | General purpose ⭐         |
+| **mistral:7b**    | 4.1GB | 8GB        | Very Fast | Good      | Quick responses           |
+| **codellama:13b** | 7.3GB | 16GB       | Medium    | Better    | More accurate code review |
+| **llama3:70b**    | 40GB  | 64GB       | Slow      | Best      | Production quality        |
 
 **For this demo, we recommend: `codellama:7b`** ⭐
 
@@ -248,19 +254,22 @@ java TestOllama
 ## Performance Expectations
 
 ### First Query (Cold Start)
-- **Time**: 10-30 seconds
+
+- **Time**: 10–30 seconds
 - **Reason**: Model needs to load into memory
 - **Solution**: Keep Ollama running, or pre-warm with a dummy query
 
 ### Subsequent Queries (Warm)
-- **Time**: 2-10 seconds
+
+- **Time**: 2–10 seconds
 - **Reason**: Model already in memory
 - **Varies by**: Model size, hardware, prompt complexity
 
 ### Token Generation Speed
+
 - **CPU**: 5-20 tokens/second
 - **GPU**: 50-200 tokens/second
-- **Typical response**: 100-300 tokens (5-60 seconds)
+- **Typical response**: 100–300 tokens (5–60 seconds)
 
 ---
 
@@ -271,6 +280,7 @@ java TestOllama
 **Cause**: Ollama service is not running
 
 **Solution**:
+
 ```bash
 # Start Ollama service
 ollama serve
@@ -286,6 +296,7 @@ curl http://localhost:11434/api/tags
 **Cause**: Model hasn't been downloaded
 
 **Solution**:
+
 ```bash
 # List downloaded models
 ollama list
@@ -301,6 +312,7 @@ ollama pull codellama:7b
 **Cause**: Insufficient RAM or CPU resources
 
 **Solutions**:
+
 1. Use a smaller model:
    ```bash
    ollama pull codellama:7b  # Instead of 13b or 70b
@@ -317,6 +329,7 @@ ollama pull codellama:7b
 **Cause**: Model too large for available RAM
 
 **Solution**:
+
 ```bash
 # Check your RAM
 # macOS/Linux:
@@ -333,6 +346,7 @@ ollama pull mistral:7b  # Smaller than codellama
 **Cause**: Another process using the port
 
 **Solution**:
+
 ```bash
 # Find process using port 11434
 lsof -i :11434
@@ -348,9 +362,10 @@ OLLAMA_HOST=0.0.0.0:11435 ollama serve
 
 ### Issue 6: Model generates poor quality responses
 
-**Cause**: Model not suitable for task, or poor prompt
+**Cause**: Model not suitable for a task, or poor prompt
 
 **Solutions**:
+
 1. Try a different model:
    ```bash
    ollama pull llama3:8b  # Better general purpose
@@ -395,23 +410,27 @@ ollama run codellama:7b --ctx-size 4096
 ## Model Management
 
 ### List All Models
+
 ```bash
 ollama list
 ```
 
 ### Remove a Model
+
 ```bash
 # Free up disk space by removing unused models
 ollama rm codellama:13b
 ```
 
 ### Update a Model
+
 ```bash
 # Get latest version of a model
 ollama pull codellama:7b
 ```
 
 ### Show Model Info
+
 ```bash
 # See model details
 ollama show codellama:7b
@@ -421,7 +440,7 @@ ollama show codellama:7b
 
 ## Pre-Warming for Demos
 
-To avoid slow first query during demos:
+To avoid slowing the first query during demos:
 
 ```bash
 # Start Ollama
@@ -458,7 +477,7 @@ Before running the Java RAG system, verify:
 - [ ] Ollama service is running (`curl http://localhost:11434/api/tags`)
 - [ ] Model is downloaded (`ollama list` shows codellama:7b)
 - [ ] Model responds to queries (`ollama run codellama:7b "test"`)
-- [ ] API endpoint works (curl test above)
+- [ ] API endpoint works (the curl test above)
 - [ ] Java can connect (TestOllama.java works)
 
 ---
@@ -488,27 +507,35 @@ ollama run codellama:7b "Hello"
 ## Recommended Models by Use Case
 
 ### For This Demo (Code Review):
+
 ```bash
 ollama pull codellama:7b
 ```
+
 **Why**: Best balance of speed, quality, and code understanding
 
 ### For Production (Better Quality):
+
 ```bash
 ollama pull codellama:13b
 ```
+
 **Why**: More accurate, better reasoning (needs 16GB RAM)
 
 ### For Fast Demos (Speed Priority):
+
 ```bash
 ollama pull mistral:7b
 ```
+
 **Why**: Fastest responses, good enough quality
 
 ### For Best Quality (If you have resources):
+
 ```bash
 ollama pull llama3:70b
 ```
+
 **Why**: Best quality, but needs 64GB RAM and is slow
 
 ---
@@ -516,42 +543,50 @@ ollama pull llama3:70b
 ## Performance Tuning Tips
 
 ### 1. Keep Ollama Running
+
 Don't start/stop Ollama between queries. Keep it running:
+
 ```bash
 ollama serve &
 ```
 
 ### 2. Pre-warm Before Demos
+
 Run a dummy query to load the model:
+
 ```bash
 ollama run codellama:7b "test" > /dev/null
 ```
 
 ### 3. Use Smaller Models for Demos
+
 7B models are fast enough and impressive:
+
 ```bash
 ollama pull codellama:7b  # Not 13b or 70b
 ```
 
 ### 4. Close Other Apps
+
 Free up RAM for better performance
 
 ### 5. Use SSD
+
 Store models on SSD for faster loading
 
 ---
 
 ## Comparison: Ollama vs Cloud LLMs
 
-| Feature | Ollama (Local) | OpenAI/Claude (Cloud) |
-|---------|----------------|----------------------|
-| **Cost** | Free | $0.01-0.10 per request |
-| **Privacy** | Complete | Data sent to cloud |
-| **Speed** | 5-30 seconds | 1-5 seconds |
-| **Quality** | Good | Excellent |
-| **Setup** | 15 minutes | 5 minutes |
-| **Internet** | Not needed | Required |
-| **API Keys** | None | Required |
+| Feature      | Ollama (Local) | OpenAI/Claude (Cloud)  |
+|--------------|----------------|------------------------|
+| **Cost**     | Free           | $0.01-0.10 per request |
+| **Privacy**  | Complete       | Data sent to cloud     |
+| **Speed**    | 5-30 seconds   | 1-5 seconds            |
+| **Quality**  | Good           | Excellent              |
+| **Setup**    | 15 minutes     | 5 minutes              |
+| **Internet** | Not needed     | Required               |
+| **API Keys** | None           | Required               |
 
 **For demos and learning: Ollama is perfect!** ✅
 
@@ -580,8 +615,8 @@ Once Ollama is set up and tested:
 ## Estimated Setup Time
 
 - **Installation**: 5 minutes
-- **Model Download**: 10-15 minutes (depends on internet)
+- **Model Download**: 10–15 minutes (depends on internet)
 - **Testing**: 5 minutes
-- **Total**: ~20-25 minutes
+- **Total**: ~20–25 minutes
 
 **You're now ready to implement TRUE RAG!** 🚀
