@@ -1,6 +1,7 @@
 # Java RAG Code Review System
 
-A TRUE Retrieval-Augmented Generation (RAG) system for Java code review that combines static analysis tools (Checkstyle and PMD) with a local knowledge base and Ollama LLM to provide intelligent, contextual feedback.
+A TRUE Retrieval-Augmented Generation (RAG) system for Java code review that combines static analysis tools (Checkstyle
+and PMD) with a local knowledge base and Ollama LLM to provide intelligent, contextual feedback.
 
 ## What Makes This TRUE RAG?
 
@@ -63,6 +64,7 @@ javatruerag/
 ## Prerequisites
 
 ### Required:
+
 - **Java 21** or higher
 - **Maven 3.6** or higher
 - **Ollama** installed and running
@@ -87,17 +89,20 @@ ollama run codellama:7b "Hello"
 **For detailed setup instructions, see [OLLAMA_SETUP.md](OLLAMA_SETUP.md)**
 
 ### Build
+
 ```bash
 cd javatruerag
 mvn clean compile
 ```
 
 ### Run Test Mode (Automated Tests)
+
 ```bash
 mvn exec:java
 ```
 
 ### Run RAG Mode (Interactive)
+
 ```bash
 # Ask questions about your code
 mvn exec:java -Dexec.args="samples/KnowledgeBaseTestExample.java 'Find bugs in this code'"
@@ -110,18 +115,23 @@ mvn exec:java -Dexec.args="samples/KnowledgeBaseTestExample.java 'Suggest improv
 ## Usage
 
 ### Test Mode (No Arguments)
+
 Runs predefined test queries:
+
 ```bash
 mvn exec:java
 ```
 
 ### RAG Mode (File + Query)
+
 Analyze specific files with custom queries:
+
 ```bash
 mvn exec:java -Dexec.args="<file> '<query>'"
 ```
 
 **Example Queries:**
+
 - `"Find all bugs and security issues"`
 - `"Explain why this code is problematic"`
 - `"What are the performance concerns?"`
@@ -139,7 +149,11 @@ Create JSON files in the `knowledgebase` directory with this structure:
   "description": "Detailed explanation of the issue and why it matters",
   "example": "Code example showing the problem and solution",
   "reference": "Source or reference documentation",
-  "tags": ["keyword1", "keyword2", "keyword3"]
+  "tags": [
+    "keyword1",
+    "keyword2",
+    "keyword3"
+  ]
 }
 ```
 
@@ -202,19 +216,20 @@ I've analyzed your code and found several issues that need attention:
    You're using the legacy Vector class. This is an anti-pattern in modern
    Java. Vector is synchronized by default, which adds unnecessary overhead
    in single-threaded scenarios. 
-   
-   Recommendation: Replace with ArrayList:
-   ```java
-   // Instead of:
-   Vector<String> items = new Vector<>();
-   
-   // Use:
-   ArrayList<String> items = new ArrayList<>();
-   ```
+      
+      Recommendation: Replace with ArrayList:
+      ```java
+      // Instead of:
+      Vector<String> items = new Vector<>();
+      
+      // Use:
+      ArrayList<String> items = new ArrayList<>();
+      ```
 
 2. **Performance Concern**
    The synchronization overhead of Vector can impact performance...
 
 [Full LLM-generated explanation continues...]
 ============================================================
+
 ```
