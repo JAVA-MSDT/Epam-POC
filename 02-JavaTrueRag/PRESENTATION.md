@@ -4,7 +4,7 @@
 
 **Goal**: Show engineers how to build a TRUE RAG system in Java using local LLMs
 
-**Duration**: 30-45 minutes
+**Duration**: 30–45 minutes
 
 **Audience**: Software engineers interested in RAG/LLM integration
 
@@ -13,20 +13,23 @@
 ## Pre-Presentation Checklist
 
 ### 1 Day Before:
+
 - [ ] Ollama installed and tested
 - [ ] CodeLlama model downloaded
 - [ ] Project compiles successfully
 - [ ] Test mode runs without errors
-- [ ] Prepare 2-3 code samples
+- [ ] Prepare 2–3 code samples
 
 ### 1 Hour Before:
+
 - [ ] Start Ollama: `ollama serve &`
 - [ ] Pre-warm model: `ollama run codellama:7b "test" > /dev/null`
-- [ ] Open project in IDE
+- [ ] Open a project in the IDE
 - [ ] Have terminal ready
 - [ ] Test internet connection (for backup)
 
 ### 5 Minutes Before:
+
 - [ ] Close unnecessary applications
 - [ ] Increase terminal font size
 - [ ] Have backup slides ready
@@ -43,6 +46,7 @@
 > "Static analysis tools tell you WHAT is wrong, but not WHY or HOW to fix it."
 
 **Demo the Problem**:
+
 ```bash
 # Show raw Checkstyle output
 checkstyle MyCode.java
@@ -61,13 +65,14 @@ checkstyle MyCode.java
 
 **Simple Definition**:
 > "RAG = Retrieval-Augmented Generation
-> 
+>
 > It's a pattern where you:
-> 1. Retrieve relevant information from a knowledge base
+> 1. Retrieve relevant information from the knowledge base
 > 2. Augment an LLM prompt with that information
 > 3. Generate a better, more informed response"
 
 **Show the Flow**:
+
 ```
 User Question
     ↓
@@ -89,6 +94,7 @@ Informed Response
 #### Demo 1: Show the System (5 min)
 
 **Navigate the code structure**:
+
 ```
 src/main/java/com/epam/
 ├── analysis/      ← "Finds issues"
@@ -98,6 +104,7 @@ src/main/java/com/epam/
 ```
 
 **Explain each layer**:
+
 - "Analysis finds issues using Checkstyle/PMD"
 - "Retrieval searches our knowledge base"
 - "RAG combines everything and asks the LLM"
@@ -109,12 +116,14 @@ mvn exec:java
 ```
 
 **While it runs, explain**:
+
 1. "Indexing knowledge base with Lucene"
 2. "Running static analysis"
 3. "RAG Pipeline - 3 steps"
 4. "LLM generating response"
 
 **Show the output**:
+
 - Point out the natural language
 - Highlight how it explains WHY
 - Show concrete suggestions
@@ -126,6 +135,7 @@ mvn exec:java -Dexec.args="samples/KnowledgeBaseTestExample.java 'Is this code s
 ```
 
 **Key Points**:
+
 - "User asks in natural language"
 - "System understands intent"
 - "LLM provides contextual answer"
@@ -142,13 +152,13 @@ mvn exec:java -Dexec.args="samples/KnowledgeBaseTestExample.java 'Is this code s
 public String generateFeedback(...) {
     // STEP 1: RETRIEVAL
     List<KnowledgeEntry> context = retrieveKnowledge(findings);
-    
+
     // STEP 2: AUGMENTATION
     String prompt = promptBuilder.buildPrompt(query, findings, context, code);
-    
+
     // STEP 3: GENERATION
     String response = ollamaClient.generate(prompt);
-    
+
     return response;
 }
 ```
@@ -164,12 +174,14 @@ public String generateFeedback(...) {
 **Open**: `PromptBuilder.java`
 
 Show how the prompt is constructed:
+
 ```java
 "You are a Java expert...
-User asked: {query}
-Issues found: {findings}
-Best practices: {knowledge}
-Provide helpful feedback..."
+User asked:{query}
+Issues found:{findings}
+Best practices:{knowledge}
+Provide helpful
+feedback..."
 ```
 
 **Key Point**: "The prompt is the secret sauce. It tells the LLM what to do and gives it context."
@@ -180,9 +192,9 @@ Provide helpful feedback..."
 
 ```java
 ChatLanguageModel model = OllamaChatModel.builder()
-    .baseUrl("http://localhost:11434")
-    .modelName("codellama:7b")
-    .build();
+        .baseUrl("http://localhost:11434")
+        .modelName("codellama:7b")
+        .build();
 
 String response = model.generate(prompt);
 ```
@@ -195,15 +207,16 @@ String response = model.generate(prompt);
 
 **Show the comparison**:
 
-| Feature | Ollama (Local) | OpenAI (Cloud) |
-|---------|---------------|----------------|
-| Cost | Free | $0.01-0.10/request |
-| Privacy | Complete | Data sent to cloud |
-| Speed | 5-30s | 1-5s |
-| Setup | 15 min | 5 min |
-| Internet | Not needed | Required |
+| Feature  | Ollama (Local) | OpenAI (Cloud)     |
+|----------|----------------|--------------------|
+| Cost     | Free           | $0.01-0.10/request |
+| Privacy  | Complete       | Data sent to cloud |
+| Speed    | 5-30s          | 1-5s               |
+| Setup    | 15 min         | 5 min              |
+| Internet | Not needed     | Required           |
 
 **Key Messages**:
+
 - "For internal tools, local is perfect"
 - "Your code never leaves your machine"
 - "No API keys to manage"
@@ -235,17 +248,17 @@ LLM                     → OpenAI, Claude, Llama3
 
 **Show example scenarios**:
 
-1. **"I want better search"**
-   - Replace Lucene with vector embeddings
-   - Keep everything else
+1. **"I want a better search"**
+    - Replace Lucene with vector embeddings
+    - Keep everything else
 
 2. **"I want cloud LLM"**
-   - Replace OllamaClient with OpenAI client
-   - Keep everything else
+    - Replace OllamaClient with OpenAI client
+    - Keep everything else
 
 3. **"I want to analyze Python"**
-   - Replace Checkstyle/PMD with Pylint
-   - Keep RAG pipeline
+    - Replace Checkstyle/PMD with Pylint
+    - Keep RAG pipeline
 
 ---
 
@@ -257,10 +270,12 @@ LLM                     → OpenAI, Claude, Llama3
 A: "Good for code review. Not perfect, but helpful. You can upgrade to larger models or cloud LLMs for better quality."
 
 **Q: "Can this scale to large codebases?"**
-A: "Current version is single-threaded. For production, add async processing, batch analysis, and distributed knowledge base."
+A: " The current version is single-threaded. For production, add async processing, batch analysis, and distributed knowledge
+base."
 
 **Q: "Why not use LangChain or LlamaIndex?"**
-A: "Those are great frameworks, but they hide the RAG pattern. This shows you the fundamentals so you understand what's happening."
+A: "Those are great frameworks, but they hide the RAG pattern. This shows you the fundamentals so you understand what's
+happening."
 
 **Q: "What about hallucinations?"**
 A: "RAG reduces hallucinations by grounding responses in your knowledge base. But always validate LLM outputs."
@@ -273,16 +288,19 @@ A: "It's a solid foundation. Add: testing, error handling, monitoring, API layer
 ## Demo Tips
 
 ### If Ollama is Slow:
-- "First query loads the model, takes 10-30 seconds"
-- "Subsequent queries are faster, 2-10 seconds"
+
+- "First query loads the model, takes 10–30 seconds"
+- "Subsequent queries are faster, 2–10 seconds"
 - Pre-warm before demo
 
 ### If Ollama Fails:
+
 - Have backup slides with expected output
 - Explain what would happen
 - Show the code instead
 
 ### If Questions Derail:
+
 - "Great question! Let's discuss after the demo"
 - Stay on schedule
 - Offer to follow up
@@ -302,12 +320,14 @@ A: "It's a solid foundation. Add: testing, error handling, monitoring, API layer
 ## Post-Presentation
 
 ### Share:
+
 - GitHub repo link
 - OLLAMA_SETUP.md
 - ARCHITECTURE.md
 - Your contact for questions
 
 ### Follow-up:
+
 - Offer to help with implementation
 - Share additional resources
 - Create a Slack/Teams channel
@@ -326,11 +346,13 @@ A: "It's a solid foundation. Add: testing, error handling, monitoring, API layer
 ### If Time Runs Short:
 
 Skip:
+
 - Detailed code walkthrough
 - Extension scenarios
 - Some Q&A
 
 Keep:
+
 - Live demo
 - RAG explanation
 - Key takeaways
@@ -351,6 +373,7 @@ Keep:
 
 ## The One-Sentence Pitch
 
-> "This is a TRUE RAG system that shows you how to combine static analysis, knowledge retrieval, and local LLMs to create intelligent code review feedback—all running on your machine with no API keys."
+> "This is a TRUE RAG system that shows you how to combine static analysis, knowledge retrieval, and local LLMs to
+> create intelligent code review feedback—all running on your machine with no API keys."
 
 **Simple. Clear. Compelling.** 🎯
