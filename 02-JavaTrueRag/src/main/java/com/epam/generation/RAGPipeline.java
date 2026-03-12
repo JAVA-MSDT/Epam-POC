@@ -1,6 +1,7 @@
 package com.epam.generation;
 
 import com.epam.augmentation.PromptBuilder;
+import com.epam.constant.AppConstant;
 import com.epam.llm.OllamaClient;
 import com.epam.model.AnalysisFinding;
 import com.epam.model.KnowledgeEntry;
@@ -23,7 +24,7 @@ public class RAGPipeline {
      * @param indexDir Directory containing the knowledge base index
      */
     public RAGPipeline(String indexDir) {
-        this(indexDir, "codellama:7b");
+        this(indexDir, AppConstant.OLLAMA_MODEL);
     }
     
     /**

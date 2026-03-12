@@ -1,5 +1,6 @@
 package com.epam.llm;
 
+import com.epam.constant.AppConstant;
 import dev.langchain4j.model.chat.ChatLanguageModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
 
@@ -15,21 +16,21 @@ public class OllamaClient {
     
     /**
      * Creates an Ollama client with default settings.
-     * Uses codellama:7b model on localhost: 11434
+     * Uses model on localhost: 11434
      */
     public OllamaClient() {
-        this("codellama:7b");
+        this(AppConstant.OLLAMA_MODEL);
     }
     
     /**
      * Creates an Ollama client with a specified model.
      * 
-     * @param modelName Name of the Ollama model (e.g., "codellama:7b", "llama3:8b")
+     * @param modelName Name of the Ollama model (e.g., "deepseek-coder:6.7b", "llama3:8b")
      */
     public OllamaClient(String modelName) {
         this.modelName = modelName;
         this.model = OllamaChatModel.builder()
-                .baseUrl("http://localhost:11434")
+                .baseUrl(AppConstant.OLLAMA_BASE_URL)
                 .modelName(modelName)
                 .timeout(Duration.ofSeconds(60))
                 .temperature(0.7)

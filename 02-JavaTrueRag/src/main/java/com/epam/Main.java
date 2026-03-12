@@ -2,6 +2,7 @@ package com.epam;
 
 import com.epam.analysis.CheckstyleAnalyzer;
 import com.epam.analysis.PMDAnalyzer;
+import com.epam.constant.AppConstant;
 import com.epam.generation.RAGPipeline;
 import com.epam.model.AnalysisFinding;
 import com.epam.retrieval.KnowledgeBaseIndexer;
@@ -99,8 +100,8 @@ public class Main {
             System.err.println("\n❌ Error generating feedback: " + e.getMessage());
             System.err.println("\nPlease ensure:");
             System.err.println("  1. Ollama is running: ollama serve");
-            System.err.println("  2. Model is downloaded: ollama pull codellama:7b");
-            System.err.println("  3. Test with: ollama run codellama:7b 'hello'");
+            System.err.println("  2. Model is downloaded: ollama pull " + AppConstant.OLLAMA_MODEL);
+            System.err.println("  3. Test with: ollama run " + AppConstant.OLLAMA_MODEL + " 'hello'");
         }
     }
     
