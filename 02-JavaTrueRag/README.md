@@ -16,36 +16,53 @@ and PMD) with a local knowledge base and Ollama LLM to provide intelligent, cont
 ```
 javatruerag/
 ├── pom.xml                                  # Maven build file
+├── README.md                                # Main documentation
+├── ARCHITECTURE.md                          # System architecture guide
+├── PROJECT_SUMMARY.md                       # Project summary
+├── QUICKSTART.md                            # Quick start guide
 ├── OLLAMA_SETUP.md                          # Ollama installation guide
+├── build.sh                                 # Build script
 ├── src/
-│   ├── main/
-│   │   ├── java/
-│   │   │   └── com/
-│   │   │       └── epam/
-│   │   │           ├── analysis/            # Static analysis components
-│   │   │           │   ├── CheckstyleAnalyzer.java
-│   │   │           │   └── PMDAnalyzer.java
-│   │   │           ├── retrieval/           # RAG: Retrieval
-│   │   │           │   ├── KnowledgeBaseIndexer.java
-│   │   │           │   └── KnowledgeBaseSearcher.java
-│   │   │           ├── augmentation/        # RAG: Augmentation
-│   │   │           │   └── PromptBuilder.java
-│   │   │           ├── llm/                 # RAG: LLM Client
-│   │   │           │   └── OllamaClient.java
-│   │   │           ├── generation/          # RAG: Generation Pipeline
-│   │   │           │   └── RAGPipeline.java
-│   │   │           ├── model/               # Data models
-│   │   │           │   ├── AnalysisFinding.java
-│   │   │           │   └── KnowledgeEntry.java
-│   │   │           └── Main.java            # Main entry point
-│   │   └── resources/
-│   │       ├── checkstyle.xml               # Checkstyle configuration
-│   │       ├── pmd-ruleset.xml              # PMD ruleset configuration
-│   │       └── knowledgebase/               # Knowledge base entries
-│   │           ├── vector_vs_arraylist.json
-│   │           ├── enumeration_vs_iterator.json
-│   │           └── synchronized_vs_concurrent.json
-└── samples/                                 # Sample files for testing
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── epam/
+│       │           ├── analysis/            # Static analysis components
+│       │           │   ├── CheckstyleAnalyzer.java
+│       │           │   └── PMDAnalyzer.java
+│       │           ├── retrieval/           # RAG: Retrieval
+│       │           │   ├── KnowledgeBaseIndexer.java
+│       │           │   └── KnowledgeBaseSearcher.java
+│       │           ├── augmentation/        # RAG: Augmentation
+│       │           │   └── PromptBuilder.java
+│       │           ├── llm/                 # RAG: LLM Client
+│       │           │   └── OllamaClient.java
+│       │           ├── generation/          # RAG: Generation Pipeline
+│       │           │   └── RAGPipeline.java
+│       │           ├── constant/            # Application constants
+│       │           │   └── AppConstant.java
+│       │           ├── model/               # Data models
+│       │           │   ├── AnalysisFinding.java
+│       │           │   └── KnowledgeEntry.java
+│       │           └── Main.java            # Main entry point
+│       └── resources/
+│           ├── checkstyle.xml               # Checkstyle configuration
+│           ├── pmd-ruleset.xml              # PMD ruleset configuration
+│           ├── knowledgebase/               # Knowledge base entries
+│           │   ├── vector_vs_arraylist.json
+│           │   ├── enumeration_vs_iterator.json
+│           │   ├── synchronized_vs_concurrent.json
+│           │   ├── size_vs_isempty.json
+│           │   └── string_concatenation_loops.json
+│           └── templates/                   # Prompt templates
+│               └── feedback_template.txt
+├── samples/                                 # Sample files for testing
+│   ├── KnowledgeBaseTestExample.java
+│   ├── BadCodeExample.java
+│   ├── GoodCodeExample.java
+│   ├── AnotherBadExample.java
+│   └── TestClass.java
+└── index/                                   # Lucene index (generated)
 ```
 
 ## Features

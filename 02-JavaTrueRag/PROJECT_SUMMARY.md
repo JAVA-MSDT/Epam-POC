@@ -1,11 +1,12 @@
-# Java RAG Code Review System - Project Summary
+# Java RAG Code Review System – Project Summary
 
 ## What This Is
 
 A **TRUE Retrieval-Augmented Generation (RAG)** system for Java code review that:
+
 - Accepts natural language queries from users
 - Analyzes code with static analysis tools
-- Retrieves relevant best practices from a knowledge base
+- Retrieves relevant best practices from the knowledge base
 - Uses a local LLM (Ollama) to generate intelligent, contextual feedback
 
 **Key Feature**: Everything runs locally—no API keys, no cloud, complete privacy.
@@ -15,6 +16,7 @@ A **TRUE Retrieval-Augmented Generation (RAG)** system for Java code review that
 ## Quick Start
 
 ### Prerequisites
+
 ```bash
 # Install Ollama
 brew install ollama
@@ -27,6 +29,7 @@ ollama pull codellama:7b
 ```
 
 ### Build & Run
+
 ```bash
 # Build
 mvn clean compile
@@ -44,21 +47,54 @@ mvn exec:java -Dexec.args="samples/KnowledgeBaseTestExample.java 'Find bugs'"
 
 ```
 javatruerag/
-├── src/main/java/com/epam/
-│   ├── analysis/          # Static analysis (Checkstyle, PMD)
-│   ├── retrieval/         # Knowledge base indexing & search
-│   ├── rag/               # RAG pipeline (Ollama integration)
-│   ├── model/             # Data models
-│   └── Main.java          # Entry point
-├── src/main/resources/
-│   ├── knowledgebase/     # JSON knowledge entries
-│   ├── checkstyle.xml     # Checkstyle rules
-│   └── pmd-ruleset.xml    # PMD rules
-├── samples/               # Test Java files
-├── ARCHITECTURE.md        # System architecture
-├── OLLAMA_SETUP.md        # Ollama installation guide
-├── PRESENTATION.md        # Presentation guide
-└── README.md              # Main documentation
+├── pom.xml                                  # Maven build file
+├── README.md                                # Main documentation
+├── ARCHITECTURE.md                          # System architecture guide
+├── PROJECT_SUMMARY.md                       # Project summary
+├── QUICKSTART.md                            # Quick start guide
+├── OLLAMA_SETUP.md                          # Ollama installation guide
+├── build.sh                                 # Build script
+├── src/
+│   └── main/
+│       ├── java/
+│       │   └── com/
+│       │       └── epam/
+│       │           ├── analysis/            # Static analysis components
+│       │           │   ├── CheckstyleAnalyzer.java
+│       │           │   └── PMDAnalyzer.java
+│       │           ├── retrieval/           # RAG: Retrieval
+│       │           │   ├── KnowledgeBaseIndexer.java
+│       │           │   └── KnowledgeBaseSearcher.java
+│       │           ├── augmentation/        # RAG: Augmentation
+│       │           │   └── PromptBuilder.java
+│       │           ├── llm/                 # RAG: LLM Client
+│       │           │   └── OllamaClient.java
+│       │           ├── generation/          # RAG: Generation Pipeline
+│       │           │   └── RAGPipeline.java
+│       │           ├── constant/            # Application constants
+│       │           │   └── AppConstant.java
+│       │           ├── model/               # Data models
+│       │           │   ├── AnalysisFinding.java
+│       │           │   └── KnowledgeEntry.java
+│       │           └── Main.java            # Main entry point
+│       └── resources/
+│           ├── checkstyle.xml               # Checkstyle configuration
+│           ├── pmd-ruleset.xml              # PMD ruleset configuration
+│           ├── knowledgebase/               # Knowledge base entries
+│           │   ├── vector_vs_arraylist.json
+│           │   ├── enumeration_vs_iterator.json
+│           │   ├── synchronized_vs_concurrent.json
+│           │   ├── size_vs_isempty.json
+│           │   └── string_concatenation_loops.json
+│           └── templates/                   # Prompt templates
+│               └── feedback_template.txt
+├── samples/                                 # Sample files for testing
+│   ├── KnowledgeBaseTestExample.java
+│   ├── BadCodeExample.java
+│   ├── GoodCodeExample.java
+│   ├── AnotherBadExample.java
+│   └── TestClass.java
+└── index/                                   # Lucene index (generated)
 ```
 
 ---
@@ -84,11 +120,13 @@ javatruerag/
 ### Example
 
 **Input**:
+
 ```bash
 mvn exec:java -Dexec.args="MyCode.java 'Find bugs'"
 ```
 
 **Output**:
+
 ```
 I've analyzed your code and found several issues:
 
@@ -109,19 +147,22 @@ I've analyzed your code and found several issues:
 
 ---
 
-## Key Components
+## Key Parts
 
 ### 1. Static Analysis
+
 - **CheckstyleAnalyzer**: Code style and conventions
 - **PMDAnalyzer**: Bug detection and code quality
 - **Output**: List of findings
 
 ### 2. Knowledge Base
+
 - **JSON files**: Best practices, anti-patterns, guidelines
 - **Lucene indexing**: Fast text search
 - **KnowledgeBaseSearcher**: Retrieves relevant entries
 
 ### 3. RAG Pipeline
+
 - **RAGGenerator**: Orchestrates the 3-step process
 - **PromptBuilder**: Constructs LLM prompts with context
 - **OllamaClient**: Integrates with local Ollama LLM
@@ -142,19 +183,20 @@ I've analyzed your code and found several issues:
 
 ## What Makes This TRUE RAG
 
-| Component | Implementation | Status |
-|-----------|---------------|--------|
-| User Query | Natural language input | ✅ |
-| Retrieval | Lucene KB search | ✅ |
-| Augmentation | Prompt with context | ✅ |
-| Generation | Ollama LLM | ✅ |
-| Local | No cloud/API keys | ✅ |
+| Component    | Implementation         | Status |
+|--------------|------------------------|--------|
+| User Query   | Natural language input | ✅      |
+| Retrieval    | Lucene KB search       | ✅      |
+| Augmentation | Prompt with context    | ✅      |
+| Generation   | Ollama LLM             | ✅      |
+| Local        | No cloud/API keys      | ✅      |
 
 ---
 
 ## Use Cases
 
 ### ✅ Perfect For:
+
 - Learning RAG concepts
 - Internal code review tools
 - Educational demos
@@ -162,6 +204,7 @@ I've analyzed your code and found several issues:
 - Privacy-sensitive environments
 
 ### ⚠️ Needs Enhancement For:
+
 - Production deployments (add testing, monitoring)
 - Large codebases (add async processing)
 - Enterprise use (add security, multi-tenancy)
@@ -172,14 +215,15 @@ I've analyzed your code and found several issues:
 
 ### Easy to Replace:
 
-| Component | Current | Alternatives |
-|-----------|---------|-------------|
-| Static Analysis | Checkstyle/PMD | SpotBugs, SonarQube |
-| Knowledge Store | JSON files | Database, API |
-| Search | Lucene | Elasticsearch, Vector DB |
-| LLM | Ollama/CodeLlama | OpenAI, Claude, Llama3 |
+| Component       | Current          | Alternatives             |
+|-----------------|------------------|--------------------------|
+| Static Analysis | Checkstyle/PMD   | SpotBugs, SonarQube      |
+| Knowledge Store | JSON files       | Database, API            |
+| Search          | Lucene           | Elasticsearch, Vector DB |
+| LLM             | Ollama/CodeLlama | OpenAI, Claude, Llama3   |
 
 ### Easy to Add:
+
 - Vector embeddings for semantic search
 - REST API layer
 - Web UI
@@ -191,17 +235,20 @@ I've analyzed your code and found several issues:
 ## Performance
 
 ### Static Analysis
-- **Speed**: 100-500ms per file
+
+- **Speed**: 100–500 ms per file
 - **Scalability**: Can analyze many files
 
 ### Knowledge Retrieval
+
 - **Speed**: 10-50ms per query
 - **Accuracy**: Keyword-based matching
 
 ### LLM Generation
-- **First query**: 10-30 seconds (model loading)
-- **Subsequent**: 2-10 seconds
-- **Resource**: 2-4GB RAM
+
+- **First query**: 10–30 seconds (model loading)
+- **Subsequent**: 2–10 seconds
+- **Resource**: 2–4 GB RAM
 
 ---
 
@@ -236,9 +283,10 @@ mvn exec:java -Dexec.args="MyCode.java 'Explain why this is problematic'"
 
 ---
 
-## Comparison: Before vs After
+## Comparison: Before vs. After
 
 ### Before (Template-Based)
+
 - ❌ No user queries
 - ❌ Rigid template output
 - ❌ No LLM
@@ -246,6 +294,7 @@ mvn exec:java -Dexec.args="MyCode.java 'Explain why this is problematic'"
 - ❌ Not TRUE RAG
 
 ### After (LLM-Based)
+
 - ✅ Natural language queries
 - ✅ Intelligent responses
 - ✅ Ollama LLM integration
@@ -257,18 +306,21 @@ mvn exec:java -Dexec.args="MyCode.java 'Explain why this is problematic'"
 ## Future Enhancements
 
 ### Short Term:
+
 - Add vector embeddings
 - Improve prompt templates
-- Expand knowledge base
+- Expand the knowledge base
 - Better error handling
 
 ### Medium Term:
+
 - REST API
 - Web UI
 - Multi-file analysis
 - Streaming responses
 
 ### Long Term:
+
 - Fine-tuned models
 - Feedback loop
 - A/B testing
@@ -296,7 +348,7 @@ This is a demo/educational project. Use and modify as needed.
 
 ## Support
 
-- **Documentation**: See markdown files in project root
+- **Documentation**: See Markdown files in the project root
 - **Issues**: Check OLLAMA_SETUP.md for troubleshooting
 - **Architecture**: See ARCHITECTURE.md for design details
 - **Presentation**: See PRESENTATION.md for demo guide
@@ -306,6 +358,7 @@ This is a demo/educational project. Use and modify as needed.
 ## Summary
 
 This project demonstrates:
+
 - ✅ How to build a TRUE RAG system in Java
 - ✅ How to integrate local LLMs (Ollama)
 - ✅ How to combine static analysis with AI
