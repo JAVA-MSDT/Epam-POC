@@ -1,4 +1,4 @@
-package com.epam;
+package com.epam.main;
 
 import com.epam.analysis.CheckstyleAnalyzer;
 import com.epam.analysis.PMDAnalyzer;
