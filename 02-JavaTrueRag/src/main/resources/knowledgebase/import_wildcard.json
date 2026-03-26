@@ -1,0 +1,8 @@
+{
+  "title": "Avoid wildcard imports (import.*)",
+  "type": "Best Practice",
+  "description": "Wildcard imports (e.g. import java.util.*) pull in every class from a package, causing namespace pollution, potential name clashes, and making it unclear which types the class actually depends on. Explicit imports document intent and prevent accidental use of unintended classes.",
+  "example": "Instead of: import java.util.*; Use: import java.util.List; import java.util.ArrayList;",
+  "reference": "Google Java Style Guide, Checkstyle import.avoidStar rule",
+  "tags": ["import", "avoidStar", "wildcard", "namespace", "readability", "checkstyle", "best-practice"]
+}

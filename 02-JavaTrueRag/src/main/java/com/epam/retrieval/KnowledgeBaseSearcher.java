@@ -92,28 +92,32 @@ public class KnowledgeBaseSearcher {
      */
     public List<KnowledgeEntry> search(String queryStr, int maxResults) throws Exception {
         List<KnowledgeEntry> results = new ArrayList<>();
-        
+        Set<String> seenTitles = new HashSet<>();
+
         Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
         try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
             IndexSearcher searcher = new IndexSearcher(reader);
 
             // Debug: Print what we're searching for
             System.out.println("    Searching knowledge base for: '" + queryStr + "'");
-            
+
             // Search across multiple fields for better matching
             Query query = buildMultiFieldQuery(queryStr);
-            
-            TopDocs topDocs = searcher.search(query, maxResults);
+
+            TopDocs topDocs = searcher.search(query, maxResults * 3); // fetch extra to allow for dedup
             System.out.println("    Found " + topDocs.totalHits.value + " potential matches");
-            
+
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
+                if (results.size() >= maxResults) break;
                 Document doc = searcher.doc(scoreDoc.doc);
                 KnowledgeEntry entry = documentToKnowledgeEntry(doc);
-                System.out.println("    Match: " + entry.getTitle() + " (score: " + scoreDoc.score + ")");
-                results.add(entry);
+                if (seenTitles.add(entry.getTitle())) {
+                    System.out.println("    Match: " + entry.getTitle() + " (score: " + scoreDoc.score + ")");
+                    results.add(entry);
+                }
             }
         }
-        
+
         return results;
     }
 

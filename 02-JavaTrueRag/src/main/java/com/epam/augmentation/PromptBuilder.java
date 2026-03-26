@@ -40,7 +40,7 @@ public class PromptBuilder {
         if (codeSnippet != null && !codeSnippet.isEmpty()) {
             prompt.append("CODE BEING ANALYZED:\n");
             prompt.append("```java\n");
-            prompt.append(truncateCode(codeSnippet, 500));
+            prompt.append(truncateCode(codeSnippet, 2000));
             prompt.append("\n```\n\n");
         }
         
@@ -70,11 +70,12 @@ public class PromptBuilder {
         
         // Instructions
         prompt.append("INSTRUCTIONS:\n");
-        prompt.append("Provide a helpful response that:\n");
-        prompt.append("1. Explains why the detected issues matter\n");
-        prompt.append("2. References the best practices from the knowledge base\n");
-        prompt.append("3. Suggests concrete improvements\n");
-        prompt.append("4. Uses a friendly, educational tone\n");
+        prompt.append("Provide a thorough code review that:\n");
+        prompt.append("1. Performs your own full analysis of the code — identify ALL issues beyond just the ones listed above\n");
+        prompt.append("2. Explains why the detected issues above matter\n");
+        prompt.append("3. Where relevant, references the best practices from the knowledge base\n");
+        prompt.append("4. Suggests concrete improvements with code examples\n");
+        prompt.append("5. Uses a friendly, educational tone\n");
         
         return prompt.toString();
     }

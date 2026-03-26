@@ -33,6 +33,7 @@ public class KnowledgeBaseIndexer {
         Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
         Analyzer analyzer = new StandardAnalyzer();
         IndexWriterConfig config = new IndexWriterConfig(analyzer);
+        config.setOpenMode(IndexWriterConfig.OpenMode.CREATE);
         
         try (IndexWriter writer = new IndexWriter(indexDir, config)) {
             ObjectMapper mapper = new ObjectMapper();
