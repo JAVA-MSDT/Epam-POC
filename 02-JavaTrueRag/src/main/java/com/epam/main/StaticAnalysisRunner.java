@@ -12,7 +12,7 @@ import java.util.List;
  * Runner that performs ONLY static analysis (Checkstyle + PMD) with no LLM or RAG.
  * Use this to establish a baseline of raw tool findings for comparison against
  * LLMOnlyRunner and the full RAG pipeline in Main.
- *
+ * <p>
  * Run: mvn exec:java -Dexec.mainClass=com.epam.main.StaticAnalysisRunner
  */
 @SuppressWarnings("java:S106")

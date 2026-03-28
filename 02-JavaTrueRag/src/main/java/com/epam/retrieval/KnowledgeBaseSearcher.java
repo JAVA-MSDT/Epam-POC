@@ -1,9 +1,9 @@
 package com.epam.retrieval;
 
-import com.epam.model.AnalysisFinding;
 import com.epam.model.KnowledgeEntry;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.DirectoryReader;
+import org.apache.lucene.index.StoredFields;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.search.*;
 import org.apache.lucene.store.Directory;
@@ -31,58 +31,6 @@ public class KnowledgeBaseSearcher {
     }
 
     /**
-     * Searches for knowledge entries that match patterns in the provided source code.
-     * 
-     * @param sourceCode The Java source code to analyze
-     * @param fileName The name of the file being analyzed
-     * @return List of findings based on knowledge base patterns
-     */
-    public List<AnalysisFinding> searchInCode(String sourceCode, String fileName) throws Exception {
-        List<AnalysisFinding> findings = new ArrayList<>();
-        
-        Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
-        try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
-            IndexSearcher searcher = new IndexSearcher(reader);
-            
-            Query query = new MatchAllDocsQuery();
-            TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
-            
-            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-                Document doc = searcher.doc(scoreDoc.doc);
-                String tags = doc.get("tags");
-                String title = doc.get("title");
-                
-                if (tags != null) {
-                    String[] tagArray = tags.split(" ");
-                    for (String tag : tagArray) {
-                        if (tag.length() > 3 && sourceCode.toLowerCase().contains(tag.toLowerCase())) {
-                            // Find line number
-                            int lineNum = findLineNumber(sourceCode, tag);
-                            findings.add(new AnalysisFinding(
-                                title,
-                                fileName + ":" + lineNum + " - Knowledge base pattern '" + tag + "' detected in code."
-                            ));
-                            break; // Avoid multiple findings for the same entry
-                        }
-                    }
-                }
-            }
-        }
-        
-        return findings;
-    }
-
-    private int findLineNumber(String sourceCode, String pattern) {
-        String[] lines = sourceCode.split("\r?\n");
-        for (int i = 0; i < lines.length; i++) {
-            if (lines[i].toLowerCase().contains(pattern.toLowerCase())) {
-                return i + 1;
-            }
-        }
-        return 1;
-    }
-
-    /**
      * Searches the knowledge base for entries matching the query string.
      * 
      * @param queryStr Search query (typically from analysis finding)
@@ -106,10 +54,10 @@ public class KnowledgeBaseSearcher {
 
             TopDocs topDocs = searcher.search(query, maxResults * 3); // fetch extra to allow for dedup
             System.out.println("    Found " + topDocs.totalHits.value + " potential matches");
-
+            StoredFields storedFields = searcher.storedFields();
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
                 if (results.size() >= maxResults) break;
-                Document doc = searcher.doc(scoreDoc.doc);
+                Document doc = storedFields.document(scoreDoc.doc);
                 KnowledgeEntry entry = documentToKnowledgeEntry(doc);
                 if (seenTitles.add(entry.getTitle())) {
                     System.out.println("    Match: " + entry.getTitle() + " (score: " + scoreDoc.score + ")");
@@ -119,35 +67,6 @@ public class KnowledgeBaseSearcher {
         }
 
         return results;
-    }
-
-    /**
-     * Gets all available knowledge base topics for suggestions.
-     * 
-     * @return List of available knowledge base topic titles
-     * @throws Exception If search fails
-     */
-    public List<String> getAllTopics() throws Exception {
-        List<String> topics = new ArrayList<>();
-        
-        Directory indexDir = FSDirectory.open(Paths.get(indexDirPath));
-        try (DirectoryReader reader = DirectoryReader.open(indexDir)) {
-            IndexSearcher searcher = new IndexSearcher(reader);
-            
-            // Get all documents
-            Query query = new MatchAllDocsQuery();
-            TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
-            
-            for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-                Document doc = searcher.doc(scoreDoc.doc);
-                String title = doc.get("title");
-                if (title != null) {
-                    topics.add(title);
-                }
-            }
-        }
-        
-        return topics;
     }
 
     /**
@@ -219,9 +138,10 @@ public class KnowledgeBaseSearcher {
             
             Query query = new MatchAllDocsQuery();
             TopDocs topDocs = searcher.search(query, Integer.MAX_VALUE);
-            
+            StoredFields storedFields = searcher.storedFields();
+
             for (ScoreDoc scoreDoc : topDocs.scoreDocs) {
-                Document doc = searcher.doc(scoreDoc.doc);
+                Document doc = storedFields.document(scoreDoc.doc);
                 extractPatternsFromDocument(doc);
             }
         }

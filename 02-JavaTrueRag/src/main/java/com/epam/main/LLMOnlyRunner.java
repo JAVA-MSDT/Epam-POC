@@ -8,14 +8,14 @@ import java.io.File;
 import java.nio.file.Files;
 
 /**
- * True LLM-only runner — raw source code + query sent directly to the LLM.
+ * True LLM-only runner — raw source code and query sent directly to the LLM.
  * No static analysis tools, no knowledge base.
- *
- * Pipeline: code → prompt(query + code) → LLM
+ * <p>
+ * Pipeline: code → prompt (query and code) → LLM
  * Compare against:
  *   - StaticAnalysisRunner: tools only, no LLM
- *   - RAGRunner:            code → tools → KB retrieval → LLM
- *
+ *   - RAGRunner: code → tools → KB retrieval → LLM
+ * <p>
  * Run: mvn exec:java -Dexec.mainClass=com.epam.main.LLMOnlyRunner
  */
 @SuppressWarnings("java:S106")

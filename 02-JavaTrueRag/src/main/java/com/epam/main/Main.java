@@ -23,7 +23,7 @@ public class Main {
         if (args.length == 0) {
             runTestSamples();
         } else if (args.length == 2) {
-            // RAG Mode: java -jar app.jar <file> <query>
+            // RAG Mode: java-jar app.jar <file> <query>
             runRAGMode(args[0], args[1]);
         } else {
             printUsage();

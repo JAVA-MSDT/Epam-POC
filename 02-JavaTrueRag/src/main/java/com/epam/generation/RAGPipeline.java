@@ -73,28 +73,7 @@ public class RAGPipeline {
         
         return response;
     }
-    
-    /**
-     * Generates a response for a general code question without static analysis.
-     * 
-     * @param userQuery User's question
-     * @param codeSnippet Code to analyze
-     * @return LLM-generated response
-     */
-    public String answerQuestion(String userQuery, String codeSnippet) {
-        System.out.println("\n=== RAG QUERY MODE ===");
-        
-        // Build simple prompt
-        String prompt = promptBuilder.buildSimplePrompt(userQuery, codeSnippet);
-        
-        // Generate response
-        String response = ollamaClient.generate(prompt);
-        
-        System.out.println("=== RAG COMPLETE ===\n");
-        
-        return response;
-    }
-    
+
     /**
      * Retrieves relevant knowledge entries based on findings.
      * This is the RETRIEVAL step of RAG.
@@ -110,14 +89,5 @@ public class RAGPipeline {
         
         // If no specific matches, return general entries
         return searcher.search("best practices", 2);
-    }
-    
-    /**
-     * Checks if Ollama is available.
-     * 
-     * @return true if Ollama is running and responding
-     */
-    public boolean isOllamaAvailable() {
-        return ollamaClient.isAvailable();
     }
 }

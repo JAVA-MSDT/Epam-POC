@@ -60,20 +60,6 @@ public class OllamaClient {
     }
     
     /**
-     * Checks if Ollama is available and responding.
-     * 
-     * @return true if Ollama is available, false otherwise
-     */
-    public boolean isAvailable() {
-        try {
-            model.generate("test");
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
-    
-    /**
      * Exception thrown when Ollama operations fail.
      */
     public static class OllamaException extends RuntimeException {

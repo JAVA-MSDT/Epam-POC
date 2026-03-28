@@ -17,11 +17,11 @@ import java.util.List;
  * Minimal RAG runner — static analysis + KB retrieval + LLM.
  * Mirrors LLMOnlyRunner structure; the only difference is RAGPipeline
  * retrieves KB entries from Lucene before building the prompt.
- *
+ * <p>
  * Compare against:
  *   - StaticAnalysisRunner: no LLM at all
- *   - LLMOnlyRunner:        LLM with findings, no KB
- *
+ *   - LLMOnlyRunner: LLM with findings, no KB
+ * <p>
  * Run: mvn exec:java -Dexec.mainClass=com.epam.main.RAGRunner
  */
 @SuppressWarnings("java:S106")
