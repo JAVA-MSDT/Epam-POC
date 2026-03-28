@@ -21,7 +21,7 @@ import java.nio.file.Files;
 @SuppressWarnings("java:S106")
 public class LLMOnlyRunner {
 
-    private static final String TEST_FILE = "samples/KnowledgeBaseTestExample.java";
+    private static final String TEST_FILE = "samples/BadCodeExample.java";
 
     private static final String[] TEST_QUERIES = {
         "Find and explain all code quality issues",

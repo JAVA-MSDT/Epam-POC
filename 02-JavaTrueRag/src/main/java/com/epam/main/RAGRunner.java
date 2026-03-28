@@ -27,7 +27,7 @@ import java.util.List;
 @SuppressWarnings("java:S106")
 public class RAGRunner {
 
-    private static final String TEST_FILE = "samples/KnowledgeBaseTestExample.java";
+    private static final String TEST_FILE = "samples/BadCodeExample.java";
     private static final String CHECKSTYLE_CONFIG = "src/main/resources/checkstyle.xml";
     private static final String PMD_RULESET = "src/main/resources/pmd-ruleset.xml";
     private static final String KB_DIR = "src/main/resources/knowledgebase";

@@ -30,7 +30,7 @@ public class PromptBuilder {
         
         // System instruction
         prompt.append("You are an expert Java code reviewer. ");
-        prompt.append("Provide clear, educational, and actionable feedback.\n\n");
+        prompt.append("Provide clear and actionable feedback.\n\n");
         
         // User query
         prompt.append("USER REQUEST:\n");
@@ -70,12 +70,13 @@ public class PromptBuilder {
         
         // Instructions
         prompt.append("INSTRUCTIONS:\n");
-        prompt.append("Provide a thorough code review that:\n");
-        prompt.append("1. Performs your own full analysis of the code — identify ALL issues beyond just the ones listed above\n");
-        prompt.append("2. Explains why the detected issues above matter\n");
+        prompt.append("Provide a comprehensive code review that:\n");
+        prompt.append("1. Performs full analysis of the code — identify ALL issues beyond just the ones listed above\n");
+        prompt.append("2. Explains why the detected issues above matters\n");
         prompt.append("3. Where relevant, references the best practices from the knowledge base\n");
         prompt.append("4. Suggests concrete improvements with code examples\n");
-        prompt.append("5. Uses a friendly, educational tone\n");
+        prompt.append("5. Report any additional code enhancements beyond the KB provided \n");
+        prompt.append("6. Uses a friendly, educational tone\n");
         
         return prompt.toString();
     }
