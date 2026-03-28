@@ -43,3 +43,11 @@ build/
 ### Mac OS ###
 .DS_Store
 /.idea/
+
+### Assistance
+.claude
+.claude/
+.claude/**
+.codemie
+.codemie/
+.codemie/**

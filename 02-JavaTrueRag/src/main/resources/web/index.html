@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> Java RAG – Code Review Assistant</title>
+
+  <!-- Bootstrap 5 -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet" />
+  <!-- Mermaid -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10.6.1/dist/mermaid.min.js"></script>
+  <!-- Marked – markdown → HTML for result rendering -->
+  <script src="https://cdn.jsdelivr.net/npm/marked@12/marked.min.js"></script>
+
+  <link rel="icon" type="image/svg+xml" href="/static/icon/robot.svg">
+
+  <style>
+    :root {
+      --brand-dark:    #0f1b2d;
+      --brand-mid:     #162032;
+      --brand-accent:  #1d6fa4;
+      --brand-light:   #58b4e0;
+      --result-bg:     #1e1e2e;
+      --result-fg:     #cdd6f4;
+    }
+
+    body { background: #f4f6f9; font-family: 'Segoe UI', system-ui, sans-serif; }
+
+    /* ── Navbar ──────────────────────────────────────────────────── */
+    .navbar { background: var(--brand-dark) !important; }
+    .navbar-brand { font-weight: 700; font-size: 1.25rem; letter-spacing: .02em; }
+    .nav-link { color: #adb5bd !important; transition: color .2s; }
+    .nav-link:hover, .nav-link.active { color: var(--brand-light) !important; }
+    .nav-link.active { border-bottom: 2px solid var(--brand-light); }
+
+    /* ── Hero ────────────────────────────────────────────────────── */
+    .hero {
+      background: linear-gradient(135deg, var(--brand-dark) 0%, var(--brand-mid) 55%, #0d3a5e 100%);
+      color: #fff;
+      padding: 96px 0 48px;
+    }
+    .hero h1 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; }
+    .hero p  { font-size: 1.15rem; color: #8ab4cc; }
+
+    /* ── Section titles ──────────────────────────────────────────── */
+    .section-title {
+      font-size: 1.5rem; font-weight: 700;
+      color: var(--brand-dark);
+      border-left: 4px solid var(--brand-accent);
+      padding-left: .75rem; margin-bottom: 1.25rem;
+    }
+
+    /* ── Diagram cards ───────────────────────────────────────────── */
+    .diagram-card {
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.08);
+      transition: box-shadow .25s;
+    }
+    .diagram-card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.14); }
+    .diagram-card .card-header {
+      background: var(--brand-dark);
+      color: #fff; border-radius: 12px 12px 0 0 !important;
+      font-weight: 600; font-size: .95rem;
+      padding: .65rem 1rem;
+    }
+    .diagram-card .card-body { overflow-x: auto; padding: 1.25rem; }
+
+    /* ── Forms ───────────────────────────────────────────────────── */
+    .form-label { font-weight: 600; font-size: .9rem; color: #495057; }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--brand-accent);
+      box-shadow: 0 0 0 .2rem rgba(29,111,164,.2);
+    }
+    textarea.form-control { resize: vertical; font-family: 'Courier New', monospace; font-size: .85rem; }
+
+    .runner-badge {
+      display: inline-block; padding: .2rem .55rem;
+      border-radius: 6px; font-size: .78rem; font-weight: 600;
+      margin-bottom: .35rem;
+    }
+    .badge-rag       { background: #dbeafe; color: #1e40af; }
+    .badge-llm       { background: #f3e8ff; color: #6b21a8; }
+    .badge-analysis  { background: #dcfce7; color: #166534; }
+
+    /* ── Result box ──────────────────────────────────────────────── */
+    .result-box {
+      background: #fff;
+      color: #1a202c;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      font-size: .9rem;
+      line-height: 1.75;
+      padding: 1.5rem 1.75rem;
+      border-radius: 10px;
+      min-height: 220px;
+      border: 1px solid #e2e8f0;
+      overflow-y: auto;
+      word-break: break-word;
+    }
+    /* Markdown headings */
+    .result-box h1 {
+      font-size: 1.35rem; font-weight: 800; color: var(--brand-dark);
+      border-bottom: 2px solid var(--brand-accent); padding-bottom: .3rem;
+      margin: 1.1rem 0 .55rem;
+    }
+    .result-box h2 {
+      font-size: 1.15rem; font-weight: 700; color: var(--brand-dark);
+      border-bottom: 1px solid #e2e8f0; padding-bottom: .2rem;
+      margin: 1rem 0 .45rem;
+    }
+    .result-box h3 { font-size: 1.02rem; font-weight: 700; color: var(--brand-accent); margin: .9rem 0 .4rem; }
+    .result-box h4 { font-size: .95rem;  font-weight: 700; color: #475569;             margin: .75rem 0 .35rem; }
+    /* Fenced code blocks */
+    .result-box pre {
+      background: #1e1e2e;
+      color: #cdd6f4;
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: .82rem;
+      font-family: 'Courier New', monospace;
+      line-height: 1.6;
+      margin: .75rem 0;
+      border-left: 4px solid var(--brand-accent);
+    }
+    .result-box pre code { background: transparent; color: inherit; padding: 0; font-size: inherit; border-radius: 0; }
+    /* Inline code */
+    .result-box :not(pre) > code {
+      background: #f1f5f9; color: #c026d3;
+      padding: .15rem .4rem; border-radius: 5px;
+      font-family: 'Courier New', monospace; font-size: .85em;
+    }
+    /* Lists */
+    .result-box ul, .result-box ol { padding-left: 1.6rem; margin: .4rem 0; }
+    .result-box li { margin-bottom: .3rem; }
+    /* Inline emphasis */
+    .result-box strong { color: var(--brand-dark); font-weight: 700; }
+    .result-box em     { color: #64748b; }
+    /* Blockquote */
+    .result-box blockquote {
+      border-left: 4px solid var(--brand-light);
+      padding: .3rem .85rem; color: #64748b;
+      font-style: italic; margin: .6rem 0;
+      background: #f8fafc; border-radius: 0 6px 6px 0;
+    }
+    .result-box hr { border-color: #e2e8f0; margin: 1rem 0; }
+    .result-box p  { margin-bottom: .55rem; }
+    .result-placeholder { color: #94a3b8; font-style: italic; font-size: .9rem; }
+
+    /* ── Spinner overlay ─────────────────────────────────────────── */
+    .spinner-wrap {
+      display: none; align-items: center; justify-content: center;
+      gap: .6rem; padding: .6rem 0; color: var(--brand-accent);
+    }
+    .spinner-wrap.active { display: flex; }
+
+    /* ── Buttons ─────────────────────────────────────────────────── */
+    .btn-run {
+      background: var(--brand-accent); border: none; color: #fff;
+      font-weight: 600; letter-spacing: .03em; padding: .6rem 1.4rem;
+      border-radius: 8px; transition: background .2s;
+    }
+    .btn-run:hover { background: #155d8a; color: #fff; }
+
+    /* ── Footer ──────────────────────────────────────────────────── */
+    footer { background: var(--brand-dark); color: #6c757d; font-size: .85rem; }
+
+    /* ── Responsive tweaks ───────────────────────────────────────── */
+    @media (max-width: 767.98px) {
+      .hero { padding: 80px 0 32px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════ NAVBAR ════════════════ -->
+<nav class="navbar navbar-expand-lg fixed-top" aria-label="Main navigation">
+  <div class="container">
+    <a class="navbar-brand text-white" href="#">
+      <i class="bi bi-cpu-fill me-2" style="color:var(--brand-light)"></i>Java RAG
+    </a>
+    <button class="navbar-toggler border-secondary" type="button"
+            data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto gap-1">
+        <li class="nav-item">
+          <a class="nav-link active" href="#" data-section="home" onclick="showSection('home');return false;">
+            <i class="bi bi-house-fill me-1"></i>Home
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-section="rag-mode" onclick="showSection('rag-mode');return false;">
+            <i class="bi bi-lightning-fill me-1"></i>RAG Mode
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#" data-section="test-mode" onclick="showSection('test-mode');return false;">
+            <i class="bi bi-flask-fill me-1"></i>Test Mode
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- ════════════════ HERO ════════════════ -->
+<header class="hero text-center">
+  <div class="container">
+    <h1><i class="bi bi-robot me-2"></i>Java RAG</h1>
+    <p class="mt-2 mb-4">Retrieval-Augmented Generation for intelligent Java code review<br/>
+      powered by Lucene · Checkstyle · PMD · Ollama</p>
+    <div class="d-flex flex-wrap justify-content-center gap-2">
+      <span class="badge bg-primary bg-opacity-25 text-white border border-primary border-opacity-25 px-3 py-2">
+        <i class="bi bi-search me-1"></i>Lucene Retrieval
+      </span>
+      <span class="badge bg-success bg-opacity-25 text-white border border-success border-opacity-25 px-3 py-2">
+        <i class="bi bi-shield-check me-1"></i>Static Analysis
+      </span>
+      <span class="badge bg-warning bg-opacity-25 text-white border border-warning border-opacity-25 px-3 py-2">
+        <i class="bi bi-cpu me-1"></i>Ollama LLM
+      </span>
+      <span class="badge bg-info bg-opacity-25 text-white border border-info border-opacity-25 px-3 py-2">
+        <i class="bi bi-book me-1"></i>Knowledge Base
+      </span>
+    </div>
+  </div>
+</header>
+
+<!-- ════════════════ MAIN CONTENT ════════════════ -->
+<main class="container my-5">
+
+  <!-- ── HOME SECTION ──────────────────────────────────────────── -->
+  <section id="home-section" class="section-content">
+
+    <!-- Architecture Overview -->
+    <h2 class="section-title"><i class="bi bi-diagram-3 me-2"></i>RAG Architecture</h2>
+    <div class="card diagram-card mb-5">
+      <div class="card-header"><i class="bi bi-cpu me-2"></i>High-Level System Overview</div>
+      <div class="card-body">
+        <pre class="mermaid">
+graph TD
+    DEV(["👤 Developer"])
+    SYS["RAG System"]
+    SA["Static Analysis\nCheckstyle + PMD"]
+    KB["Knowledge Base\nLucene Index"]
+    PB["Prompt Builder"]
+    LLM["Ollama LLM\ndeepseek-coder"]
+    OUT(["📋 Code Review Feedback"])
+
+    DEV -->|"Java Source File + Query"| SYS
+    SYS --> SA
+    SYS --> KB
+    SA -->|"Analysis Findings"| PB
+    KB -->|"Relevant KB Entries"| PB
+    SYS -->|"Code + Query"| PB
+    PB -->|"Augmented Prompt"| LLM
+    LLM --> OUT
+    OUT -->|"Review"| DEV
+
+    style DEV fill:#1d6fa4,color:#fff,stroke:#0d3a5e
+    style OUT fill:#198754,color:#fff,stroke:#0f5132
+    style LLM fill:#6f42c1,color:#fff,stroke:#432874
+    style SYS fill:#0f1b2d,color:#fff,stroke:#162032
+        </pre>
+      </div>
+    </div>
+
+    <!-- Pipeline -->
+    <h2 class="section-title"><i class="bi bi-arrow-right-circle me-2"></i>RAG Pipeline</h2>
+    <div class="card diagram-card mb-5">
+      <div class="card-header"><i class="bi bi-signpost-split me-2"></i>Data Flow — Input to Output</div>
+      <div class="card-body">
+        <pre class="mermaid">
+flowchart LR
+    A["📄 Java Source File\n+ User Query"]
+    B["🔍 CheckstyleAnalyzer\n+ PMDAnalyzer"]
+    C["📋 Analysis\nFindings"]
+    D["📚 KnowledgeBase\nSearcher"]
+    E["💡 Relevant\nKB Entries"]
+    F["✏️ PromptBuilder\nbuildPrompt()"]
+    G["🤖 OllamaClient\ngenerate()"]
+    H["✅ Code Review\nFeedback"]
+
+    A --> B
+    B --> C
+    C --> D
+    D --> E
+    C --> F
+    E --> F
+    A --> F
+    F --> G
+    G --> H
+
+    style A  fill:#dbeafe,stroke:#3b82f6,color:#1e3a8a
+    style H  fill:#dcfce7,stroke:#22c55e,color:#14532d
+    style G  fill:#f3e8ff,stroke:#a855f7,color:#4c1d95
+    style F  fill:#fef9c3,stroke:#eab308,color:#713f12
+        </pre>
+      </div>
+    </div>
+
+    <!-- Components (package view) -->
+    <h2 class="section-title"><i class="bi bi-boxes me-2"></i>RAG Components</h2>
+    <div class="card diagram-card mb-5">
+      <div class="card-header"><i class="bi bi-grid-3x3-gap me-2"></i>Package Organisation</div>
+      <div class="card-body">
+        <pre class="mermaid">
+graph TB
+    subgraph analysis["📦 com.epam.analysis"]
+        CS["CheckstyleAnalyzer"]
+        PMD["PMDAnalyzer"]
+    end
+    subgraph retrieval["📦 com.epam.retrieval"]
+        KBI["KnowledgeBaseIndexer"]
+        KBS["KnowledgeBaseSearcher"]
+        IDX[("Lucene Index")]
+    end
+    subgraph augmentation["📦 com.epam.augmentation"]
+        PB["PromptBuilder"]
+    end
+    subgraph generation["📦 com.epam.generation"]
+        RP["RAGPipeline"]
+    end
+    subgraph llm["📦 com.epam.llm"]
+        OC["OllamaClient"]
+    end
+    subgraph runners["📦 com.epam.main"]
+        R1["RAGRunner"]
+        R2["LLMOnlyRunner"]
+        R3["StaticAnalysisRunner"]
+        MN["Main"]
+    end
+    subgraph web["📦 com.epam.web"]
+        WR["WebRunner"]
+        WS["RagWebServer"]
+    end
+
+    KBI --> IDX
+    KBS --> IDX
+    CS --> RP
+    PMD --> RP
+    KBS --> RP
+    PB --> RP
+    OC --> RP
+    RP --> R1
+    R2 --> OC
+    R2 --> PB
+    R3 --> CS
+    R3 --> PMD
+    R1 --> RP
+    MN --> RP
+    WR --> WS
+    WS --> RP
+    WS --> OC
+    WS --> PB
+        </pre>
+      </div>
+    </div>
+
+    <!-- Class Diagram -->
+    <h2 class="section-title"><i class="bi bi-diagram-2 me-2"></i>Code Diagram</h2>
+    <div class="card diagram-card mb-5">
+      <div class="card-header"><i class="bi bi-file-earmark-code me-2"></i>Java Class Diagram</div>
+      <div class="card-body">
+        <pre class="mermaid">
+classDiagram
+    class RAGPipeline {
+        -OllamaClient ollamaClient
+        -PromptBuilder promptBuilder
+        -KnowledgeBaseSearcher searcher
+        +generateFeedback(query, findings, code) String
+    }
+    class OllamaClient {
+        -ChatLanguageModel model
+        -String modelName
+        +generate(prompt) String
+        +isAvailable() bool
+    }
+    class PromptBuilder {
+        +buildPrompt(query, findings, entries, code) String
+        +buildSimplePrompt(query, code) String
+    }
+    class KnowledgeBaseSearcher {
+        -String indexDirPath
+        +search(queryStr, maxResults) List
+    }
+    class KnowledgeBaseIndexer {
+        +indexKnowledgeBase(kbDir, indexDir) void
+    }
+    class CheckstyleAnalyzer {
+        +analyze(file, config) List
+    }
+    class PMDAnalyzer {
+        +analyze(file, ruleset) List
+    }
+    class AnalysisFinding {
+        +String issue
+        +String details
+    }
+    class KnowledgeEntry {
+        +String title
+        +String type
+        +String description
+        +List tags
+    }
+    class WebRunner {
+        +main(args) void
+    }
+    class RagWebServer {
+        -int port
+        +start() void
+    }
+
+    RAGPipeline --> OllamaClient : uses
+    RAGPipeline --> PromptBuilder : uses
+    RAGPipeline --> KnowledgeBaseSearcher : queries
+    KnowledgeBaseSearcher ..> KnowledgeEntry : returns
+    CheckstyleAnalyzer ..> AnalysisFinding : produces
+    PMDAnalyzer ..> AnalysisFinding : produces
+    WebRunner --> RagWebServer : starts
+    RagWebServer --> RAGPipeline : dispatches to
+    RagWebServer --> OllamaClient : uses directly
+    RagWebServer --> PromptBuilder : uses directly
+        </pre>
+      </div>
+    </div>
+
+  </section><!-- /home-section -->
+
+
+  <!-- ── RAG MODE SECTION ───────────────────────────────────────── -->
+  <section id="rag-mode-section" class="section-content d-none">
+
+    <h2 class="section-title"><i class="bi bi-lightning-fill me-2"></i>RAG Mode — Full Pipeline Analysis</h2>
+    <p class="text-muted mb-4">
+      Runs the complete RAG pipeline: static analysis (Checkstyle + PMD) →
+      knowledge base retrieval (Lucene) → LLM generation (Ollama).
+    </p>
+
+    <div class="row g-4">
+      <!-- LEFT: inputs -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+          <div class="card-body p-4">
+
+            <div class="mb-3">
+              <label class="form-label" for="rag-file">
+                <i class="bi bi-upload me-1"></i>Upload Java File
+              </label>
+              <input type="file" id="rag-file" accept=".java" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="rag-code">
+                <i class="bi bi-code-slash me-1"></i>Or Paste Code
+              </label>
+              <textarea id="rag-code" class="form-control" rows="14"
+                placeholder="// Paste your Java code here..."></textarea>
+            </div>
+
+            <div class="mb-4">
+              <label class="form-label" for="rag-query">
+                <i class="bi bi-chat-dots me-1"></i>Your Query
+              </label>
+              <textarea id="rag-query" class="form-control" rows="3"
+                placeholder="What would you like to know? e.g. 'Review this code for performance issues'">Review this code for issues and suggest improvements</textarea>
+            </div>
+
+            <div class="d-grid">
+              <button id="rag-run-btn" class="btn btn-run btn-lg" onclick="runRagMode()">
+                <i class="bi bi-play-fill me-2"></i>Run RAG Analysis
+              </button>
+            </div>
+
+            <div class="spinner-wrap mt-3" id="rag-spinner">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <span>Running pipeline… this may take a moment</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: result -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3 h-100">
+          <div class="card-header bg-dark text-white rounded-top-3 d-flex align-items-center gap-2">
+            <i class="bi bi-terminal-fill"></i> Analysis Result
+          </div>
+          <div class="card-body p-3">
+            <div id="rag-result" class="result-box">
+              <span class="result-placeholder">Result will appear here after running the analysis.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section><!-- /rag-mode-section -->
+
+
+  <!-- ── TEST MODE SECTION ──────────────────────────────────────── -->
+  <section id="test-mode-section" class="section-content d-none">
+
+    <h2 class="section-title"><i class="bi bi-flask-fill me-2"></i>Test Mode — Compare Runners</h2>
+    <p class="text-muted mb-4">
+      Select a runner, provide code and a query, then compare how each pipeline approaches the review.
+    </p>
+
+    <div class="row g-4">
+      <!-- LEFT: inputs -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3">
+          <div class="card-body p-4">
+
+            <!-- Runner selection -->
+            <div class="mb-3">
+              <label class="form-label" for="runner-select">
+                <i class="bi bi-cpu me-1"></i>Select Runner
+              </label>
+              <select id="runner-select" class="form-select" onchange="onRunnerChange()">
+                <option value="rag">RAG Runner — Static Analysis + KB Retrieval + LLM</option>
+                <option value="llm-only">LLM Only Runner — Direct LLM, No KB</option>
+                <option value="static-analysis">Static Analysis Runner — Checkstyle + PMD Only</option>
+              </select>
+              <div id="runner-description" class="form-text mt-1">
+                <span class="runner-badge badge-rag">Full Pipeline</span>
+                Runs Checkstyle &amp; PMD → searches the Lucene knowledge base → builds an augmented prompt → generates feedback with Ollama.
+              </div>
+            </div>
+
+            <hr class="my-3" />
+
+            <!-- Code input -->
+            <div class="mb-3">
+              <label class="form-label" for="test-code-file">
+                <i class="bi bi-upload me-1"></i>Upload Code File <span class="text-muted fw-normal">(.java)</span>
+              </label>
+              <input type="file" id="test-code-file" accept=".java" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label" for="test-code">
+                <i class="bi bi-code-slash me-1"></i>Or Paste Code
+              </label>
+              <textarea id="test-code" class="form-control" rows="10"
+                placeholder="// Paste your Java code here..."></textarea>
+            </div>
+
+            <!-- Query (hidden for static-analysis) -->
+            <div id="query-group" class="mb-3">
+              <label class="form-label" for="test-query">
+                <i class="bi bi-chat-dots me-1"></i>Query
+              </label>
+              <textarea id="test-query" class="form-control" rows="2"
+                placeholder="Enter your query…">Review this code for issues and suggest improvements</textarea>
+            </div>
+
+            <!-- KB section (visible for RAG only) -->
+            <div id="kb-section">
+              <hr class="my-3" />
+              <p class="form-label mb-2"><i class="bi bi-database me-1"></i>Custom Knowledge Base <span class="text-muted fw-normal">(optional — leave blank to use the built-in KB)</span></p>
+
+              <div class="mb-3">
+                <label class="form-label" for="kb-file">
+                  Upload KB File <span class="text-muted fw-normal">(.json — single entry or array)</span>
+                </label>
+                <input type="file" id="kb-file" accept=".json" class="form-control" />
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" for="kb-entries">
+                  Or Paste KB Entries (JSON)
+                </label>
+                <textarea id="kb-entries" class="form-control" rows="5"
+                  placeholder='{ "title": "...", "type": "Best Practice", "description": "...", "example": "...", "reference": "...", "tags": ["..."] }'></textarea>
+              </div>
+            </div>
+
+            <div class="d-grid mt-2">
+              <button id="test-run-btn" class="btn btn-run btn-lg" onclick="runTestMode()">
+                <i class="bi bi-play-fill me-2"></i>Run Analysis
+              </button>
+            </div>
+
+            <div class="spinner-wrap mt-3" id="test-spinner">
+              <div class="spinner-border spinner-border-sm" role="status"></div>
+              <span>Running… this may take a moment</span>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: result -->
+      <div class="col-lg-6">
+        <div class="card border-0 shadow-sm rounded-3 h-100">
+          <div class="card-header bg-dark text-white rounded-top-3 d-flex align-items-center justify-content-between">
+            <span><i class="bi bi-terminal-fill me-2"></i>Analysis Result</span>
+            <span id="result-runner-badge"></span>
+          </div>
+          <div class="card-body p-3">
+            <div id="test-result" class="result-box">
+              <span class="result-placeholder">Result will appear here after running the analysis.</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section><!-- /test-mode-section -->
+
+</main>
+
+<!-- ════════════════ FOOTER ════════════════ -->
+<footer class="text-center py-3 mt-4">
+  <div class="container">
+    <p class="mb-0">
+      <i class="bi bi-cpu-fill me-1" style="color:var(--brand-light)"></i>
+      Java RAG &mdash; EPAM Systems
+      &nbsp;|&nbsp;
+      <span class="text">Powered by Lucene · Checkstyle · PMD · Ollama (deepseek-coder)</span>
+    </p>
+  </div>
+</footer>
+
+<!-- ════════════════ SCRIPTS ════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  // ── Mermaid init ───────────────────────────────────────────────
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    themeVariables: {
+      primaryColor:   '#dbeafe',
+      primaryTextColor: '#1e3a8a',
+      lineColor:      '#1d6fa4',
+      secondaryColor: '#f3e8ff',
+      tertiaryColor:  '#dcfce7'
+    }
+  });
+
+  // ── Navigation ─────────────────────────────────────────────────
+  function showSection(name) {
+    document.querySelectorAll('.section-content').forEach(s => s.classList.add('d-none'));
+    document.getElementById(name + '-section').classList.remove('d-none');
+    document.querySelectorAll('.nav-link[data-section]').forEach(l => {
+      l.classList.toggle('active', l.dataset.section === name);
+    });
+  }
+
+  // ── Runner descriptions ────────────────────────────────────────
+  const RUNNER_META = {
+    'rag': {
+      badge: '<span class="runner-badge badge-rag">Full Pipeline</span>',
+      desc:  'Runs Checkstyle &amp; PMD &rarr; searches the Lucene knowledge base &rarr; builds an augmented prompt &rarr; generates feedback with Ollama.'
+    },
+    'llm-only': {
+      badge: '<span class="runner-badge badge-llm">LLM Only</span>',
+      desc:  'Sends your code and query directly to Ollama without static analysis or knowledge base retrieval.'
+    },
+    'static-analysis': {
+      badge: '<span class="runner-badge badge-analysis">No LLM</span>',
+      desc:  'Runs Checkstyle and PMD only. Returns raw tool findings without any LLM interpretation.'
+    }
+  };
+
+  function onRunnerChange() {
+    const val  = document.getElementById('runner-select').value;
+    const meta = RUNNER_META[val];
+    document.getElementById('runner-description').innerHTML = meta.badge + ' ' + meta.desc;
+    document.getElementById('kb-section').style.display     = val === 'rag'              ? '' : 'none';
+    document.getElementById('query-group').style.display    = val === 'static-analysis'  ? 'none' : '';
+  }
+
+  // ── File upload → textarea ─────────────────────────────────────
+  function wireFileInput(fileInputId, textAreaId) {
+    document.getElementById(fileInputId).addEventListener('change', function () {
+      const file = this.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = e => { document.getElementById(textAreaId).value = e.target.result; };
+      reader.readAsText(file);
+    });
+  }
+  wireFileInput('rag-file',       'rag-code');
+  wireFileInput('test-code-file', 'test-code');
+  wireFileInput('kb-file',        'kb-entries');
+
+  // ── API call ───────────────────────────────────────────────────
+  async function callApi(payload) {
+    const response = await fetch('/api/run', {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body:    JSON.stringify(payload)
+    });
+    return response.json();
+  }
+
+  function setResult(boxId, data) {
+    const box = document.getElementById(boxId);
+    if (data.status === 'error') {
+      box.innerHTML =
+        '<div class="d-flex align-items-start gap-2 p-2 rounded" style="background:#fff1f2;border:1px solid #fecdd3">' +
+        '<i class="bi bi-exclamation-triangle-fill mt-1" style="color:#e11d48;flex-shrink:0"></i>' +
+        '<div><strong style="color:#9f1239">Error</strong><br>' + escapeHtml(data.error) + '</div></div>';
+    } else {
+      const text = data.result || '*(empty response)*';
+      box.innerHTML = marked.parse(text);
+    }
+  }
+
+  function escapeHtml(str) {
+    return String(str)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  function setLoading(spinnerId, btnId, loading) {
+    document.getElementById(spinnerId).classList.toggle('active', loading);
+    document.getElementById(btnId).disabled = loading;
+  }
+
+  // ── RAG Mode ───────────────────────────────────────────────────
+  async function runRagMode() {
+    const code  = document.getElementById('rag-code').value.trim();
+    const query = document.getElementById('rag-query').value.trim();
+    if (!code) { alert('Please provide Java code to analyse.'); return; }
+    setLoading('rag-spinner', 'rag-run-btn', true);
+    document.getElementById('rag-result').innerHTML =
+      '<span class="result-placeholder">Running RAG pipeline…</span>';
+    try {
+      const data = await callApi({ runner: 'rag', code, query });
+      setResult('rag-result', data);
+    } catch (e) {
+      document.getElementById('rag-result').innerHTML =
+        '<span style="color:#f38ba8">⚠ Network error: ' + escapeHtml(e.message) + '</span>';
+    } finally {
+      setLoading('rag-spinner', 'rag-run-btn', false);
+    }
+  }
+
+  // ── Test Mode ──────────────────────────────────────────────────
+  async function runTestMode() {
+    const runner = document.getElementById('runner-select').value;
+    const code   = document.getElementById('test-code').value.trim();
+    const query  = document.getElementById('test-query').value.trim();
+    const kb     = document.getElementById('kb-entries').value.trim();
+
+    if (!code) { alert('Please provide Java code to analyse.'); return; }
+
+    // Update badge on result header
+    const meta = RUNNER_META[runner];
+    document.getElementById('result-runner-badge').innerHTML = meta.badge;
+
+    setLoading('test-spinner', 'test-run-btn', true);
+    document.getElementById('test-result').innerHTML =
+      '<span class="result-placeholder">Running ' + runner + ' pipeline…</span>';
+    try {
+      const data = await callApi({ runner, code, query, kb });
+      setResult('test-result', data);
+    } catch (e) {
+      document.getElementById('test-result').innerHTML =
+        '<span style="color:#f38ba8">⚠ Network error: ' + escapeHtml(e.message) + '</span>';
+    } finally {
+      setLoading('test-spinner', 'test-run-btn', false);
+    }
+  }
+</script>
+
+</body>
+</html>
