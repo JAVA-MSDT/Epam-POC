@@ -146,6 +146,7 @@ public class RagWebServer {
     // ── Pipeline dispatch ──────────────────────────────────────────────────
 
     private String dispatch(String runner, String code, String query, String kb) throws Exception {
+        System.out.println("Running " + runner + " pipeline...");
         return switch (runner) {
             case "llm-only"          -> runLlmOnly(code, query);
             case "static-analysis"   -> runStaticAnalysis(code);
