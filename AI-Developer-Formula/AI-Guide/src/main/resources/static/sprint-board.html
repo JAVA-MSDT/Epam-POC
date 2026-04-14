@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaskMe — Sprint Board</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<nav>
+    <a href="/" class="logo">🎭 MaskMe</a>
+    <a href="/">Overview</a>
+    <a href="/api-demo.html">API Demo</a>
+    <a href="/sprint-board.html" class="active">Sprint Board</a>
+</nav>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>📋 Sprint Board</h1>
+        <p>Current sprint tickets — AI-assisted developer workflow demo</p>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="jira-tabs">
+        <button class="jira-tab active" onclick="switchTab('ticket1')">MASK-101: Balance Masking Condition</button>
+        <button class="jira-tab" onclick="switchTab('ticket2')">MASK-102: Balance Masking Tests</button>
+    </div>
+
+    <!-- Ticket 1 -->
+    <div class="jira-ticket" id="ticket1">
+        <div class="jira-main">
+            <div class="jira-ticket-key">
+                <span class="jira-type jira-type-story">📗 Story</span>
+                MASK-101
+            </div>
+            <h1 class="jira-ticket-title">Add Balance Masking Condition with Threshold Input</h1>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Description</div>
+                <p>
+                    Currently the <code>balance</code> field in <code>UserDto</code> uses
+                    <code>AlwaysMaskMeCondition</code>, which masks it unconditionally on every request.
+                    We need a new <code>BalanceMaskingCondition</code> that masks the balance
+                    <strong>only when</strong> the user's balance exceeds a threshold value provided
+                    at runtime via the <code>Mask-Balance-Threshold</code> HTTP header.
+                </p>
+                <p style="margin-top:.5rem;">
+                    This requires a new condition class, a custom <code>BigDecimalConverter</code>,
+                    updating the <code>@MaskMe</code> annotation on the <code>balance</code> field,
+                    registering the condition as a Spring bean, and exposing a new endpoint.
+                </p>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Requirements</div>
+                <ul>
+                    <li>A new custom masking condition that masks the <code>balance</code> field only when its value exceeds a runtime threshold</li>
+                    <li>The threshold value should be provided via a <code>Mask-Balance-Threshold</code> HTTP header</li>
+                    <li>A custom converter to handle <code>BigDecimal</code> type conversion during masking (the existing converter only handles <code>String</code> fields)</li>
+                    <li>The new condition must be Spring-managed to support dependency injection</li>
+                    <li>The <code>balance</code> field in <code>UserDto</code> should use the new condition instead of <code>AlwaysMaskMeCondition</code></li>
+                    <li>A new REST endpoint to demonstrate the threshold-based balance masking</li>
+                    <li>The new condition and converter must be registered in the existing MaskMe configuration</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Acceptance Criteria</div>
+                <ul>
+                    <li>When the threshold header is provided and the user's balance exceeds it, the balance is masked</li>
+                    <li>When the threshold header is provided and the user's balance is below it, the balance remains visible</li>
+                    <li>When no threshold header is provided, the balance is not masked</li>
+                    <li>The new condition supports Spring dependency injection</li>
+                    <li>Empty mask values are converted to <code>BigDecimal.ZERO</code></li>
+                    <li>All existing endpoints remain unchanged and functional</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">⚠️ Open Questions / Clarifications Needed</div>
+                <div class="jira-clarification">
+                    <ul>
+                        <li>Should the threshold comparison be <strong>strictly greater than</strong> or <strong>greater than or equal</strong>?</li>
+                        <li>What should the masked balance display as — zero, a placeholder like <code>"-1"</code>, or something else?</li>
+                        <li>Should the new endpoint also mask other fields (e.g. via <code>MaskMeOnInput</code>), or only the balance?</li>
+                        <li>Should the <code>GET /users</code> endpoint support the balance threshold as an additional condition?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="jira-sidebar">
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Status</span>
+                <span class="jira-status jira-status-todo">To Do</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Priority</span>
+                <span class="jira-priority jira-priority-medium">⬆ Medium</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Type</span>
+                <span>📗 Story</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Sprint</span>
+                <span class="jira-meta-value">Sprint 4</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Story Points</span>
+                <span class="jira-meta-value">5</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Assignee</span>
+                <span class="jira-meta-value">Unassigned</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Reporter</span>
+                <span class="jira-meta-value">Ahmed Samy</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Labels</span>
+                <div>
+                    <span class="jira-label">maskme</span>
+                    <span class="jira-label">condition</span>
+                    <span class="jira-label">converter</span>
+                </div>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Components</span>
+                <span class="jira-meta-value">masking-core</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Linked Issues</span>
+                <a class="jira-link" href="#" onclick="switchTab('ticket2');document.querySelectorAll('.jira-tab')[1].click();return false;">🔗 MASK-102 (tested by)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket 2 -->
+    <div class="jira-ticket" id="ticket2" style="display:none;">
+        <div class="jira-main">
+            <div class="jira-ticket-key">
+                <span class="jira-type jira-type-task">📘 Task</span>
+                MASK-102
+            </div>
+            <h1 class="jira-ticket-title">Add Unit Tests for Balance Masking Feature</h1>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Description</div>
+                <p>
+                    Write unit tests covering the balance masking feature introduced in
+                    <a class="jira-link" href="#" onclick="switchTab('ticket1');document.querySelectorAll('.jira-tab')[0].click();return false;" style="display:inline;">MASK-101</a>.
+                    Tests should cover the new <code>BalanceMaskingCondition</code>,
+                    the <code>CustomBigDecimalConverter</code>, and the
+                    <code>GET /users/masked/balance/{id}</code> endpoint via <code>UserController</code>.
+                </p>
+                <p style="margin-top:.5rem;">
+                    The project currently has <strong>no test directory</strong> — the
+                    <code>src/test/java</code> structure needs to be created. Use JUnit 5 and
+                    Spring Boot Test (already available via the starter). Use Mockito for service-layer mocking.
+                </p>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Requirements</div>
+                <ul>
+                    <li>Unit tests for the new balance masking condition covering: threshold exceeded, threshold not exceeded, and no input provided</li>
+                    <li>Unit tests for the BigDecimal converter covering: empty value handling, valid value conversion, and type support check</li>
+                    <li>Controller tests for the new balance masking endpoint covering: masked response, unmasked response, and missing header behavior</li>
+                    <li>Regression tests confirming existing endpoints are unaffected by the changes</li>
+                    <li>Edge case coverage for invalid or non-numeric threshold inputs</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Acceptance Criteria</div>
+                <ul>
+                    <li>All tests pass with <code>mvn test</code></li>
+                    <li>Minimum 3 test cases per component (condition, converter, controller)</li>
+                    <li>Unit tests do not require a full Spring context — dependencies are mocked</li>
+                    <li>Controller tests verify HTTP status codes and response body content</li>
+                    <li>No existing functionality is broken</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">⚠️ Open Questions / Clarifications Needed</div>
+                <div class="jira-clarification">
+                    <ul>
+                        <li>The project currently has no test dependencies — does <code>spring-boot-starter-test</code> need to be added to <code>pom.xml</code>?</li>
+                        <li>Should integration tests (full Spring context) be included or handled in a separate ticket?</li>
+                        <li>Is there a preferred assertion library? (AssertJ vs Hamcrest vs plain JUnit)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="jira-sidebar">
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Status</span>
+                <span class="jira-status jira-status-todo">To Do</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Priority</span>
+                <span class="jira-priority jira-priority-medium">⬆ Medium</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Type</span>
+                <span>📘 Task</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Sprint</span>
+                <span class="jira-meta-value">Sprint 4</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Story Points</span>
+                <span class="jira-meta-value">3</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Assignee</span>
+                <span class="jira-meta-value">Unassigned</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Reporter</span>
+                <span class="jira-meta-value">Ahmed Samy</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Labels</span>
+                <div>
+                    <span class="jira-label">testing</span>
+                    <span class="jira-label">junit5</span>
+                    <span class="jira-label">maskme</span>
+                </div>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Components</span>
+                <span class="jira-meta-value">masking-core</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Linked Issues</span>
+                <a class="jira-link" href="#" onclick="switchTab('ticket1');document.querySelectorAll('.jira-tab')[0].click();return false;">🔗 MASK-101 (tests for)</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    MaskMe Library — <a href="https://github.com/JAVA-MSDT" target="_blank">GitHub</a> |
+    Built by Ahmed Samy
+</footer>
+
+<script>
+function switchTab(id) {
+    document.querySelectorAll('.jira-ticket').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('.jira-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).style.display = 'block';
+    event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>

@@ -341,3 +341,209 @@ footer {
 }
 
 footer a { color: var(--primary); text-decoration: none; }
+
+
+/* ── Sprint Board / Jira-like Ticket Styles ── */
+
+.jira-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid var(--border);
+    margin-bottom: 0;
+}
+
+.jira-tab {
+    padding: .75rem 1.5rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-bottom: none;
+    border-radius: 6px 6px 0 0;
+    font-size: .85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all .15s;
+    margin-right: 2px;
+}
+
+.jira-tab:hover { background: #e8eaed; }
+
+.jira-tab.active {
+    background: #fff;
+    color: var(--primary);
+    border-color: var(--border);
+    border-bottom: 2px solid #fff;
+    margin-bottom: -2px;
+    position: relative;
+    z-index: 1;
+}
+
+.jira-ticket {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    min-height: 400px;
+}
+
+.jira-main { padding: 1.75rem 2rem; }
+
+.jira-sidebar {
+    padding: 1.5rem;
+    border-left: 1px solid var(--border);
+    background: #fafbfc;
+    border-radius: 0 0 8px 0;
+}
+
+.jira-ticket-title {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: .25rem;
+    color: var(--text);
+}
+
+.jira-ticket-key {
+    font-size: .8rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+}
+
+.jira-type {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    font-weight: 600;
+    font-size: .75rem;
+}
+
+.jira-type-story { color: #36b37e; }
+.jira-type-task { color: #2684ff; }
+
+.jira-section {
+    margin-bottom: 1.5rem;
+}
+
+.jira-section-title {
+    font-size: .75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .6px;
+    color: var(--text-secondary);
+    margin-bottom: .5rem;
+    padding-bottom: .35rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.jira-section p,
+.jira-section li {
+    font-size: .9rem;
+    line-height: 1.7;
+    color: #333;
+}
+
+.jira-section ul {
+    padding-left: 1.25rem;
+    margin: 0;
+}
+
+.jira-section ul li {
+    margin-bottom: .35rem;
+}
+
+.jira-section code {
+    background: var(--code-bg);
+    padding: .1rem .4rem;
+    border-radius: 3px;
+    font-size: .82rem;
+    font-family: 'Fira Code', monospace;
+}
+
+.jira-meta-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: .6rem 0;
+    border-bottom: 1px solid #eef0f2;
+    font-size: .85rem;
+}
+
+.jira-meta-row:last-child { border-bottom: none; }
+
+.jira-meta-label {
+    color: var(--text-secondary);
+    font-weight: 600;
+    font-size: .75rem;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+}
+
+.jira-meta-value { font-weight: 500; }
+
+.jira-status {
+    display: inline-block;
+    padding: .2rem .6rem;
+    border-radius: 3px;
+    font-size: .7rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+.jira-status-todo { background: #dfe1e6; color: #42526e; }
+.jira-status-progress { background: #deebff; color: #0052cc; }
+.jira-status-done { background: #e3fcef; color: #006644; }
+
+.jira-priority {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.jira-priority-medium { color: #ff991f; }
+.jira-priority-high { color: #ff5630; }
+
+.jira-label {
+    display: inline-block;
+    padding: .15rem .5rem;
+    background: #e8f0fe;
+    color: var(--primary);
+    border-radius: 3px;
+    font-size: .7rem;
+    font-weight: 600;
+    margin-right: .3rem;
+    margin-bottom: .3rem;
+}
+
+.jira-clarification {
+    background: #fffae6;
+    border: 1px solid #ffe380;
+    border-radius: 6px;
+    padding: .75rem 1rem;
+    margin-top: .5rem;
+}
+
+.jira-clarification li {
+    color: #974f0c !important;
+}
+
+.jira-link {
+    font-size: .85rem;
+    color: var(--primary);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: .3rem;
+}
+
+.jira-link:hover { text-decoration: underline; }
+
+@media (max-width: 800px) {
+    .jira-ticket { grid-template-columns: 1fr; }
+    .jira-sidebar { border-left: none; border-top: 1px solid var(--border); }
+    .jira-tabs { flex-wrap: wrap; }
+}

@@ -62,7 +62,8 @@ AI-Guide/
 │   ├── static/
 │   │   ├── css/style.css                  # Shared styles for all pages
 │   │   ├── index.html                     # Overview page — library description
-│   │   └── api-demo.html                  # API demo — interactive endpoint testing
+│   │   ├── api-demo.html                  # API demo — interactive endpoint testing
+│   │   └── sprint-board.html              # Jira-like sprint board with demo tickets
 │   └── application.properties             # server.port=9090
 ├── pom.xml
 └── README.md
@@ -82,6 +83,7 @@ AI-Guide/
 │   ┌────────────────┐ │  ┌──────────────────────────────────┐    │
 │   │ index.html     │ │  │ UserController                   │    │
 │   │ api-demo.html  │ │  │  GET /users/{id}      (unmasked) │    │
+│   │ sprint-board   │ │  │  GET /users/masked/{id} (masked) │    │
 │   └────────────────┘ │  │  GET /users/masked/{id} (masked) │    │
 │                      │  │  GET /users/user/{id}  (domain)  │    │
 │                      │  │  GET /users            (all)      │    │
@@ -128,12 +130,13 @@ AI-Guide/
 
 ## Web UI
 
-The application serves two HTML pages at [http://localhost:9090](http://localhost:9090):
+The application serves three HTML pages at [http://localhost:9090](http://localhost:9090):
 
-| Page     | URL              | Purpose                                                                         |
-|----------|------------------|---------------------------------------------------------------------------------|
-| Overview | `/`              | MaskMe library description, features, code comparison (hardcoded vs annotation) |
-| API Demo | `/api-demo.html` | Interactive endpoint testing with visual user cards, side-by-side comparison    |
+| Page         | URL                  | Purpose                                                                         |
+|--------------|----------------------|---------------------------------------------------------------------------------|
+| Overview     | `/`                  | MaskMe library description, features, code comparison (hardcoded vs annotation) |
+| API Demo     | `/api-demo.html`     | Interactive endpoint testing with visual user cards, side-by-side comparison     |
+| Sprint Board | `/sprint-board.html` | Jira-like sprint board with demo tickets for AI workflow presentation            |
 
 ### API Demo Features
 
