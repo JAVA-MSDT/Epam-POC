@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MASK-101 — Requirements Analysis</title>
+    <style>
+        :root {
+            --bg: #f4f5f7; --card: #fff; --border: #dfe1e6; --text: #172b4d; --text-sec: #5e6c84;
+            --primary: #0052cc; --success: #00875a; --warning: #ff991f; --danger: #de350b;
+            --info-bg: #deebff; --info-border: #b3d4ff; --warn-bg: #fff7e6; --warn-border: #ffe0b2;
+            --danger-bg: #ffebe6; --danger-border: #ffbdad; --success-bg: #e3fcef; --success-border: #abf5d1;
+            --code-bg: #f4f5f7; --radius: 8px;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+        /* Header */
+        .header { background: linear-gradient(135deg, #0052cc, #0065ff); color: #fff; padding: 2.5rem 0; margin-bottom: 2rem; }
+        .header h1 { font-size: 1.8rem; margin-bottom: .4rem; }
+        .header p { opacity: .85; font-size: .95rem; }
+        .header .meta { display: flex; gap: 1.5rem; margin-top: 1rem; font-size: .8rem; opacity: .75; flex-wrap: wrap; }
+
+        /* TOC */
+        .toc { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem 1.5rem; margin-bottom: 2rem; }
+        .toc h2 { font-size: 1rem; margin-bottom: .75rem; color: var(--primary); }
+        .toc ol { padding-left: 1.25rem; }
+        .toc li { margin-bottom: .35rem; font-size: .88rem; }
+        .toc a { color: var(--primary); text-decoration: none; }
+        .toc a:hover { text-decoration: underline; }
+
+        /* Section */
+        .section { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); margin-bottom: 1.5rem; overflow: hidden; }
+        .section-head { padding: 1rem 1.5rem; border-bottom: 1px solid var(--border); cursor: pointer; display: flex; align-items: center; gap: .75rem; }
+        .section-head:hover { background: #fafbfc; }
+        .section-head h2 { font-size: 1.05rem; flex: 1; }
+        .section-head .badge { font-size: .7rem; padding: .2rem .6rem; border-radius: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: .3px; white-space: nowrap; }
+        .section-body { padding: 1.25rem 1.5rem; }
+
+        /* Finding card */
+        .finding { border: 1px solid var(--border); border-radius: 6px; margin-bottom: 1rem; overflow: hidden; }
+        .finding:last-child { margin-bottom: 0; }
+        .finding-head { padding: .75rem 1rem; font-weight: 600; font-size: .88rem; display: flex; align-items: center; gap: .5rem; }
+        .finding-body { padding: .75rem 1rem; font-size: .85rem; border-top: 1px solid var(--border); }
+        .finding-body p { margin-bottom: .5rem; }
+        .finding-body p:last-child { margin-bottom: 0; }
+
+        /* Severity colors */
+        .sev-critical .finding-head { background: var(--danger-bg); color: var(--danger); border-left: 4px solid var(--danger); }
+        .sev-high .finding-head { background: #fff3e0; color: #e65100; border-left: 4px solid #e65100; }
+        .sev-medium .finding-head { background: var(--warn-bg); color: #b36b00; border-left: 4px solid var(--warning); }
+        .sev-low .finding-head { background: var(--info-bg); color: var(--primary); border-left: 4px solid var(--primary); }
+        .sev-info .finding-head { background: var(--success-bg); color: var(--success); border-left: 4px solid var(--success); }
+
+        .badge-critical { background: var(--danger); color: #fff; }
+        .badge-high { background: #e65100; color: #fff; }
+        .badge-medium { background: var(--warning); color: #fff; }
+        .badge-low { background: var(--primary); color: #fff; }
+        .badge-info { background: var(--success); color: #fff; }
+
+        /* Sub-sections inside finding body */
+        .sub { margin-top: .6rem; padding: .6rem .75rem; border-radius: 4px; font-size: .82rem; }
+        .sub-fix { background: var(--success-bg); border: 1px solid var(--success-border); }
+        .sub-impact { background: var(--warn-bg); border: 1px solid var(--warn-border); }
+        .sub-edge { background: var(--info-bg); border: 1px solid var(--info-border); }
+        .sub strong { display: block; margin-bottom: .25rem; font-size: .78rem; text-transform: uppercase; letter-spacing: .3px; }
+
+        /* Code */
+        code { background: var(--code-bg); padding: .15rem .4rem; border-radius: 3px; font-size: .82rem; font-family: 'Fira Code', 'Consolas', monospace; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 1rem; border-radius: 6px; overflow-x: auto; font-size: .78rem; line-height: 1.5; margin: .5rem 0; }
+        pre code { background: none; padding: 0; color: inherit; }
+
+        /* Impact matrix table */
+        table { width: 100%; border-collapse: collapse; font-size: .82rem; margin: .5rem 0; }
+        th, td { padding: .5rem .75rem; border: 1px solid var(--border); text-align: left; }
+        th { background: var(--code-bg); font-weight: 600; font-size: .75rem; text-transform: uppercase; letter-spacing: .3px; }
+
+        /* Utility */
+        .tag { display: inline-block; font-size: .7rem; padding: .15rem .5rem; border-radius: 3px; font-weight: 600; margin-right: .25rem; }
+        .tag-file { background: #e8f0fe; color: var(--primary); }
+        .tag-new { background: var(--success-bg); color: var(--success); }
+        .tag-modify { background: var(--warn-bg); color: #b36b00; }
+        ul { padding-left: 1.25rem; margin: .25rem 0; }
+        li { margin-bottom: .2rem; }
+        .muted { color: var(--text-sec); }
+
+        /* Collapsible */
+        .section-body { display: block; }
+        .section.collapsed .section-body { display: none; }
+        .chevron { transition: transform .2s; font-size: .75rem; }
+        .section.collapsed .chevron { transform: rotate(-90deg); }
+
+        /* Summary stats */
+        .stats { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+        .stat { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1rem 1.25rem; flex: 1; min-width: 140px; text-align: center; }
+        .stat .num { font-size: 1.6rem; font-weight: 700; }
+        .stat .label { font-size: .75rem; color: var(--text-sec); text-transform: uppercase; letter-spacing: .3px; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="container">
+        <h1>📋 MASK-101 — Requirements Deep Analysis</h1>
+        <p>Balance Masking Condition with Threshold Input — Comprehensive Impact & Edge Case Analysis</p>
+        <div class="meta">
+            <span>📦 Project: MaskMe Demo (AI-Guide)</span>
+            <span>🏷️ Ticket: MASK-101</span>
+            <span>⚙️ Stack: Spring Boot 4.0.1 / Java 21 / MaskMe 1.0.0</span>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+
+    <!-- Summary Stats -->
+    <div class="stats">
+        <div class="stat"><div class="num" style="color:var(--danger);">3</div><div class="label">Critical / High</div></div>
+        <div class="stat"><div class="num" style="color:var(--warning);">6</div><div class="label">Medium</div></div>
+        <div class="stat"><div class="num" style="color:var(--primary);">5</div><div class="label">Low / Info</div></div>
+        <div class="stat"><div class="num">7</div><div class="label">Files Impacted</div></div>
+        <div class="stat"><div class="num">3</div><div class="label">New Files</div></div>
+    </div>
+
+    <!-- TOC -->
+    <div class="toc">
+        <h2>📑 Table of Contents</h2>
+        <ol>
+            <li><a href="#sec-impact">Impact Matrix — Files & Components</a></li>
+            <li><a href="#sec-condition">Finding 1 — BalanceMaskingCondition Design</a></li>
+            <li><a href="#sec-converter">Finding 2 — CustomBigDecimalConverter</a></li>
+            <li><a href="#sec-dto">Finding 3 — UserDto Annotation Change</a></li>
+            <li><a href="#sec-config">Finding 4 — MaskMeConfiguration Registration</a></li>
+            <li><a href="#sec-controller">Finding 5 — New Endpoint & Controller Changes</a></li>
+            <li><a href="#sec-getall">Finding 6 — GET /users Endpoint Integration</a></li>
+            <li><a href="#sec-domain">Finding 7 — Domain Entity (User.java) Consideration</a></li>
+            <li><a href="#sec-benchmark">Finding 8 — Benchmark Impact</a></li>
+            <li><a href="#sec-frontend">Finding 9 — Frontend (api-demo.html) Updates</a></li>
+            <li><a href="#sec-open">Finding 10 — Open Questions Resolution</a></li>
+            <li><a href="#sec-edge">Finding 11 — Edge Cases & Scenarios Matrix</a></li>
+            <li><a href="#sec-regression">Finding 12 — Regression Risk Assessment</a></li>
+            <li><a href="#sec-thread">Finding 13 — Thread Safety & Concurrency</a></li>
+            <li><a href="#sec-checklist">Implementation Checklist</a></li>
+        </ol>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- SECTION 1: Impact Matrix                                      -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-impact">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>1. Impact Matrix — Files & Components</h2>
+            <span class="badge badge-high">High Importance</span>
+        </div>
+        <div class="section-body">
+            <p class="muted" style="margin-bottom:.75rem;">Every file that must be created or modified, with the type of change and risk level.</p>
+            <table>
+                <thead>
+                    <tr><th>File</th><th>Action</th><th>Change Summary</th><th>Risk</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>BalanceMaskingCondition.java</code></td>
+                        <td><span class="tag tag-new">NEW</span></td>
+                        <td>New condition class implementing <code>MaskMeCondition</code>, Spring-managed via <code>@Component</code></td>
+                        <td><span class="tag" style="background:#fff3e0;color:#e65100;">Medium</span> — core masking logic</td>
+                    </tr>
+                    <tr>
+                        <td><code>CustomBigDecimalConverter.java</code></td>
+                        <td><span class="tag tag-new">NEW</span></td>
+                        <td>New converter implementing <code>MaskMeConverter</code> for <code>BigDecimal</code> fields</td>
+                        <td><span class="tag" style="background:#fff3e0;color:#e65100;">Medium</span> — converter priority chain</td>
+                    </tr>
+                    <tr>
+                        <td><code>UserDto.java</code></td>
+                        <td><span class="tag tag-modify">MODIFY</span></td>
+                        <td>Change <code>balance</code> annotation from <code>AlwaysMaskMeCondition</code> → <code>BalanceMaskingCondition</code></td>
+                        <td><span class="tag" style="background:var(--danger-bg);color:var(--danger);">High</span> — breaks existing masking behavior</td>
+                    </tr>
+                    <tr>
+                        <td><code>MaskMeConfiguration.java</code></td>
+                        <td><span class="tag tag-modify">MODIFY</span></td>
+                        <td>Register <code>CustomBigDecimalConverter</code> globally</td>
+                        <td><span class="tag" style="background:#fff3e0;color:#e65100;">Medium</span> — converter ordering</td>
+                    </tr>
+                    <tr>
+                        <td><code>UserController.java</code></td>
+                        <td><span class="tag tag-modify">MODIFY</span></td>
+                        <td>Add new endpoint <code>GET /users/masked/balance/{id}</code> + update <code>GET /users</code></td>
+                        <td><span class="tag" style="background:var(--danger-bg);color:var(--danger);">High</span> — existing endpoint risk</td>
+                    </tr>
+                    <tr>
+                        <td><code>api-demo.html</code></td>
+                        <td><span class="tag tag-modify">MODIFY</span></td>
+                        <td>Add UI section for the new balance threshold endpoint</td>
+                        <td><span class="tag" style="background:var(--info-bg);color:var(--primary);">Low</span></td>
+                    </tr>
+                    <tr>
+                        <td><code>SimpleBenchmark.java</code></td>
+                        <td><span class="tag tag-modify">MODIFY</span></td>
+                        <td>Add benchmark scenario for <code>BalanceMaskingCondition</code></td>
+                        <td><span class="tag" style="background:var(--info-bg);color:var(--primary);">Low</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 1: BalanceMaskingCondition Design                     -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-condition">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>2. Finding — BalanceMaskingCondition Design</h2>
+            <span class="badge badge-critical">Critical</span>
+        </div>
+        <div class="section-body">
+            <p>This is the core new class. It must follow the exact pattern of <code>PhoneMaskingCondition</code> (the only existing custom Spring-managed condition), but with fundamentally different comparison logic.</p>
+
+            <div class="finding sev-critical">
+                <div class="finding-head">F1.1 — Input type mismatch: setInput receives Object, but threshold is a numeric string</div>
+                <div class="finding-body">
+                    <p>The <code>MaskMeCondition.setInput(Object)</code> contract passes the raw header value as a <code>String</code>. The condition must parse it to <code>BigDecimal</code> internally. If the header contains <code>"abc"</code> or is empty, a <code>NumberFormatException</code> will crash the masking pipeline.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix</strong>
+                        Parse inside <code>setInput</code> with try-catch. On failure, set threshold to <code>null</code> so <code>shouldMask</code> returns <code>false</code> (no masking when input is invalid).
+                    </div>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact</strong>
+                        If not handled: any invalid header value will throw an unhandled exception, returning a 500 to the client on ALL endpoints that use this condition.
+                    </div>
+                    <div class="sub sub-edge">
+                        <strong>🧪 Edge Cases</strong>
+                        <ul>
+                            <li>Header value: <code>""</code> (empty string) — must not mask</li>
+                            <li>Header value: <code>"abc"</code> — must not mask, must not throw</li>
+                            <li>Header value: <code>"-10"</code> — negative threshold, all positive balances exceed it</li>
+                            <li>Header value: <code>"0"</code> — any non-zero balance exceeds it</li>
+                            <li>Header value: <code>"100.999999999"</code> — high precision BigDecimal</li>
+                            <li>Header absent entirely — <code>setInput</code> never called, threshold stays <code>null</code></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-high">
+                <div class="finding-head">F1.2 — shouldMask needs access to the actual BigDecimal field value, but receives Object</div>
+                <div class="finding-body">
+                    <p><code>shouldMask(Object maskedFieldValue, Object objectContainingMaskedField)</code> — the <code>maskedFieldValue</code> is the raw field value. For <code>balance</code> it will be a <code>BigDecimal</code>. You must cast safely.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix</strong>
+                        Check <code>maskedFieldValue instanceof BigDecimal</code> before comparing. If it's not a BigDecimal (e.g., the annotation is accidentally placed on a String field), return <code>false</code>.
+                    </div>
+                    <div class="sub sub-edge">
+                        <strong>🧪 Edge Cases</strong>
+                        <ul>
+                            <li><code>maskedFieldValue</code> is <code>null</code> — user has null balance → must not mask, must not NPE</li>
+                            <li><code>maskedFieldValue</code> is <code>BigDecimal.ZERO</code> — threshold "0" with strictly-greater-than → should NOT mask</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-medium">
+                <div class="finding-head">F1.3 — Strictly greater than vs. greater-than-or-equal (Open Question #1)</div>
+                <div class="finding-body">
+                    <p>The requirements say "exceeds a threshold". The word "exceeds" in English means <strong>strictly greater than</strong>. However, the open question asks for clarification.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        Use <code>balance.compareTo(threshold) > 0</code> (strictly greater than). This matches the natural meaning of "exceeds" and is the safer default — a balance exactly equal to the threshold remains visible.
+                    </div>
+                    <div class="sub sub-edge">
+                        <strong>🧪 Edge Case</strong>
+                        Balance = 50.00, Threshold = 50.00 → with <code>&gt;</code> it stays visible; with <code>&gt;=</code> it gets masked. Document the chosen behavior.
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-medium">
+                <div class="finding-head">F1.4 — Spring bean scope: Singleton condition with mutable state</div>
+                <div class="finding-body">
+                    <p>Looking at <code>PhoneMaskingCondition</code>, it stores <code>private String input</code> as instance state. Since it's a <code>@Component</code> (singleton by default), the <code>input</code> field is shared across all requests. The MaskMe library calls <code>setInput</code> before <code>shouldMask</code> on the same thread, but in a concurrent server, two requests could interleave.</p>
+                    <p><strong>However</strong>, examining <code>MaskMeProcessor</code>, it uses <code>MaskMeConditionFactory.createCondition()</code> which calls <code>applicationContext.getBean(type)</code>. Since Spring returns the singleton, the <code>setInput → shouldMask</code> sequence is NOT atomic across threads.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix</strong>
+                        This is an existing pattern issue (also affects <code>PhoneMaskingCondition</code>). For your new condition, follow the same pattern for consistency, but be aware this is a latent concurrency bug in the demo app. For production, consider <code>@Scope("prototype")</code> or <code>ThreadLocal</code> for the input field.
+                    </div>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact on existing code</strong>
+                        This is NOT a new risk — it already exists in <code>PhoneMaskingCondition</code>. Following the same pattern keeps the codebase consistent.
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-top:1rem;"><strong>Pattern to follow</strong> — based on <code>PhoneMaskingCondition.java</code>:</p>
+            <pre><code>@Component
+@RequiredArgsConstructor
+public class BalanceMaskingCondition implements MaskMeCondition {
+    private BigDecimal threshold;  // set via setInput
+
+    @Override
+    public boolean shouldMask(Object maskedFieldValue, Object objectContainingMaskedField) {
+        if (threshold == null || !(maskedFieldValue instanceof BigDecimal balance)) {
+            return false;
+        }
+        return balance.compareTo(threshold) > 0;
+    }
+
+    @Override
+    public void setInput(Object input) {
+        if (input instanceof String s && !s.isBlank()) {
+            try { this.threshold = new BigDecimal(s); }
+            catch (NumberFormatException e) { this.threshold = null; }
+        }
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 2: CustomBigDecimalConverter                          -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-converter">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>3. Finding — CustomBigDecimalConverter</h2>
+            <span class="badge badge-high">High</span>
+        </div>
+        <div class="section-body">
+            <p>The requirement says "a custom converter to handle BigDecimal type conversion". But the MaskMe library <strong>already has</strong> <code>MaskMeNumberConverter</code> which handles <code>BigDecimal</code> — it converts empty strings to <code>BigDecimal.ZERO</code>. So why do we need a custom one?</p>
+
+            <div class="finding sev-high">
+                <div class="finding-head">F2.1 — Potential conflict with built-in MaskMeNumberConverter</div>
+                <div class="finding-body">
+                    <p>The built-in <code>MaskMeNumberConverter</code> (priority 0) already handles <code>BigDecimal</code>. If you register a <code>CustomBigDecimalConverter</code> with priority &gt; 0, it will intercept ALL BigDecimal conversions globally — not just for the balance field.</p>
+                    <p>This means the <code>balance</code> field on the <code>User</code> domain entity (which still uses <code>AlwaysMaskMeCondition</code>) will also be affected by the new converter.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix</strong>
+                        <ul>
+                            <li><strong>Option A:</strong> Don't create a custom converter at all — the built-in <code>MaskMeNumberConverter</code> already converts empty <code>maskValue</code> to <code>BigDecimal.ZERO</code>. Only create one if you need custom masked display (e.g., <code>"-1"</code> or <code>"[HIDDEN]"</code>).</li>
+                            <li><strong>Option B:</strong> If you do create one, use the <code>maskedFieldName</code> parameter to scope it: only apply custom logic when <code>fieldName.equals("balance")</code>, and return <code>null</code> for other fields to let the chain continue.</li>
+                        </ul>
+                    </div>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact</strong>
+                        A global BigDecimal converter with priority &gt; 0 will affect: <code>UserDto.balance</code>, <code>User.balance</code>, and any future BigDecimal field in any DTO/entity. This is a <strong>silent behavioral change</strong> to existing endpoints.
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-medium">
+                <div class="finding-head">F2.2 — canConvert scope: BigDecimal only or all Number types?</div>
+                <div class="finding-body">
+                    <p>Following the pattern of <code>CustomStringConverter</code> which returns <code>type == String.class</code>, the new converter should return <code>type == BigDecimal.class</code> — NOT all numeric types.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix</strong>
+                        <code>canConvert</code> must check <code>type == BigDecimal.class</code> only. If you check <code>Number.class.isAssignableFrom(type)</code>, you'll intercept Integer, Long, Double conversions too — breaking <code>GeoLocationDto.latitude</code> (Double) and <code>UserDto.id</code> (Long).
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-low">
+                <div class="finding-head">F2.3 — Priority value must be > 0 to override built-in, but consider side effects</div>
+                <div class="finding-body">
+                    <p>The existing <code>CustomStringConverter</code> uses priority <code>10</code>. The built-in <code>MaskMeNumberConverter</code> uses priority <code>0</code>. Your converter needs priority &gt; 0 to take precedence.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        Use priority <code>10</code> to match the existing custom converter pattern. The converter chain in <code>MaskMeConverterRegistry</code> sorts by priority descending, so higher = tried first.
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-top:1rem;"><strong>Pattern to follow</strong> — based on <code>CustomStringConverter.java</code>:</p>
+            <pre><code>public class CustomBigDecimalConverter implements MaskMeConverter {
+    @Override
+    public int priority() { return 10; }
+
+    @Override
+    public boolean canConvert(Class&lt;?&gt; type) {
+        return type == BigDecimal.class;
+    }
+
+    @Override
+    public Object convert(String maskingValue, Class&lt;?&gt; targetFieldType,
+                          Object originalFieldValue, Object containingObject,
+                          String maskedFieldName) {
+        if (maskingValue == null || maskingValue.isBlank()) {
+            return BigDecimal.ZERO;
+        }
+        try { return new BigDecimal(maskingValue); }
+        catch (NumberFormatException e) { return BigDecimal.ZERO; }
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 3: UserDto Annotation Change                          -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-dto">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>4. Finding — UserDto Annotation Change</h2>
+            <span class="badge badge-critical">Critical</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-critical">
+                <div class="finding-head">F3.1 — Changing balance condition BREAKS existing endpoints</div>
+                <div class="finding-body">
+                    <p>Currently <code>UserDto.balance</code> uses <code>AlwaysMaskMeCondition</code>. The requirement says to replace it with <code>BalanceMaskingCondition</code>. This means:</p>
+                    <ul>
+                        <li><code>GET /users/masked/{id}</code> — currently masks balance unconditionally → will now only mask when threshold header is provided AND balance exceeds it</li>
+                        <li><code>GET /users</code> — currently masks balance unconditionally → same behavioral change</li>
+                        <li><code>GET /users/user/{id}</code> — uses <code>User</code> domain entity, NOT <code>UserDto</code> → <strong>unaffected</strong></li>
+                    </ul>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact — This is the highest-risk change</strong>
+                        <ul>
+                            <li>Acceptance criteria says "All existing endpoints remain unchanged and functional" — but changing the annotation on <code>UserDto.balance</code> <strong>directly changes</strong> the behavior of <code>GET /users/masked/{id}</code> and <code>GET /users</code></li>
+                            <li>Previously: balance was ALWAYS masked on these endpoints</li>
+                            <li>After change: balance is only masked when <code>Mask-Balance-Threshold</code> header is present and balance exceeds it</li>
+                        </ul>
+                    </div>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix — Two options</strong>
+                        <ul>
+                            <li><strong>Option A (Recommended):</strong> Use BOTH conditions: <code>@MaskMe(conditions = {AlwaysMaskMeCondition.class, BalanceMaskingCondition.class})</code>. The MaskMe library evaluates conditions with OR logic (any condition returning true triggers masking). This preserves existing behavior AND adds threshold-based masking.</li>
+                            <li><strong>Option B:</strong> Replace with only <code>BalanceMaskingCondition</code> as the requirement states, but acknowledge this is a <strong>breaking change</strong> to existing endpoints. Update acceptance criteria accordingly.</li>
+                        </ul>
+                    </div>
+                    <div class="sub sub-edge">
+                        <strong>🧪 Verification</strong>
+                        After implementation, test: <code>curl -H "Mask-Input: maskMe" http://localhost:9090/users/masked/1</code> — balance should still be masked if Option A is chosen.
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-medium">
+                <div class="finding-head">F3.2 — maskValue for balance: what should the masked display be?</div>
+                <div class="finding-body">
+                    <p>Currently <code>maskValue = ""</code> which the built-in converter turns into <code>BigDecimal.ZERO</code>. The requirement's open question asks: zero, <code>"-1"</code>, or something else?</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        Keep <code>maskValue = ""</code> → <code>BigDecimal.ZERO</code>. This is the current behavior and is semantically clear ("balance hidden = 0"). Using <code>"-1"</code> could confuse API consumers into thinking the user has negative balance.
+                    </div>
+                </div>
+            </div>
+
+            <p style="margin-top:1rem;"><strong>Current vs. Proposed (Option A):</strong></p>
+            <pre><code>// CURRENT
+@MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "")
+BigDecimal balance
+
+// PROPOSED (Option A — preserves backward compatibility)
+@MaskMe(conditions = {AlwaysMaskMeCondition.class, BalanceMaskingCondition.class}, maskValue = "")
+BigDecimal balance</code></pre>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 4: MaskMeConfiguration Registration                   -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-config">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>5. Finding — MaskMeConfiguration Registration</h2>
+            <span class="badge badge-medium">Medium</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-medium">
+                <div class="finding-head">F4.1 — BalanceMaskingCondition does NOT need a @Bean declaration</div>
+                <div class="finding-body">
+                    <p>Unlike <code>AlwaysMaskMeCondition</code> and <code>MaskMeOnInput</code> (which are library classes and need explicit <code>@Bean</code> declarations), <code>BalanceMaskingCondition</code> is YOUR class with <code>@Component</code>. Spring's component scanning will find it automatically.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix</strong>
+                        Do NOT add a <code>@Bean</code> method for <code>BalanceMaskingCondition</code> in <code>MaskMeConfiguration</code>. The <code>@Component</code> annotation is sufficient. Adding both would create a duplicate bean conflict.
+                    </div>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact if done wrong</strong>
+                        Spring will throw <code>NoUniqueBeanDefinitionException</code> at startup if both <code>@Component</code> and <code>@Bean</code> exist for the same type.
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-medium">
+                <div class="finding-head">F4.2 — CustomBigDecimalConverter MUST be registered in setupCustomConverters()</div>
+                <div class="finding-body">
+                    <p>The converter is NOT a Spring bean — it's registered via <code>MaskMeConverterRegistry.registerGlobal()</code>. It must be added in the <code>setupCustomConverters()</code> method alongside <code>CustomStringConverter</code>.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Exact change needed in MaskMeConfiguration.java</strong>
+                    </div>
+                    <pre><code>private void setupCustomConverters() {
+    MaskMeConverterRegistry.clearGlobal();
+    MaskMeConverterRegistry.registerGlobal(new CustomStringConverter());
+    MaskMeConverterRegistry.registerGlobal(new CustomBigDecimalConverter()); // ADD THIS
+}</code></pre>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact</strong>
+                        If forgotten: the built-in <code>MaskMeNumberConverter</code> handles BigDecimal already (converts empty to ZERO). So the app won't crash — but any custom conversion logic you intended won't execute.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 5: New Endpoint & Controller Changes                  -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-controller">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>6. Finding — New Endpoint & Controller Changes</h2>
+            <span class="badge badge-high">High</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-high">
+                <div class="finding-head">F5.1 — New endpoint must follow existing MaskMeInitializer.mask() pattern</div>
+                <div class="finding-body">
+                    <p>Looking at the existing controller, every masked endpoint calls <code>MaskMeInitializer.mask(dto, ConditionClass.class, inputValue)</code>. The new endpoint must follow this exact pattern with <code>BalanceMaskingCondition.class</code> and the header value.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Implementation</strong>
+                    </div>
+                    <pre><code>@GetMapping("/masked/balance/{id}")
+public UserDto getMaskedByBalance(@PathVariable Long id,
+        @RequestHeader(value = "Mask-Balance-Threshold", defaultValue = "") String threshold) {
+    UserDto userDto = userMapper.toDto(userService.findUserById(id));
+    return MaskMeInitializer.mask(userDto, BalanceMaskingCondition.class, threshold);
+}</code></pre>
+                    <div class="sub sub-edge">
+                        <strong>🧪 Edge Cases</strong>
+                        <ul>
+                            <li>Header absent → <code>defaultValue = ""</code> → <code>setInput("")</code> → threshold is null → no masking ✓</li>
+                            <li>Header = <code>"50"</code>, user balance = 20.0 → no masking ✓</li>
+                            <li>Header = <code>"50"</code>, user balance = 100.46 → masked ✓</li>
+                            <li>Invalid user ID → existing <code>RuntimeException("User not found")</code> propagates as 500 — consider adding proper error handling</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-medium">
+                <div class="finding-head">F5.2 — Open Question #3: Should the new endpoint also mask other fields?</div>
+                <div class="finding-body">
+                    <p>If the endpoint only passes <code>BalanceMaskingCondition.class</code> as input, then <code>MaskMeOnInput</code> fields (name, zipCode) will NOT be masked (no input provided for that condition). However, <code>AlwaysMaskMeCondition</code> fields (id, email, password, birthDate, createdAt, city, geoLocation) WILL still be masked because <code>AlwaysMaskMeCondition.shouldMask()</code> always returns true.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        This is correct behavior — the endpoint demonstrates balance-threshold masking specifically. <code>AlwaysMask</code> fields mask regardless. <code>MaskMeOnInput</code> fields stay unmasked unless you also pass that condition. This is a feature, not a bug.
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-low">
+                <div class="finding-head">F5.3 — URL path design: /users/masked/balance/{id} vs /users/balance/{id}</div>
+                <div class="finding-body">
+                    <p>The sprint board ticket (MASK-102) references <code>GET /users/masked/balance/{id}</code>. This is consistent with the existing <code>/users/masked/{id}</code> pattern. Keep this path.</p>
+                    <div class="sub sub-impact">
+                        <strong>⚡ No conflict</strong>
+                        Spring MVC can distinguish <code>/users/masked/{id}</code> from <code>/users/masked/balance/{id}</code> because "balance" is a literal segment, not a path variable.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 6: GET /users Endpoint Integration                    -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-getall">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>7. Finding — GET /users Endpoint Integration</h2>
+            <span class="badge badge-medium">Medium</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-medium">
+                <div class="finding-head">F6.1 — Open Question #4: Should GET /users support balance threshold?</div>
+                <div class="finding-body">
+                    <p>The existing <code>GET /users</code> endpoint already combines two conditions via <code>getMaskedConditionsForGetAllUsers()</code> which returns <code>Object[]{MaskMeOnInput.class, maskInput, PhoneMaskingCondition.class, maskPhone}</code>.</p>
+                    <p>Adding a third condition means extending this array to 6 elements and adding a third <code>@RequestHeader</code> parameter.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Suggested Fix — If yes, add to GET /users</strong>
+                    </div>
+                    <pre><code>@GetMapping
+public List&lt;UserDto&gt; getUsers(
+        @RequestHeader(value = "Mask-Input", defaultValue = "maskMe") String maskInput,
+        @RequestHeader(value = "Mask-Phone", defaultValue = "") String maskPhone,
+        @RequestHeader(value = "Mask-Balance-Threshold", defaultValue = "") String balanceThreshold) {
+
+    return userService.findUsers().stream()
+            .map(user -> MaskMeInitializer.mask(userMapper.toDto(user),
+                    MaskMeOnInput.class, maskInput,
+                    PhoneMaskingCondition.class, maskPhone,
+                    BalanceMaskingCondition.class, balanceThreshold))
+            .toList();
+}</code></pre>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact</strong>
+                        <ul>
+                            <li>The <code>defaultValue = ""</code> ensures backward compatibility — if the header is absent, <code>BalanceMaskingCondition</code> receives empty string → threshold is null → no masking</li>
+                            <li>Existing callers sending only <code>Mask-Input</code> and <code>Mask-Phone</code> headers will see NO behavioral change</li>
+                            <li>The <code>getMaskedConditionsForGetAllUsers</code> helper method must be updated to accept and include the third condition pair</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 7: Domain Entity Consideration                        -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-domain">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>8. Finding — Domain Entity (User.java) Consideration</h2>
+            <span class="badge badge-low">Low</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-low">
+                <div class="finding-head">F7.1 — User.java balance still uses AlwaysMaskMeCondition — intentional?</div>
+                <div class="finding-body">
+                    <p>The <code>User</code> domain entity has <code>@MaskMe(conditions = {AlwaysMaskMeCondition.class})</code> on its <code>balance</code> field. The requirement only mentions changing <code>UserDto</code>. The domain entity is used by <code>GET /users/user/{id}</code>.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        Leave <code>User.java</code> unchanged. The domain entity represents the "always mask" use case for the demo. Only <code>UserDto</code> gets the threshold-based condition. This gives the demo two contrasting behaviors to showcase.
+                    </div>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact</strong>
+                        None — <code>GET /users/user/{id}</code> continues to always mask balance. No regression.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 8: Benchmark Impact                                   -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-benchmark">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>9. Finding — Benchmark Impact</h2>
+            <span class="badge badge-info">Info</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-info">
+                <div class="finding-head">F8.1 — SimpleBenchmark.java should include BalanceMaskingCondition scenario</div>
+                <div class="finding-body">
+                    <p>The benchmark currently tests <code>MaskMeOnInput</code> and <code>PhoneMaskingCondition</code>. Adding a third condition to the "multiple conditions" benchmark would reflect real-world usage after this change.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        Add <code>BalanceMaskingCondition.class, "50"</code> to the multi-condition benchmark calls. This is optional and low priority — the benchmark is a standalone tool, not part of the main app flow.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 9: Frontend Updates                                   -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-frontend">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>10. Finding — Frontend (api-demo.html) Updates</h2>
+            <span class="badge badge-low">Low</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-low">
+                <div class="finding-head">F9.1 — api-demo.html needs a new endpoint section for balance masking</div>
+                <div class="finding-body">
+                    <p>The API demo page has sections for each endpoint. A new section for <code>GET /users/masked/balance/{id}</code> should be added with a threshold input field and user selector.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Changes needed</strong>
+                        <ul>
+                            <li>Add a new <code>endpoint-section</code> block with a numeric input for the threshold header</li>
+                            <li>Add a JS function <code>callBalanceMasked()</code> that sends the request with <code>Mask-Balance-Threshold</code> header</li>
+                            <li>Update the annotations reference table at the bottom to show <code>BalanceMaskingCondition</code> for balance</li>
+                            <li>Update <code>MASKED_FIELDS_DTO</code> JS object: change <code>balance: 'AlwaysMask'</code> to <code>balance: 'BalanceMasking'</code> (if Option B from F3.1 is chosen)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="finding sev-low">
+                <div class="finding-head">F9.2 — sprint-board.html ticket status should update</div>
+                <div class="finding-body">
+                    <p>After implementation, the MASK-101 ticket status in <code>sprint-board.html</code> should change from "To Do" to "Done". This is cosmetic but keeps the demo consistent.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 10: Open Questions Resolution                         -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-open">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>11. Finding — Open Questions Resolution</h2>
+            <span class="badge badge-medium">Medium</span>
+        </div>
+        <div class="section-body">
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Question</th><th>Recommended Answer</th><th>Rationale</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Strictly greater than or greater-than-or-equal?</td>
+                        <td><strong>Strictly greater than</strong> (<code>compareTo &gt; 0</code>)</td>
+                        <td>"Exceeds" means strictly greater. Balance exactly at threshold stays visible. Safer default.</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Masked balance display value?</td>
+                        <td><strong>BigDecimal.ZERO</strong> (keep <code>maskValue=""</code>)</td>
+                        <td>Current behavior. Semantically clear. <code>"-1"</code> could confuse consumers.</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>New endpoint mask other fields too?</td>
+                        <td><strong>No</strong> — only pass <code>BalanceMaskingCondition</code></td>
+                        <td><code>AlwaysMask</code> fields still mask automatically. <code>MaskMeOnInput</code> fields stay unmasked. This isolates the demo.</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>GET /users support balance threshold?</td>
+                        <td><strong>Yes</strong> — add as optional third condition</td>
+                        <td>Demonstrates multi-condition composition. <code>defaultValue=""</code> ensures backward compatibility.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 11: Edge Cases & Scenarios Matrix                     -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-edge">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>12. Finding — Edge Cases & Scenarios Matrix</h2>
+            <span class="badge badge-high">High</span>
+        </div>
+        <div class="section-body">
+            <p class="muted" style="margin-bottom:.75rem;">Complete matrix of input combinations and expected outcomes for <code>BalanceMaskingCondition</code>.</p>
+            <table>
+                <thead>
+                    <tr><th>Scenario</th><th>Header Value</th><th>User Balance</th><th>shouldMask?</th><th>Displayed Balance</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>No header</td><td><em>absent</em></td><td>100.46</td><td>❌ false</td><td>100.46</td></tr>
+                    <tr><td>Empty header</td><td><code>""</code></td><td>100.46</td><td>❌ false</td><td>100.46</td></tr>
+                    <tr><td>Invalid header</td><td><code>"abc"</code></td><td>100.46</td><td>❌ false</td><td>100.46</td></tr>
+                    <tr><td>Threshold below balance</td><td><code>"50"</code></td><td>100.46</td><td>✅ true</td><td>0</td></tr>
+                    <tr><td>Threshold above balance</td><td><code>"200"</code></td><td>100.46</td><td>❌ false</td><td>100.46</td></tr>
+                    <tr><td>Threshold equals balance</td><td><code>"100.46"</code></td><td>100.46</td><td>❌ false (strictly &gt;)</td><td>100.46</td></tr>
+                    <tr><td>Zero threshold</td><td><code>"0"</code></td><td>20.0</td><td>✅ true</td><td>0</td></tr>
+                    <tr><td>Zero threshold, zero balance</td><td><code>"0"</code></td><td>0.00</td><td>❌ false</td><td>0.00</td></tr>
+                    <tr><td>Negative threshold</td><td><code>"-10"</code></td><td>20.0</td><td>✅ true</td><td>0</td></tr>
+                    <tr><td>Null balance field</td><td><code>"50"</code></td><td><em>null</em></td><td>❌ false</td><td><em>null</em></td></tr>
+                    <tr><td>High precision</td><td><code>"100.4599"</code></td><td>100.46</td><td>✅ true (100.46 &gt; 100.4599)</td><td>0</td></tr>
+                    <tr><td>Very large threshold</td><td><code>"999999999"</code></td><td>100.46</td><td>❌ false</td><td>100.46</td></tr>
+                </tbody>
+            </table>
+
+            <div class="finding sev-medium" style="margin-top:1rem;">
+                <div class="finding-head">F11.1 — BigDecimal scale comparison subtlety</div>
+                <div class="finding-body">
+                    <p><code>new BigDecimal("100.46").compareTo(new BigDecimal("100.46"))</code> returns <code>0</code> ✓. But <code>new BigDecimal("100.46").equals(new BigDecimal("100.460"))</code> returns <code>false</code> because <code>equals</code> checks scale. Always use <code>compareTo</code>, never <code>equals</code> for BigDecimal comparison.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Already handled</strong>
+                        The suggested implementation uses <code>compareTo</code>. Just don't accidentally switch to <code>equals</code>.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 12: Regression Risk Assessment                        -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-regression">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>13. Finding — Regression Risk Assessment</h2>
+            <span class="badge badge-high">High</span>
+        </div>
+        <div class="section-body">
+            <p class="muted" style="margin-bottom:.75rem;">For each existing endpoint, what changes and what could break.</p>
+            <table>
+                <thead>
+                    <tr><th>Endpoint</th><th>Risk Level</th><th>What Could Break</th><th>Mitigation</th></tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>GET /users/{id}</code></td>
+                        <td><span class="tag" style="background:var(--success-bg);color:var(--success);">None</span></td>
+                        <td>Nothing — no masking applied, returns raw DTO</td>
+                        <td>No change needed</td>
+                    </tr>
+                    <tr>
+                        <td><code>GET /users/masked/{id}</code></td>
+                        <td><span class="tag" style="background:var(--danger-bg);color:var(--danger);">High</span></td>
+                        <td>If balance annotation changes from <code>AlwaysMask</code> to <code>BalanceMasking</code> only → balance no longer masked on this endpoint</td>
+                        <td>Use Option A (both conditions) from F3.1</td>
+                    </tr>
+                    <tr>
+                        <td><code>GET /users/user/{id}</code></td>
+                        <td><span class="tag" style="background:var(--success-bg);color:var(--success);">None</span></td>
+                        <td>Nothing — uses <code>User</code> domain entity, not <code>UserDto</code></td>
+                        <td>No change needed</td>
+                    </tr>
+                    <tr>
+                        <td><code>GET /users</code></td>
+                        <td><span class="tag" style="background:var(--warn-bg);color:#b36b00;">Medium</span></td>
+                        <td>Same as <code>/users/masked/{id}</code> if annotation changes. Also: adding third header parameter could break clients that send unexpected headers.</td>
+                        <td>Use Option A + <code>defaultValue=""</code> for new header</td>
+                    </tr>
+                    <tr>
+                        <td><code>GET /users/masked/balance/{id}</code></td>
+                        <td><span class="tag" style="background:var(--info-bg);color:var(--primary);">New</span></td>
+                        <td>N/A — new endpoint</td>
+                        <td>Test all edge cases from F11</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="finding sev-medium" style="margin-top:1rem;">
+                <div class="finding-head">F12.1 — Converter registration order matters</div>
+                <div class="finding-body">
+                    <p>In <code>setupCustomConverters()</code>, <code>clearGlobal()</code> is called first, then converters are registered. If <code>CustomBigDecimalConverter</code> is registered BEFORE <code>CustomStringConverter</code>, it doesn't matter because they handle different types. But if someone later creates a converter that handles both, registration order + priority determines behavior.</p>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Recommendation</strong>
+                        Register in logical order: <code>CustomStringConverter</code> first (existing), then <code>CustomBigDecimalConverter</code> (new). Both use priority 10, but they target different types so no conflict.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- FINDING 13: Thread Safety & Concurrency                       -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-thread">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>14. Finding — Thread Safety & Concurrency</h2>
+            <span class="badge badge-medium">Medium</span>
+        </div>
+        <div class="section-body">
+            <div class="finding sev-medium">
+                <div class="finding-head">F13.1 — Singleton condition with mutable threshold field (detailed analysis)</div>
+                <div class="finding-body">
+                    <p>Tracing the full call chain for concurrent requests:</p>
+                    <ol>
+                        <li>Request A arrives: <code>MaskMeInitializer.mask(dto, BalanceMaskingCondition.class, "50")</code></li>
+                        <li>Inside <code>mask()</code>: <code>processor.setConditionInput(BalanceMaskingCondition.class, "50")</code> — stored in ThreadLocal ✓</li>
+                        <li>Inside <code>processor.process()</code> → <code>shouldMask()</code> → <code>MaskMeConditionFactory.createCondition(BalanceMaskingCondition.class)</code></li>
+                        <li>Factory calls <code>applicationContext.getBean(BalanceMaskingCondition.class)</code> → returns SINGLETON</li>
+                        <li><code>condition.setInput("50")</code> — sets <code>this.threshold = 50</code> on the SHARED singleton</li>
+                        <li>Request B arrives simultaneously: <code>condition.setInput("200")</code> — overwrites to 200</li>
+                        <li>Request A's <code>shouldMask()</code> now uses threshold=200 instead of 50 ❌</li>
+                    </ol>
+                    <div class="sub sub-fix">
+                        <strong>🔧 Mitigation Options</strong>
+                        <ul>
+                            <li><strong>For this demo app:</strong> Accept the risk — it's a demo, not production. Follow the same pattern as <code>PhoneMaskingCondition</code> for consistency.</li>
+                            <li><strong>For production:</strong> Use <code>@Scope("prototype")</code> on the condition so each <code>getBean()</code> call returns a new instance. Or use <code>ThreadLocal&lt;BigDecimal&gt;</code> for the threshold field.</li>
+                        </ul>
+                    </div>
+                    <div class="sub sub-impact">
+                        <strong>⚡ Impact</strong>
+                        This is a pre-existing architectural pattern in the demo. Changing it for <code>BalanceMaskingCondition</code> alone would be inconsistent. Flag it but don't fix it in this ticket.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- IMPLEMENTATION CHECKLIST                                      -->
+    <!-- ============================================================ -->
+    <div class="section" id="sec-checklist">
+        <div class="section-head">
+            <span class="chevron">▼</span>
+            <h2>15. Implementation Checklist</h2>
+            <span class="badge badge-info">Reference</span>
+        </div>
+        <div class="section-body">
+            <p class="muted" style="margin-bottom:.75rem;">Ordered steps to implement MASK-101 safely, with risk mitigation built in.</p>
+            <table>
+                <thead>
+                    <tr><th>#</th><th>Step</th><th>File</th><th>Validates</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>1</td><td>Create <code>BalanceMaskingCondition</code> with safe parsing in <code>setInput</code></td><td><code>maskme/condition/</code></td><td>F1.1, F1.2, F1.3</td></tr>
+                    <tr><td>2</td><td>Create <code>CustomBigDecimalConverter</code> scoped to <code>BigDecimal.class</code> only</td><td><code>maskme/converter/</code></td><td>F2.1, F2.2, F2.3</td></tr>
+                    <tr><td>3</td><td>Register converter in <code>MaskMeConfiguration.setupCustomConverters()</code></td><td><code>maskme/config/</code></td><td>F4.2</td></tr>
+                    <tr><td>4</td><td>Update <code>UserDto.balance</code> annotation — add <code>BalanceMaskingCondition</code> alongside <code>AlwaysMaskMeCondition</code></td><td><code>dto/UserDto.java</code></td><td>F3.1 (Option A)</td></tr>
+                    <tr><td>5</td><td>Add <code>GET /users/masked/balance/{id}</code> endpoint</td><td><code>controller/</code></td><td>F5.1, F5.3</td></tr>
+                    <tr><td>6</td><td>Update <code>GET /users</code> to accept optional <code>Mask-Balance-Threshold</code> header</td><td><code>controller/</code></td><td>F6.1</td></tr>
+                    <tr><td>7</td><td>Verify <code>User.java</code> domain entity is NOT changed</td><td><code>domain/User.java</code></td><td>F7.1</td></tr>
+                    <tr><td>8</td><td>Test all 12 edge case scenarios from the matrix</td><td>Manual / MASK-102</td><td>F11</td></tr>
+                    <tr><td>9</td><td>Test existing endpoints for regression</td><td>Manual / MASK-102</td><td>F12</td></tr>
+                    <tr><td>10</td><td>Update <code>api-demo.html</code> with new endpoint section</td><td><code>static/api-demo.html</code></td><td>F9.1</td></tr>
+                    <tr><td>11</td><td>Update <code>README.md</code> with new endpoint documentation</td><td><code>README.md</code></td><td>—</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+document.querySelectorAll('.section-head').forEach(h => {
+    h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed'));
+});
+</script>
+</body>
+</html>
