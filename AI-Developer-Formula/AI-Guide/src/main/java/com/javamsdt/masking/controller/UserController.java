@@ -6,7 +6,6 @@
  */
 package com.javamsdt.masking.controller;
 
-import com.javamsdt.masking.domain.User;
 import com.javamsdt.masking.dto.UserDto;
 import com.javamsdt.masking.mapper.UserMapper;
 import com.javamsdt.masking.maskme.condition.PhoneMaskingCondition;
@@ -26,7 +25,6 @@ import java.util.List;
  * <ul>
  *   <li>Unmasked data retrieval</li>
  *   <li>Conditional masking with MaskMeOnInput</li>
- *   <li>Always-masked domain entities</li>
  *   <li>Multiple conditions (MaskMeOnInput + PhoneMaskingCondition)</li>
  * </ul>
  * </p>
@@ -86,26 +84,6 @@ public class UserController {
 
         UserDto userDto = userMapper.toDto(userService.findUserById(id));
         return MaskMeInitializer.mask(userDto, MaskMeOnInput.class, maskInput);
-    }
-
-    /**
-     * Retrieves a domain entity with always-masked fields.
-     * <p>
-     * Fields annotated with {@code @MaskMe(conditions = {AlwaysMaskMeCondition.class})}
-     * are masked without requiring any input or headers.
-     * </p>
-     *
-     * <p><b>Example:</b></p>
-     * <pre>{@code
-     * GET /users/user/1
-     * }</pre>
-     *
-     * @param id the user ID
-     * @return User domain entity with always-masked fields
-     */
-    @GetMapping("/user/{id}")
-    public User getUserEntity(@PathVariable final Long id) {
-        return MaskMeInitializer.mask(userService.findUserById(id));
     }
 
     /**

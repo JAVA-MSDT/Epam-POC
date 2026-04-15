@@ -6,8 +6,6 @@
  */
 package com.javamsdt.masking.domain;
 
-import io.github.javamsdt.maskme.api.annotation.MaskMe;
-import io.github.javamsdt.maskme.implementation.condition.AlwaysMaskMeCondition;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,7 +15,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Address {
     private Long id;
-    @MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "*****")
     private String street;
     private String building;
     private String city;

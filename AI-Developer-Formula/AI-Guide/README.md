@@ -36,10 +36,10 @@ AI-Guide/
 │   ├── controller/
 │   │   └── UserController.java            # GET /users — masking demo endpoints
 │   ├── domain/
-│   │   ├── Address.java                   # Domain entity with @MaskMe annotations
+│   │   ├── Address.java                   # Plain domain entity
 │   │   ├── Gender.java
 │   │   ├── GeoLocation.java
-│   │   └── User.java                      # Domain entity with @MaskMe + @ExcludeMaskMe
+│   │   └── User.java                      # Plain domain entity
 │   ├── dto/
 │   │   ├── AddressDto.java                # DTO with @MaskMe on city, zipCode
 │   │   ├── GeoLocationDto.java            # DTO with @MaskMe on id, latitude
@@ -84,9 +84,7 @@ AI-Guide/
 │   │ index.html     │ │  │ UserController                   │    │
 │   │ api-demo.html  │ │  │  GET /users/{id}      (unmasked) │    │
 │   │ sprint-board   │ │  │  GET /users/masked/{id} (masked) │    │
-│   └────────────────┘ │  │  GET /users/masked/{id} (masked) │    │
-│                      │  │  GET /users/user/{id}  (domain)  │    │
-│                      │  │  GET /users            (all)      │    │
+│   └────────────────┘ │  │  GET /users            (all)      │    │
 │                      │  └──────────────────────────────────┘    │
 ├──────────────────────┴──────────────────────────────────────────┤
 │                                                                  │
@@ -102,7 +100,7 @@ AI-Guide/
 │   │  ├─ MaskMeOnInput          → masks when input="maskMe" │    │
 │   │  └─ PhoneMaskingCondition  → masks specific phone      │    │
 │   ├────────────────────────────────────────────────────────┤    │
-│   │ Annotated DTOs                                         │    │
+│   │ Annotated DTOs (masking only on DTO layer)             │    │
 │   │  ├─ UserDto    (11 fields, 8 masked)                   │    │
 │   │  ├─ AddressDto (7 fields, 2 masked)                    │    │
 │   │  └─ GeoLocationDto (3 fields, 2 masked)               │    │
@@ -135,26 +133,25 @@ The application serves three HTML pages at [http://localhost:9090](http://localh
 | Page         | URL                  | Purpose                                                                         |
 |--------------|----------------------|---------------------------------------------------------------------------------|
 | Overview     | `/`                  | MaskMe library description, features, code comparison (hardcoded vs annotation) |
-| API Demo     | `/api-demo.html`     | Interactive endpoint testing with visual user cards, side-by-side comparison     |
-| Sprint Board | `/sprint-board.html` | Jira-like sprint board with demo tickets for AI workflow presentation            |
+| API Demo     | `/api-demo.html`     | Interactive endpoint testing with visual user cards, side-by-side comparison    |
+| Sprint Board | `/sprint-board.html` | Jira-like sprint board with demo tickets for AI workflow presentation           |
 
 ### API Demo Features
 
 - **Side-by-side comparison** — fetches unmasked and masked user in one click, displayed side by side
 - **Visual user cards** — masked fields highlighted in amber 🎭, excluded fields in green 🛡️
-- **All 4 endpoints** — configurable headers and user selection
+- **All 3 endpoints** — configurable headers and user selection
 - **Raw JSON toggle** — expand to see the actual JSON response
 
 ## REST API Endpoints
 
 ### User Endpoints
 
-| Method | URL                  | Headers                                         | Description                              |
-|--------|----------------------|-------------------------------------------------|------------------------------------------|
-| GET    | `/users/{id}`        | —                                               | Unmasked user DTO                        |
-| GET    | `/users/masked/{id}` | `Mask-Input: maskMe`                            | Masked user (MaskMeOnInput condition)    |
-| GET    | `/users/user/{id}`   | —                                               | Domain entity with AlwaysMaskMeCondition |
-| GET    | `/users`             | `Mask-Input: maskMe`, `Mask-Phone: 01000000000` | All users with multiple conditions       |
+| Method | URL                  | Headers                                         | Description                           |
+|--------|----------------------|-------------------------------------------------|---------------------------------------|
+| GET    | `/users/{id}`        | —                                               | Unmasked user DTO                     |
+| GET    | `/users/masked/{id}` | `Mask-Input: maskMe`                            | Masked user (MaskMeOnInput condition) |
+| GET    | `/users`             | `Mask-Input: maskMe`, `Mask-Phone: 01000000000` | All users with multiple conditions    |
 
 **Example:**
 
