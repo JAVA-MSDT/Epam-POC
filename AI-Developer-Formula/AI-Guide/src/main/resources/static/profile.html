@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaskMe — Profile</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .profile-layout { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; align-items: start; }
+        @media (max-width: 800px) { .profile-layout { grid-template-columns: 1fr; } }
+
+        /* Sidebar */
+        .profile-sidebar {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+            overflow: hidden; position: sticky; top: 72px;
+        }
+        .sidebar-top {
+            background: linear-gradient(135deg, #1a73e8, #4285f4);
+            padding: 2rem 1.5rem; text-align: center; color: #fff;
+        }
+        .sidebar-top.female { background: linear-gradient(135deg, #e91e63, #f06292); }
+        .sidebar-avatar {
+            width: 80px; height: 80px; border-radius: 50%; background: rgba(255,255,255,.2);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.8rem; font-weight: 700; margin: 0 auto .75rem; border: 3px solid rgba(255,255,255,.4);
+        }
+        .sidebar-name { font-size: 1.2rem; font-weight: 700; }
+        .sidebar-email { font-size: .82rem; opacity: .85; margin-top: .2rem; }
+        .sidebar-meta { padding: 1rem 1.25rem; }
+        .meta-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: .55rem 0; border-bottom: 1px solid #f1f3f4; font-size: .82rem;
+        }
+        .meta-row:last-child { border-bottom: none; }
+        .meta-label { color: var(--text-secondary); font-weight: 600; font-size: .72rem; text-transform: uppercase; letter-spacing: .3px; }
+        .meta-value { font-weight: 500; text-align: right; max-width: 160px; word-break: break-all; }
+
+        /* Main content */
+        .profile-main { display: flex; flex-direction: column; gap: 1.25rem; }
+
+        .section-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+            overflow: hidden;
+        }
+        .section-title {
+            padding: .75rem 1.25rem; background: var(--code-bg); border-bottom: 1px solid var(--border);
+            font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .4px;
+            color: var(--text-secondary); display: flex; align-items: center; gap: .5rem;
+        }
+        .section-body { padding: 1rem 1.25rem; }
+
+        .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+        @media (max-width: 600px) { .detail-grid { grid-template-columns: 1fr; } }
+        .detail-item {
+            padding: .65rem .75rem; border-bottom: 1px solid #f1f3f4;
+            display: flex; flex-direction: column; gap: .15rem;
+        }
+        .detail-item:nth-child(odd) { border-right: 1px solid #f1f3f4; }
+        .detail-label { font-size: .7rem; font-weight: 600; text-transform: uppercase; letter-spacing: .3px; color: var(--text-secondary); }
+        .detail-value { font-size: .88rem; font-weight: 500; word-break: break-all; }
+
+        /* Masking indicators */
+        .masked-val {
+            background: #fef7e0; color: #b06000; padding: .1rem .4rem; border-radius: 4px;
+            font-family: 'Fira Code', monospace; font-size: .82rem; border: 1px solid #f5e6b8;
+            display: inline-block;
+        }
+        .excluded-val {
+            background: #e6f4ea; color: #0d904f; padding: .1rem .4rem; border-radius: 4px;
+            font-size: .82rem; border: 1px solid #b7e1c7; display: inline-block;
+        }
+        .mask-icon { font-size: .7rem; margin-left: .25rem; }
+
+        /* Toggle */
+        .profile-toolbar {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+        }
+        .profile-toolbar .back-link { color: var(--text-secondary); text-decoration: none; font-size: .85rem; display: flex; align-items: center; gap: .3rem; }
+        .profile-toolbar .back-link:hover { color: var(--primary); }
+        .toggle-bar {
+            display: flex; align-items: center; gap: .75rem;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: .5rem 1rem; font-size: .85rem;
+        }
+        .switch { position: relative; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; inset: 0; background: #ccc; border-radius: 22px;
+            transition: .3s; cursor: pointer;
+        }
+        .slider::before {
+            content: ''; position: absolute; height: 16px; width: 16px;
+            left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s;
+        }
+        .switch input:checked + .slider { background: var(--primary); }
+        .switch input:checked + .slider::before { transform: translateX(18px); }
+
+        .loading { text-align: center; padding: 3rem; color: var(--text-secondary); }
+        .error { text-align: center; padding: 2rem; color: var(--danger); }
+
+        /* Map placeholder */
+        .map-placeholder {
+            background: linear-gradient(135deg, #e8f0fe, #f0f4ff);
+            border-radius: 8px; padding: 1.5rem; text-align: center;
+            color: var(--text-secondary); font-size: .85rem;
+        }
+        .map-coords { font-family: 'Fira Code', monospace; font-size: .9rem; color: var(--text); margin-top: .5rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="logo">🎭 MaskMe</a>
+    <a href="/">Overview</a>
+    <a href="/users.html">Users</a>
+    <a href="/profile.html?id=1" id="navMyProfile">My Profile</a>
+    <a href="/api-demo.html">API Demo</a>
+    <a href="/sprint-board.html">Sprint Board</a>
+</nav>
+
+<div class="container">
+    <div class="profile-toolbar">
+        <a href="/users.html" class="back-link">← Back to Users</a>
+        <div class="toggle-bar">
+            <span>🔓 Original</span>
+            <label class="switch">
+                <input type="checkbox" id="maskToggle" onchange="loadProfile()">
+                <span class="slider"></span>
+            </label>
+            <span>🎭 Masked</span>
+        </div>
+    </div>
+
+    <div id="profileContent">
+        <div class="loading">⏳ Loading profile...</div>
+    </div>
+</div>
+
+<footer>
+    MaskMe Library — <a href="https://github.com/JAVA-MSDT" target="_blank">GitHub</a> |
+    Built by Ahmed Samy
+</footer>
+
+<script>
+const params = new URLSearchParams(location.search);
+const userId = params.get('id') || '1';
+
+// Set mask toggle from URL param
+if (params.get('masked') === 'true') {
+    document.getElementById('maskToggle').checked = true;
+}
+
+// Highlight "My Profile" nav link if viewing user 1
+if (userId === '1') {
+    document.getElementById('navMyProfile').classList.add('active');
+} else {
+    document.querySelector('nav a[href="/users.html"]').classList.add('active');
+}
+
+const MASKED_FIELDS = new Set(['email','password']);
+const EXCLUDED_FIELDS = new Set();
+const ADDR_MASKED = new Set(['city']);
+const GEO_MASKED = new Set();
+
+const KNOWN_MASKS = new Set(['****','*****','[EMAIL PROTECTED]','************','[ZIP_MASKED]']);
+
+function esc(s) { const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+function isMasked(val) {
+    if (val === null || val === undefined) return false;
+    const s = String(val);
+    return KNOWN_MASKS.has(s) || /^\*+$/.test(s);
+}
+
+function val(v, field, maskedSet, isExcluded) {
+    const display = v === null || v === undefined ? '<em style="color:#aaa">—</em>' : esc(String(v));
+    if (isExcluded) return `<span class="excluded-val">${display} <span class="mask-icon">🛡️</span></span>`;
+    if (maskedSet.has(field) && isMasked(v)) return `<span class="masked-val">${display} <span class="mask-icon">🎭</span></span>`;
+    return display;
+}
+
+function getInitials(name) {
+    if (!name || /^\*+$/.test(name)) return '🎭';
+    return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+}
+
+function renderProfile(user, masked) {
+    const gender = user.genderId || 'MALE';
+    const isFemale = gender === 'FEMALE' || (user.genderName || '').toLowerCase() === 'female';
+    const displayName = user.name || 'User';
+    const addr = user.address || {};
+    const geo = addr.geoLocation || {};
+
+    return `
+    <div class="profile-layout">
+        <!-- Sidebar -->
+        <div class="profile-sidebar">
+            <div class="sidebar-top ${isFemale ? 'female' : ''}">
+                <div class="sidebar-avatar">${esc(getInitials(displayName))}</div>
+                <div class="sidebar-name">${val(user.name, 'name', MASKED_FIELDS, false)}</div>
+                <div class="sidebar-email">${val(user.email, 'email', MASKED_FIELDS, false)}</div>
+            </div>
+            <div class="sidebar-meta">
+                <div class="meta-row"><span class="meta-label">User ID</span><span class="meta-value">${val(user.id, 'id', MASKED_FIELDS, false)}</span></div>
+                <div class="meta-row"><span class="meta-label">Gender</span><span class="meta-value">${val(user.genderName, 'genderName', MASKED_FIELDS, EXCLUDED_FIELDS.has('genderName'))}</span></div>
+                <div class="meta-row"><span class="meta-label">Balance</span><span class="meta-value">$${val(user.balance, 'balance', MASKED_FIELDS, false)}</span></div>
+                <div class="meta-row"><span class="meta-label">Member Since</span><span class="meta-value">${val(user.createdAt, 'createdAt', MASKED_FIELDS, false)}</span></div>
+            </div>
+        </div>
+
+        <!-- Main -->
+        <div class="profile-main">
+            <!-- Personal Info -->
+            <div class="section-card">
+                <div class="section-title">👤 Personal Information</div>
+                <div class="section-body">
+                    <div class="detail-grid">
+                        <div class="detail-item"><span class="detail-label">Full Name</span><span class="detail-value">${val(user.name, 'name', MASKED_FIELDS, false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Email</span><span class="detail-value">${val(user.email, 'email', MASKED_FIELDS, false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Password</span><span class="detail-value">${val(user.password, 'password', MASKED_FIELDS, false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Phone</span><span class="detail-value">${val(user.phone, 'phone', new Set(['phone']), false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Date of Birth</span><span class="detail-value">${val(user.birthDate, 'birthDate', MASKED_FIELDS, false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Gender ID</span><span class="detail-value">${esc(user.genderId || '—')}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Address -->
+            <div class="section-card">
+                <div class="section-title">📍 Address</div>
+                <div class="section-body">
+                    <div class="detail-grid">
+                        <div class="detail-item"><span class="detail-label">Street</span><span class="detail-value">${esc(addr.street || '—')}</span></div>
+                        <div class="detail-item"><span class="detail-label">Building</span><span class="detail-value">${esc(addr.building || '—')}</span></div>
+                        <div class="detail-item"><span class="detail-label">City</span><span class="detail-value">${val(addr.city, 'city', ADDR_MASKED, false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">State</span><span class="detail-value">${esc(addr.state || '—')}</span></div>
+                        <div class="detail-item"><span class="detail-label">Zip Code</span><span class="detail-value">${val(addr.zipCode, 'zipCode', new Set(masked ? ['zipCode'] : []), false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Country</span><span class="detail-value">${esc(addr.country || '—')}</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- GeoLocation -->
+            <div class="section-card">
+                <div class="section-title">🌍 Geolocation</div>
+                <div class="section-body">
+                    <div class="detail-grid">
+                        <div class="detail-item"><span class="detail-label">Location ID</span><span class="detail-value">${val(geo.id, 'id', GEO_MASKED, false)}</span></div>
+                        <div class="detail-item"><span class="detail-label">Longitude</span><span class="detail-value">${esc(String(geo.longitude ?? '—'))}</span></div>
+                        <div class="detail-item" style="grid-column: span 2;"><span class="detail-label">Latitude</span><span class="detail-value">${val(geo.latitude, 'latitude', GEO_MASKED, false)}</span></div>
+                    </div>
+                    <div class="map-placeholder" style="margin-top: .75rem;">
+                        📌 Map Preview
+                        <div class="map-coords">${esc(String(geo.latitude ?? '—'))}° N, ${esc(String(geo.longitude ?? '—'))}° E</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>`;
+}
+
+async function loadProfile() {
+    const container = document.getElementById('profileContent');
+    const masked = document.getElementById('maskToggle').checked;
+    container.innerHTML = '<div class="loading">⏳ Loading profile...</div>';
+
+    try {
+        let url, headers;
+        if (masked) {
+            url = `/users/masked/${userId}`;
+            headers = { 'Mask-Input': 'maskMe' };
+        } else {
+            url = `/users/${userId}`;
+            headers = {};
+        }
+
+        const res = await fetch(url, { headers });
+        if (!res.ok) {
+            const body = await res.text();
+            throw new Error(`${res.status} — ${res.statusText}. URL: ${url}`);
+        }
+        const user = await res.json();
+
+        document.title = `MaskMe — ${user.name || 'Profile'}`;
+        container.innerHTML = renderProfile(user, masked);
+    } catch (e) {
+        container.innerHTML = `<div class="error">❌ Failed to load profile: ${esc(e.message)}</div>`;
+    }
+}
+
+loadProfile();
+</script>
+</body>
+</html>

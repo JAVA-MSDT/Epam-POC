@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaskMe — Users</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .page-header {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;
+        }
+        .page-header h1 { font-size: 1.5rem; }
+        .user-count { font-size: .85rem; color: var(--text-secondary); }
+
+        .users-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 1.25rem; }
+
+        .user-card {
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px;
+            overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.06);
+            cursor: pointer; transition: all .2s;
+        }
+        .user-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.1); border-color: var(--primary); }
+
+        .card-top {
+            padding: 1.25rem 1.25rem .75rem;
+            display: flex; align-items: center; gap: 1rem;
+        }
+        .avatar {
+            width: 52px; height: 52px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 1.1rem; color: #fff; flex-shrink: 0;
+        }
+        .card-top .info h3 { font-size: 1rem; margin-bottom: .1rem; }
+        .card-top .info p { font-size: .8rem; color: var(--text-secondary); }
+
+        .card-body { padding: 0 1.25rem 1.25rem; }
+        .card-row {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: .4rem 0; border-bottom: 1px solid #f1f3f4; font-size: .82rem;
+        }
+        .card-row:last-child { border-bottom: none; }
+        .card-row .label { color: var(--text-secondary); font-weight: 500; font-size: .72rem; text-transform: uppercase; letter-spacing: .3px; }
+        .card-row .value { font-weight: 500; text-align: right; }
+
+        .card-footer {
+            padding: .6rem 1.25rem; background: var(--code-bg);
+            border-top: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            font-size: .78rem; color: var(--text-secondary);
+        }
+        .card-footer .view-link { color: var(--primary); font-weight: 600; text-decoration: none; }
+        .card-footer .view-link:hover { text-decoration: underline; }
+
+        .toggle-bar {
+            display: flex; align-items: center; gap: .75rem;
+            background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px;
+            padding: .5rem 1rem; font-size: .85rem;
+        }
+        .toggle-bar label { cursor: pointer; display: flex; align-items: center; gap: .4rem; font-weight: 500; }
+        .switch { position: relative; width: 40px; height: 22px; }
+        .switch input { opacity: 0; width: 0; height: 0; }
+        .slider {
+            position: absolute; inset: 0; background: #ccc; border-radius: 22px;
+            transition: .3s; cursor: pointer;
+        }
+        .slider::before {
+            content: ''; position: absolute; height: 16px; width: 16px;
+            left: 3px; bottom: 3px; background: #fff; border-radius: 50%; transition: .3s;
+        }
+        .switch input:checked + .slider { background: var(--primary); }
+        .switch input:checked + .slider::before { transform: translateX(18px); }
+
+        .masked-badge {
+            display: inline-block; background: #fef7e0; color: #b06000;
+            font-size: .65rem; font-weight: 700; padding: .1rem .4rem;
+            border-radius: 3px; border: 1px solid #f5e6b8; margin-left: .3rem;
+        }
+
+        .loading { text-align: center; padding: 3rem; color: var(--text-secondary); font-size: .95rem; }
+        .error { text-align: center; padding: 2rem; color: var(--danger); }
+
+        .gender-male { background: linear-gradient(135deg, #1a73e8, #4285f4); }
+        .gender-female { background: linear-gradient(135deg, #e91e63, #f06292); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/" class="logo">🎭 MaskMe</a>
+    <a href="/">Overview</a>
+    <a href="/users.html" class="active">Users</a>
+    <a href="/profile.html?id=1">My Profile</a>
+    <a href="/api-demo.html">API Demo</a>
+    <a href="/sprint-board.html">Sprint Board</a>
+</nav>
+
+<div class="container">
+    <div class="page-header">
+        <div>
+            <h1>👥 Users</h1>
+            <span class="user-count" id="userCount"></span>
+        </div>
+        <div class="toggle-bar">
+            <span>🔓 Original</span>
+            <label class="switch">
+                <input type="checkbox" id="maskToggle" onchange="loadUsers()">
+                <span class="slider"></span>
+            </label>
+            <span>🎭 Masked</span>
+        </div>
+    </div>
+
+    <div id="usersGrid" class="users-grid">
+        <div class="loading">⏳ Loading users...</div>
+    </div>
+</div>
+
+<footer>
+    MaskMe Library — <a href="https://github.com/JAVA-MSDT" target="_blank">GitHub</a> |
+    Built by Ahmed Samy
+</footer>
+
+<script>
+const AVATAR_COLORS = { MALE: 'gender-male', FEMALE: 'gender-female' };
+
+function getInitials(name) {
+    return name.split(' ').map(w => w[0]).join('').substring(0, 2).toUpperCase();
+}
+
+function esc(s) {
+    const d = document.createElement('div');
+    d.textContent = s;
+    return d.innerHTML;
+}
+
+function maskedTag() {
+    return '<span class="masked-badge">MASKED</span>';
+}
+
+function isMasked(val) {
+    if (val === null || val === undefined) return false;
+    const s = String(val);
+    return ['****', '*****', '[EMAIL PROTECTED]', '************', '[ZIP_MASKED]'].includes(s)
+        || /^\*+$/.test(s);
+}
+
+function renderCard(user, masked) {
+    const gender = user.genderId || 'MALE';
+    const avatarClass = AVATAR_COLORS[gender] || 'gender-male';
+    const displayName = user.name || 'Unknown';
+    const m = masked ? (v) => isMasked(v) ? maskedTag() : '' : () => '';
+
+    return `<div class="user-card" onclick="location.href='/profile.html?id=${user.id}${masked ? '&masked=true' : ''}'">
+        <div class="card-top">
+            <div class="avatar ${avatarClass}">${esc(getInitials(displayName))}</div>
+            <div class="info">
+                <h3>${esc(displayName)} ${m(user.name)}</h3>
+                <p>${esc(user.email || '')} ${m(user.email)}</p>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="card-row"><span class="label">Phone</span><span class="value">${esc(user.phone || '—')} ${m(user.phone)}</span></div>
+            <div class="card-row"><span class="label">Balance</span><span class="value">$${esc(String(user.balance ?? '—'))} ${m(user.balance)}</span></div>
+            <div class="card-row"><span class="label">Birth Date</span><span class="value">${esc(user.birthDate || '—')} ${m(user.birthDate)}</span></div>
+            <div class="card-row"><span class="label">City</span><span class="value">${esc(user.address?.city || '—')} ${m(user.address?.city)}</span></div>
+        </div>
+        <div class="card-footer">
+            <span>ID: ${esc(String(user.id))}</span>
+            <a class="view-link" href="/profile.html?id=${user.id}${masked ? '&masked=true' : ''}">View Profile →</a>
+        </div>
+    </div>`;
+}
+
+async function loadUsers() {
+    const grid = document.getElementById('usersGrid');
+    const masked = document.getElementById('maskToggle').checked;
+    grid.innerHTML = '<div class="loading">⏳ Loading users...</div>';
+
+    try {
+        const headers = masked ? { 'Mask-Input': 'maskMe', 'Mask-Phone': '01000000000' } : {};
+        const res = await fetch('/users', { headers });
+        if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+        const users = await res.json();
+
+        document.getElementById('userCount').textContent = `${users.length} users${masked ? ' (masked view)' : ''}`;
+        grid.innerHTML = users.map(u => renderCard(u, masked)).join('');
+    } catch (e) {
+        grid.innerHTML = `<div class="error">❌ Failed to load users: ${esc(e.message)}</div>`;
+    }
+}
+
+loadUsers();
+</script>
+</body>
+</html>

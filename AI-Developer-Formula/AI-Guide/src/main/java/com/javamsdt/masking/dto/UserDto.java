@@ -8,21 +8,16 @@ package com.javamsdt.masking.dto;
 
 
 import com.javamsdt.masking.maskme.condition.PhoneMaskingCondition;
-import io.github.javamsdt.maskme.api.annotation.ExcludeMaskMe;
 import io.github.javamsdt.maskme.api.annotation.MaskMe;
 import io.github.javamsdt.maskme.implementation.condition.AlwaysMaskMeCondition;
-import io.github.javamsdt.maskme.implementation.condition.MaskMeOnInput;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.time.LocalDate;
 
 public record UserDto(
-        @MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "1000")
         Long id,
-        @MaskMe(conditions = {MaskMeOnInput.class}, maskValue = "{email}-{genderId}")
         String name,
-
         @MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "")
         String email,
         @MaskMe(conditions = {AlwaysMaskMeCondition.class})
@@ -30,14 +25,10 @@ public record UserDto(
         @MaskMe(conditions = {PhoneMaskingCondition.class})
         String phone,
         AddressDto address,
-        @MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "01/01/1800")
         LocalDate birthDate,
         String genderId,
-        @ExcludeMaskMe
         String genderName,
-        @MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "")
         BigDecimal balance,
-        @MaskMe(conditions = {AlwaysMaskMeCondition.class}, maskValue = "1900-01-01T00:00:00.00Z")
         Instant createdAt
 ) {
 }

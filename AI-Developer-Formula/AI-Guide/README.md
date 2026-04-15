@@ -43,7 +43,7 @@ AI-Guide/
 │   ├── dto/
 │   │   ├── AddressDto.java                # DTO with @MaskMe on city, zipCode
 │   │   ├── GeoLocationDto.java            # DTO with @MaskMe on id, latitude
-│   │   └── UserDto.java                   # DTO with @MaskMe on 8 fields + @ExcludeMaskMe
+│   │   └── UserDto.java                   # DTO with @MaskMe on email, password, phone
 │   ├── mapper/
 │   │   └── UserMapper.java                # MapStruct mapper (User → UserDto)
 │   ├── maskme/
@@ -101,9 +101,9 @@ AI-Guide/
 │   │  └─ PhoneMaskingCondition  → masks specific phone      │    │
 │   ├────────────────────────────────────────────────────────┤    │
 │   │ Annotated DTOs (masking only on DTO layer)             │    │
-│   │  ├─ UserDto    (11 fields, 8 masked)                   │    │
+│   │  ├─ UserDto    (11 fields, 3 masked)                   │    │
 │   │  ├─ AddressDto (7 fields, 2 masked)                    │    │
-│   │  └─ GeoLocationDto (3 fields, 2 masked)               │    │
+│   │  └─ GeoLocationDto (3 fields, 0 masked)               │    │
 │   └────────────────────────────────────────────────────────┘    │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -112,19 +112,11 @@ AI-Guide/
 
 | Field      | DTO            | Condition             | Mask Value                      |
 |------------|----------------|-----------------------|---------------------------------|
-| id         | UserDto        | AlwaysMaskMeCondition | `"1000"`                        |
-| name       | UserDto        | MaskMeOnInput         | `"{email}-{genderId}"`          |
 | email      | UserDto        | AlwaysMaskMeCondition | `""` (empty → custom converter) |
 | password   | UserDto        | AlwaysMaskMeCondition | `"****"` (default)              |
 | phone      | UserDto        | PhoneMaskingCondition | `"****"` (default)              |
-| birthDate  | UserDto        | AlwaysMaskMeCondition | `"01/01/1800"`                  |
-| balance    | UserDto        | AlwaysMaskMeCondition | `""` (empty → 0)                |
-| createdAt  | UserDto        | AlwaysMaskMeCondition | `"1900-01-01T00:00:00.00Z"`     |
-| genderName | UserDto        | `@ExcludeMaskMe`      | Skipped entirely                |
 | city       | AddressDto     | AlwaysMaskMeCondition | `"****"` (default)              |
 | zipCode    | AddressDto     | MaskMeOnInput         | `"[ZIP_MASKED]"`                |
-| id         | GeoLocationDto | AlwaysMaskMeCondition | `"00000000-0000-..."`           |
-| latitude   | GeoLocationDto | AlwaysMaskMeCondition | `"00.0000"`                     |
 
 ## Web UI
 
