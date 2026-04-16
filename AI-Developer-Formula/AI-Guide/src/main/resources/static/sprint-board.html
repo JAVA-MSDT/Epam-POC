@@ -26,8 +26,10 @@
 
     <!-- Tab bar -->
     <div class="jira-tabs">
-        <button class="jira-tab active" onclick="switchTab('ticket1')">MASK-101: Balance Masking Condition</button>
-        <button class="jira-tab" onclick="switchTab('ticket2')">MASK-102: Balance Masking Tests</button>
+        <button class="jira-tab active" onclick="switchTab('ticket1')">MASK-101: Balance Masking</button>
+        <button class="jira-tab" onclick="switchTab('ticket2')">MASK-102: Balance Tests</button>
+        <button class="jira-tab" onclick="switchTab('ticket3')">MASK-103: Visibility Masking</button>
+        <button class="jira-tab" onclick="switchTab('ticket4')">MASK-104: Visibility Tests</button>
     </div>
 
     <!-- Ticket 1 -->
@@ -244,6 +246,234 @@
             <div class="jira-meta-row">
                 <span class="jira-meta-label">Linked Issues</span>
                 <a class="jira-link" href="#" onclick="switchTab('ticket1');document.querySelectorAll('.jira-tab')[0].click();return false;">🔗 MASK-101 (tests for)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket 3 -->
+    <div class="jira-ticket" id="ticket3" style="display:none;">
+        <div class="jira-main">
+            <div class="jira-ticket-key">
+                <span class="jira-type jira-type-story">📗 Story</span>
+                MASK-103
+            </div>
+            <h1 class="jira-ticket-title">Add Viewer-Based Visibility Masking for Email Field</h1>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Description</div>
+                <p>
+                    Currently the <code>email</code> field in <code>UserDto</code> uses
+                    <code>AlwaysMaskMeCondition</code>, which masks it on every request regardless of who is viewing.
+                    We need a new <code>VisibilityMaskingCondition</code> that masks the email
+                    based on the <strong>viewer's relationship</strong> to the profile owner.
+                </p>
+                <p style="margin-top:.5rem;">
+                    The visibility level is provided at runtime via a <code>Mask-Visibility</code> HTTP header
+                    with three possible values: <code>owner</code>, <code>friend</code>, or <code>public</code>.
+                    Only <code>public</code> viewers should see the email masked.
+                </p>
+                <p style="margin-top:.5rem;">
+                    <strong>Note:</strong> In a production application, the visibility level would be determined
+                    by querying user preferences and relationships from a database (e.g., a <code>UserPreferencesRepository</code>).
+                    For this demo, we simplify by passing the visibility level directly via an HTTP header.
+                </p>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Requirements</div>
+                <ul>
+                    <li>A new <code>VisibilityMaskingCondition</code> implementing <code>MaskMeCondition</code></li>
+                    <li>The condition receives the viewer's visibility level via <code>setInput(Object)</code></li>
+                    <li>Three visibility levels: <code>owner</code> (no masking), <code>friend</code> (no masking), <code>public</code> (masked)</li>
+                    <li>The visibility level is provided via a <code>Mask-Visibility</code> HTTP header</li>
+                    <li>The condition must be Spring-managed (<code>@Component</code>) to support dependency injection</li>
+                    <li>The <code>email</code> field in <code>UserDto</code> should use the new condition instead of <code>AlwaysMaskMeCondition</code></li>
+                    <li>A new REST endpoint <code>GET /users/profile/{id}</code> to demonstrate viewer-based masking</li>
+                    <li>The new condition must be registered via the Spring framework provider (no <code>@Bean</code> needed — <code>@Component</code> is sufficient)</li>
+                    <li>When no header is provided, default to <code>public</code> (most restrictive — mask by default)</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Acceptance Criteria</div>
+                <ul>
+                    <li>When <code>Mask-Visibility: public</code> — email is masked</li>
+                    <li>When <code>Mask-Visibility: friend</code> — email is visible</li>
+                    <li>When <code>Mask-Visibility: owner</code> — email is visible</li>
+                    <li>When no header is provided — email is masked (defaults to public)</li>
+                    <li>Invalid header values (e.g., <code>"admin"</code>, <code>""</code>) — email is masked (treated as public)</li>
+                    <li>The condition supports Spring dependency injection</li>
+                    <li>All existing endpoints remain unchanged and functional</li>
+                    <li>The <code>GET /users</code> endpoint optionally supports the visibility header as an additional condition</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">⚠️ Open Questions / Clarifications Needed</div>
+                <div class="jira-clarification">
+                    <ul>
+                        <li>Should the visibility condition apply only to <code>email</code>, or also to other fields like <code>phone</code> and <code>balance</code>?</li>
+                        <li>Should <code>friend</code> visibility partially mask the email (e.g., <code>a***@mail.com</code>) or show it fully?</li>
+                        <li>In production, the visibility would come from a DB call — should the condition accept a <code>UserPreferencesService</code> via DI as a placeholder for future integration?</li>
+                        <li>Should the new endpoint also trigger <code>AlwaysMaskMeCondition</code> fields (password, city), or only the visibility-based fields?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="jira-sidebar">
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Status</span>
+                <span class="jira-status jira-status-todo">To Do</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Priority</span>
+                <span class="jira-priority jira-priority-medium">⬆ Medium</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Type</span>
+                <span>📗 Story</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Sprint</span>
+                <span class="jira-meta-value">Sprint 5</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Story Points</span>
+                <span class="jira-meta-value">5</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Assignee</span>
+                <span class="jira-meta-value">Unassigned</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Reporter</span>
+                <span class="jira-meta-value">Ahmed Samy</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Labels</span>
+                <div>
+                    <span class="jira-label">maskme</span>
+                    <span class="jira-label">condition</span>
+                    <span class="jira-label">visibility</span>
+                </div>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Components</span>
+                <span class="jira-meta-value">masking-core</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Linked Issues</span>
+                <a class="jira-link" href="#" onclick="switchTab('ticket4');document.querySelectorAll('.jira-tab')[3].click();return false;">🔗 MASK-104 (tested by)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Ticket 4 -->
+    <div class="jira-ticket" id="ticket4" style="display:none;">
+        <div class="jira-main">
+            <div class="jira-ticket-key">
+                <span class="jira-type jira-type-task">📘 Task</span>
+                MASK-104
+            </div>
+            <h1 class="jira-ticket-title">Add Unit Tests for Visibility Masking Feature</h1>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Description</div>
+                <p>
+                    Write unit tests covering the viewer-based visibility masking feature introduced in
+                    <a class="jira-link" href="#" onclick="switchTab('ticket3');document.querySelectorAll('.jira-tab')[2].click();return false;" style="display:inline;">MASK-103</a>.
+                    Tests should cover the new <code>VisibilityMaskingCondition</code> and the
+                    <code>GET /users/profile/{id}</code> endpoint via <code>UserController</code>.
+                </p>
+                <p style="margin-top:.5rem;">
+                    Use the existing test structure created in
+                    <a class="jira-link" href="#" onclick="switchTab('ticket2');document.querySelectorAll('.jira-tab')[1].click();return false;" style="display:inline;">MASK-102</a>.
+                    Use JUnit 5 and Mockito for service-layer mocking.
+                </p>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Requirements</div>
+                <ul>
+                    <li>Unit tests for <code>VisibilityMaskingCondition</code> covering all three visibility levels: <code>owner</code>, <code>friend</code>, <code>public</code></li>
+                    <li>Test that <code>null</code> input defaults to masking (public behavior)</li>
+                    <li>Test that invalid input values (e.g., <code>"admin"</code>, <code>""</code>) default to masking</li>
+                    <li>Test case-insensitive input handling (e.g., <code>"Owner"</code>, <code>"PUBLIC"</code>)</li>
+                    <li>Controller tests for <code>GET /users/profile/{id}</code> covering: public (masked), friend (visible), owner (visible), and missing header (masked)</li>
+                    <li>Regression tests confirming existing endpoints (<code>GET /users/{id}</code>, <code>GET /users/masked/{id}</code>, <code>GET /users</code>) are unaffected</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">Acceptance Criteria</div>
+                <ul>
+                    <li>All tests pass with <code>mvn test</code></li>
+                    <li>Minimum 5 test cases for the condition (owner, friend, public, null, invalid)</li>
+                    <li>Minimum 4 test cases for the controller endpoint</li>
+                    <li>Unit tests do not require a full Spring context — dependencies are mocked</li>
+                    <li>Controller tests verify HTTP status codes and response body content</li>
+                    <li>No existing functionality is broken</li>
+                </ul>
+            </div>
+
+            <div class="jira-section">
+                <div class="jira-section-title">⚠️ Open Questions / Clarifications Needed</div>
+                <div class="jira-clarification">
+                    <ul>
+                        <li>Should tests verify the masked email value specifically (e.g., <code>[EMAIL PROTECTED]</code>) or just that it differs from the original?</li>
+                        <li>Should there be a parameterized test covering all visibility levels in a single test method?</li>
+                        <li>Should integration tests (full Spring context with MaskMe configured) be included or handled in a separate ticket?</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="jira-sidebar">
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Status</span>
+                <span class="jira-status jira-status-todo">To Do</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Priority</span>
+                <span class="jira-priority jira-priority-medium">⬆ Medium</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Type</span>
+                <span>📘 Task</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Sprint</span>
+                <span class="jira-meta-value">Sprint 5</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Story Points</span>
+                <span class="jira-meta-value">3</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Assignee</span>
+                <span class="jira-meta-value">Unassigned</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Reporter</span>
+                <span class="jira-meta-value">Ahmed Samy</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Labels</span>
+                <div>
+                    <span class="jira-label">testing</span>
+                    <span class="jira-label">junit5</span>
+                    <span class="jira-label">maskme</span>
+                    <span class="jira-label">visibility</span>
+                </div>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Components</span>
+                <span class="jira-meta-value">masking-core</span>
+            </div>
+            <div class="jira-meta-row">
+                <span class="jira-meta-label">Linked Issues</span>
+                <a class="jira-link" href="#" onclick="switchTab('ticket3');document.querySelectorAll('.jira-tab')[2].click();return false;">🔗 MASK-103 (tests for)</a>
             </div>
         </div>
     </div>
