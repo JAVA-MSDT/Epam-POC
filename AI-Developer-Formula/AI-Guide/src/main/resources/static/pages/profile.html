@@ -111,8 +111,8 @@
 <body>
 
 <nav>
-    <a href="/static" class="logo">🎭 MaskMe</a>
-    <a href="/static">Overview</a>
+    <a href="/" class="logo">🎭 MaskMe</a>
+    <a href="/">Overview</a>
     <a href="/pages/users.html">Users</a>
     <a href="/pages/profile.html?id=1" id="navMyProfile">My Profile</a>
     <a href="/pages/api-demo.html">API Demo</a>
@@ -156,7 +156,7 @@ if (params.get('masked') === 'true') {
 if (userId === '1') {
     document.getElementById('navMyProfile').classList.add('active');
 } else {
-    document.querySelector('nav a[href="/users.html"]').classList.add('active');
+    document.querySelector('nav a[href="/pages/users.html"]').classList.add('active');
 }
 
 const MASKED_FIELDS = new Set(['email','password']);

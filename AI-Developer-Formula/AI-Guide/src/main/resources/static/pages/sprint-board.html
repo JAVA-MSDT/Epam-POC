@@ -9,8 +9,8 @@
 <body>
 
 <nav>
-    <a href="/static" class="logo">🎭 MaskMe</a>
-    <a href="/static">Overview</a>
+    <a href="/" class="logo">🎭 MaskMe</a>
+    <a href="/">Overview</a>
     <a href="/pages/users.html">Users</a>
     <a href="/pages/profile.html?id=1">My Profile</a>
     <a href="/pages/api-demo.html">API Demo</a>
@@ -27,10 +27,10 @@
 
     <!-- Tab bar -->
     <div class="jira-tabs">
-        <button class="jira-tab active" onclick="switchTab('ticket1')">MASK-101: Balance Masking</button>
-        <button class="jira-tab" onclick="switchTab('ticket2')">MASK-102: Balance Tests</button>
-        <button class="jira-tab" onclick="switchTab('ticket3')">MASK-103: Visibility Masking</button>
-        <button class="jira-tab" onclick="switchTab('ticket4')">MASK-104: Visibility Tests</button>
+        <button class="jira-tab active" onclick="switchTab('ticket1', this)">MASK-101: Balance Masking</button>
+        <button class="jira-tab" onclick="switchTab('ticket2', this)">MASK-102: Balance Tests</button>
+        <button class="jira-tab" onclick="switchTab('ticket3', this)">MASK-103: Visibility Masking</button>
+        <button class="jira-tab" onclick="switchTab('ticket4', this)">MASK-104: Visibility Tests</button>
     </div>
 
     <!-- Ticket 1 -->
@@ -139,7 +139,7 @@
             </div>
             <div class="jira-meta-row">
                 <span class="jira-meta-label">Linked Issues</span>
-                <a class="jira-link" href="#" onclick="switchTab('ticket2');document.querySelectorAll('.jira-tab')[1].click();return false;">🔗 MASK-102 (tested by)</a>
+                <a class="jira-link" href="#" onclick="switchTab('ticket2', document.querySelectorAll('.jira-tab')[1]);return false;">🔗 MASK-102 (tested by)</a>
             </div>
         </div>
     </div>
@@ -157,7 +157,7 @@
                 <div class="jira-section-title">Description</div>
                 <p>
                     Write unit tests covering the balance masking feature introduced in
-                    <a class="jira-link" href="#" onclick="switchTab('ticket1');document.querySelectorAll('.jira-tab')[0].click();return false;" style="display:inline;">MASK-101</a>.
+                    <a class="jira-link" href="#" onclick="switchTab('ticket1', document.querySelectorAll('.jira-tab')[0]);return false;" style="display:inline;">MASK-101</a>.
                     Tests should cover the new <code>BalanceMaskingCondition</code>,
                     the <code>CustomBigDecimalConverter</code>, and the
                     <code>GET /users/masked/balance/{id}</code> endpoint via <code>UserController</code>.
@@ -246,7 +246,7 @@
             </div>
             <div class="jira-meta-row">
                 <span class="jira-meta-label">Linked Issues</span>
-                <a class="jira-link" href="#" onclick="switchTab('ticket1');document.querySelectorAll('.jira-tab')[0].click();return false;">🔗 MASK-101 (tests for)</a>
+                <a class="jira-link" href="#" onclick="switchTab('ticket1', document.querySelectorAll('.jira-tab')[0]);return false;">🔗 MASK-101 (tests for)</a>
             </div>
         </div>
     </div>
@@ -365,7 +365,7 @@
             </div>
             <div class="jira-meta-row">
                 <span class="jira-meta-label">Linked Issues</span>
-                <a class="jira-link" href="#" onclick="switchTab('ticket4');document.querySelectorAll('.jira-tab')[3].click();return false;">🔗 MASK-104 (tested by)</a>
+                <a class="jira-link" href="#" onclick="switchTab('ticket4', document.querySelectorAll('.jira-tab')[3]);return false;">🔗 MASK-104 (tested by)</a>
             </div>
         </div>
     </div>
@@ -383,13 +383,13 @@
                 <div class="jira-section-title">Description</div>
                 <p>
                     Write unit tests covering the viewer-based visibility masking feature introduced in
-                    <a class="jira-link" href="#" onclick="switchTab('ticket3');document.querySelectorAll('.jira-tab')[2].click();return false;" style="display:inline;">MASK-103</a>.
+                    <a class="jira-link" href="#" onclick="switchTab('ticket3', document.querySelectorAll('.jira-tab')[2]);return false;" style="display:inline;">MASK-103</a>.
                     Tests should cover the new <code>VisibilityMaskingCondition</code> and the
                     <code>GET /users/profile/{id}</code> endpoint via <code>UserController</code>.
                 </p>
                 <p style="margin-top:.5rem;">
                     Use the existing test structure created in
-                    <a class="jira-link" href="#" onclick="switchTab('ticket2');document.querySelectorAll('.jira-tab')[1].click();return false;" style="display:inline;">MASK-102</a>.
+                    <a class="jira-link" href="#" onclick="switchTab('ticket2', document.querySelectorAll('.jira-tab')[1]);return false;" style="display:inline;">MASK-102</a>.
                     Use JUnit 5 and Mockito for service-layer mocking.
                 </p>
             </div>
@@ -474,7 +474,7 @@
             </div>
             <div class="jira-meta-row">
                 <span class="jira-meta-label">Linked Issues</span>
-                <a class="jira-link" href="#" onclick="switchTab('ticket3');document.querySelectorAll('.jira-tab')[2].click();return false;">🔗 MASK-103 (tests for)</a>
+                <a class="jira-link" href="#" onclick="switchTab('ticket3', document.querySelectorAll('.jira-tab')[2]);return false;">🔗 MASK-103 (tests for)</a>
             </div>
         </div>
     </div>
@@ -487,11 +487,11 @@
 </footer>
 
 <script>
-function switchTab(id) {
+function switchTab(id, tabEl) {
     document.querySelectorAll('.jira-ticket').forEach(t => t.style.display = 'none');
     document.querySelectorAll('.jira-tab').forEach(t => t.classList.remove('active'));
     document.getElementById(id).style.display = 'block';
-    event.target.classList.add('active');
+    if (tabEl) tabEl.classList.add('active');
 }
 </script>
 

@@ -87,8 +87,8 @@
 <body>
 
 <nav>
-    <a href="/static" class="logo">🎭 MaskMe</a>
-    <a href="/static">Overview</a>
+    <a href="/" class="logo">🎭 MaskMe</a>
+    <a href="/">Overview</a>
     <a href="/pages/users.html" class="active">Users</a>
     <a href="/pages/profile.html?id=1">My Profile</a>
     <a href="/pages/api-demo.html">API Demo</a>
@@ -152,7 +152,7 @@ function renderCard(user, masked) {
     const displayName = user.name || 'Unknown';
     const m = masked ? (v) => isMasked(v) ? maskedTag() : '' : () => '';
 
-    return `<div class="user-card" onclick="location.href='/profile.html?id=${user.id}${masked ? '&masked=true' : ''}'">
+    return `<div class="user-card" onclick="location.href='/pages/profile.html?id=${user.id}${masked ? '&masked=true' : ''}'">
         <div class="card-top">
             <div class="avatar ${avatarClass}">${esc(getInitials(displayName))}</div>
             <div class="info">
@@ -168,7 +168,7 @@ function renderCard(user, masked) {
         </div>
         <div class="card-footer">
             <span>ID: ${esc(String(user.id))}</span>
-            <a class="view-link" href="/profile.html?id=${user.id}${masked ? '&masked=true' : ''}">View Profile →</a>
+            <a class="view-link" href="/pages/profile.html?id=${user.id}${masked ? '&masked=true' : ''}">View Profile →</a>
         </div>
     </div>`;
 }
