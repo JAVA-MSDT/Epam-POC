@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MaskMe — Prompts</title>
+    <link rel="stylesheet" href="/css/style.css">
+    <style>
+        .accordion { margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+
+        .accordion-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.25rem;
+            background: var(--code-bg);
+            cursor: pointer;
+            user-select: none;
+            font-weight: 600;
+            font-size: .95rem;
+            transition: background .15s;
+        }
+
+        .accordion-header:hover { background: #e8eaed; }
+
+        .accordion-header .chevron {
+            font-size: .75rem;
+            transition: transform .2s;
+            color: var(--text-secondary);
+        }
+
+        .accordion-header.open .chevron { transform: rotate(180deg); }
+
+        .accordion-body {
+            display: none;
+            padding: 1.25rem;
+            border-top: 1px solid var(--border);
+            background: var(--card-bg);
+        }
+
+        .accordion-body.open { display: block; }
+
+        .prompt-meta {
+            font-size: .8rem;
+            color: var(--text-secondary);
+            margin-bottom: .75rem;
+        }
+
+        .prompt-wrapper { position: relative; }
+
+        .prompt-textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: .85rem 1rem;
+            padding-right: 5rem;
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: .8rem;
+            line-height: 1.6;
+            background: #1e1e1e;
+            color: #d4d4d4;
+            border: 1px solid #444;
+            border-radius: 8px;
+            resize: vertical;
+            outline: none;
+            white-space: pre;
+            overflow-wrap: normal;
+            overflow-x: auto;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: .6rem;
+            right: .6rem;
+            padding: .35rem .75rem;
+            background: var(--primary);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: .75rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background .2s;
+            display: flex;
+            align-items: center;
+            gap: .3rem;
+        }
+
+        .copy-btn:hover { background: var(--primary-dark); }
+        .copy-btn.copied { background: var(--success); }
+    </style>
+</head>
+<body>
+
+<nav>
+    <a href="/static" class="logo">🎭 MaskMe</a>
+    <a href="/static">Overview</a>
+    <a href="/pages/users.html">Users</a>
+    <a href="/pages/profile.html?id=1">My Profile</a>
+    <a href="/pages/api-demo.html">API Demo</a>
+    <a href="/pages/sprint-board.html">Sprint Board</a>
+    <a href="/pages/prompts.html" class="active">Prompts</a>
+</nav>
+
+<div class="container">
+
+    <div class="hero">
+        <h1>💬 AI Prompts</h1>
+        <p>Ready-to-use prompts for AI-assisted development workflows. Click copy and paste directly into your AI assistant.</p>
+    </div>
+
+    <!-- 1. Requirements Generation -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>📋 1. Requirements Generation</span>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="accordion-body">
+            <div class="prompt-meta">Use this prompt to perform a deep analysis of requirements before implementation — covers edge cases, risks, and incremental steps.</div>
+            <div class="prompt-wrapper">
+                <textarea class="prompt-textarea" readonly>I have the following requirements:
+
+
+
+
+// [Insert requirements here]
+
+
+
+
+Please perform an intensive and comprehensive analysis that covers all edge cases and possible scenarios related to these requirements.
+
+
+
+Your analysis should include:
+
+
+
+1. A step-by-step walkthrough and in-depth explanation of each requirement.
+2. Analysis of:
+   - The relevant code base and similar patterns.
+   - All implementations affected by these requirements.
+   - Specific areas of the code that will be impacted by the changes.
+   - Potential risks, including the possibility of breaking existing functionality, and strategies to avoid such issues.
+   - Any edge cases, scenarios, or possible implementations that may not be immediately obvious.
+3. Suggestions for dividing the implementation into incremental, logical steps, so that each step can be independently verified and committed.
+4. For each finding, provide:
+   - The issue or observation.
+   - The suggested fix or approach.
+   - The impact of this fix on other parts of the codebase, if any.
+
+---
+
+
+
+**Summary of Improvements:**
+- Clear, organized instructions.
+- Explicitly requests edge case and risk analysis.
+- Specifies HTML output with internal styling.
+- Requests both findings and an incremental implementation plan.
+
+
+
+---
+
+
+
+// OPTIONAL
+
+To address the latency in finalizing the HTML, I recommend breaking down the task into clear, manageable steps:
+
+
+
+1. Create the basic HTML skeleton.
+2. Apply the necessary styling.
+3. Add the findings incrementally, one at a time, rather than all at once.
+4. After each addition, review the HTML to ensure all findings are included and the context is preserved.
+5. Continue this process until all findings are incorporated and verified.
+
+
+
+By following this step-by-step approach, you should be able to finalize the HTML page more efficiently and accurately.</textarea>
+                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. HTML Generation Breakdown -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🏗️ 2. HTML Generation Breakdown</span>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="accordion-body">
+            <div class="prompt-meta">Use this prompt when the AI is struggling with latency or completeness when generating large HTML outputs — guides it to build incrementally.</div>
+            <div class="prompt-wrapper">
+                <textarea class="prompt-textarea" readonly>To address the latency in finalizing the HTML, I recommend breaking down the task into clear, manageable steps:
+ 
+1. Create the basic HTML skeleton.
+2. Apply the necessary styling.
+3. Add the findings incrementally, one at a time, rather than all at once.
+4. After each addition, review the HTML to ensure all findings are included and the context is preserved.
+5. Continue this process until all findings are incorporated and verified.
+ 
+By following this step-by-step approach, you should be able to finalize the HTML page more efficiently and accurately.</textarea>
+                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Test Cases -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🧪 3. Test Cases</span>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="accordion-body">
+            <div class="prompt-meta">Use this prompt to generate comprehensive JUnit 5 test cases with nested classes, Given-When-Then pattern, AssertJ assertions, and Mockito mocks.</div>
+            <div class="prompt-wrapper">
+                <textarea class="prompt-textarea" readonly>Now it's time to cover the implemented changes with comprehensive test cases. Follow this pattern:
+
+**Test Class Structure:**
+- Create nested test classes using `@Nested` to group related functionality (Create, Read, Update, Delete, Validation, ErrorHandling)
+- Use `@DisplayName` to describe the test intention clearly
+- Follow Given-When-Then pattern in each test method
+- Use descriptive method names: `should_ReturnResult_When_ConditionMet()`
+
+**Test Coverage Requirements:**
+- Happy path scenarios with valid inputs
+- Edge cases (null, empty, boundary values)
+- Error scenarios and exception handling
+- Multiple assertions per test to validate thoroughly
+
+**Assertion Best Practices:**
+- Use AssertJ fluent assertions: `assertThat(result).isNotNull().hasSize(3)`
+- Verify mock interactions: `verify(dependency).method(expectedParam)`
+- Test both return values and side effects
+- Include meaningful error messages in assertions
+
+**Mock Setup:**
+- Use `@Mock` for dependencies and `@InjectMocks` for class under test
+- Configure mock behavior in Given section
+- Verify mock calls in Then section
+
+**Example Structure:**
+```java
+@Nested
+@DisplayName("Create Operations")
+class CreateOperations {
+    
+    @Test
+    @DisplayName("Should create entity when valid data provided")
+    void should_CreateEntity_When_ValidDataProvided() {
+        // Given - setup test data and mocks
+        // When - execute method under test  
+        // Then - assert results and verify interactions
+    }
+}
+```</textarea>
+                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 4. Code Review -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>🔍 4. Code Review</span>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="accordion-body">
+            <div class="prompt-meta">Use this prompt to get a structured code review covering quality, security, performance, and maintainability.</div>
+            <div class="prompt-wrapper">
+                <textarea class="prompt-textarea" readonly>Please perform a thorough code review of the following code. Structure your review as follows:
+
+**1. Code Quality**
+- Readability and naming conventions
+- Code duplication and DRY violations
+- Single Responsibility Principle adherence
+- Unnecessary complexity or over-engineering
+
+**2. Correctness & Edge Cases**
+- Logic errors or off-by-one issues
+- Null/empty input handling
+- Boundary conditions not covered
+- Concurrency or thread-safety concerns
+
+**3. Security**
+- Input validation and sanitization
+- Sensitive data exposure
+- Injection vulnerabilities
+- Authentication/authorization gaps
+
+**4. Performance**
+- Unnecessary object creation or loops
+- N+1 query patterns
+- Missing caching opportunities
+- Memory leak risks
+
+**5. Maintainability**
+- Missing or misleading comments/documentation
+- Hard-coded values that should be configurable
+- Testability of the code
+- Suggested refactoring with rationale
+
+For each finding, provide:
+- Severity: [Critical / High / Medium / Low / Info]
+- Location: class/method name and line reference
+- Issue description
+- Suggested fix with code example where applicable</textarea>
+                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 5. Commit Message -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>✍️ 5. Commit Message Generator</span>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="accordion-body">
+            <div class="prompt-meta">Use this prompt to generate a well-structured conventional commit message from a description of your changes.</div>
+            <div class="prompt-wrapper">
+                <textarea class="prompt-textarea" readonly>Generate a conventional commit message for the following changes:
+
+// [Describe your changes here]
+
+Follow this format:
+```
+<type>(<scope>): <short summary>
+
+<body — what changed and why, wrapped at 72 chars>
+
+<footer — breaking changes or issue references>
+```
+
+Types: feat | fix | refactor | test | docs | chore | perf | style
+- Keep the summary line under 72 characters
+- Use imperative mood: "add", "fix", "update" — not "added", "fixed"
+- Body should explain the WHY, not the WHAT
+- Reference ticket numbers if applicable (e.g., Closes #101)</textarea>
+                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 6. Refactoring -->
+    <div class="accordion">
+        <div class="accordion-header" onclick="toggleAccordion(this)">
+            <span>♻️ 6. Refactoring Guide</span>
+            <span class="chevron">▼</span>
+        </div>
+        <div class="accordion-body">
+            <div class="prompt-meta">Use this prompt to get a safe, incremental refactoring plan for existing code without breaking functionality.</div>
+            <div class="prompt-wrapper">
+                <textarea class="prompt-textarea" readonly>I need to refactor the following code. Please provide a safe, incremental refactoring plan.
+
+// [Paste code here]
+
+**Refactoring Goals:**
+// [e.g., improve readability / reduce duplication / improve testability / apply design pattern]
+
+For each refactoring step:
+1. Describe what to change and why
+2. Show the before and after code
+3. Confirm the behavior is preserved (no logic changes)
+4. Identify any tests that need to be updated
+5. Flag any risk of regression
+
+Constraints:
+- Do NOT change external interfaces or method signatures unless explicitly asked
+- Each step should be independently committable
+- Prefer small, safe transformations over large rewrites</textarea>
+                <button class="copy-btn" onclick="copyPrompt(this)">📋 Copy</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<footer>
+    MaskMe Library — <a href="https://github.com/JAVA-MSDT" target="_blank">GitHub</a> |
+    Built by Ahmed Samy
+</footer>
+
+<script>
+function toggleAccordion(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    header.classList.toggle('open', !isOpen);
+    body.classList.toggle('open', !isOpen);
+}
+
+function copyPrompt(btn) {
+    const textarea = btn.previousElementSibling;
+    navigator.clipboard.writeText(textarea.value).then(() => {
+        btn.textContent = '✅ Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+            btn.innerHTML = '📋 Copy';
+            btn.classList.remove('copied');
+        }, 2000);
+    });
+}
+</script>
+
+</body>
+</html>
