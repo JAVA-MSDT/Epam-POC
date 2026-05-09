@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(find E:/Programming/Projects/Education/EPAM/Epam-POC/AI-Developer-Formula -name *.yml -o -name *.yaml -o -name *.xml -not -path */target/*)"
+    ]
+  }
+}
