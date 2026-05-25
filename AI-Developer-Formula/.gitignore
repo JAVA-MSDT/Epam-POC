@@ -37,4 +37,4 @@ build/
 ### AI
 settings.local.json
 .playwright-mcp
-
+.playwright-mcp/**
