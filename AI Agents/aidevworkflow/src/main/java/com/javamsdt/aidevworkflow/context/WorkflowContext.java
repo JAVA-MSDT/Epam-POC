@@ -78,6 +78,9 @@ public class WorkflowContext {
     // ── Step 7 output: Quality Assurance ──────────────────────────
     private String qaReport;
 
+    // ── Optional: Refactoring (between Steps 7 and 8) ─────────────
+    private String refactoringPlan;
+
     // ── Step 8 output: Deployment & Review ────────────────────────
     private String deploymentStatus;
 
@@ -185,6 +188,9 @@ public class WorkflowContext {
         this.qaReport = qaReport;
     }
 
+    public String getRefactoringPlan() { return refactoringPlan; }
+    public void setRefactoringPlan(String refactoringPlan) { this.refactoringPlan = refactoringPlan; }
+
     public String getDeploymentStatus() {
         return deploymentStatus;
     }
@@ -223,6 +229,7 @@ public class WorkflowContext {
                 ", reviewNotes='" + truncate(reviewNotes) + '\'' +
                 ", implementation='" + truncate(implementation) + '\'' +
                 ", qaReport='" + truncate(qaReport) + '\'' +
+                ", refactoringPlan='" + truncate(refactoringPlan) + '\'' +
                 ", deploymentStatus='" + truncate(deploymentStatus) + '\'' +
                 ", featureBranchName='" + featureBranchName + '\'' +
                 ", prUrl='" + prUrl + '\'' +

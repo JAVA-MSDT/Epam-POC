@@ -46,6 +46,7 @@ public class WorkflowOrchestrator {
     private final ImplementationAgent implementationAgent;
     private final QualityAssuranceAgent qualityAssuranceAgent;
     private final DeploymentAgent deploymentAgent;
+    private final RefactoringAgent refactoringAgent;
 
     public WorkflowOrchestrator(LlmClient llmClient, WorkflowContext ctx) {
         this(llmClient, ctx, false, null, null, null);
@@ -71,6 +72,7 @@ public class WorkflowOrchestrator {
         this.implementationAgent = new ImplementationAgent(llmClient);
         this.qualityAssuranceAgent = new QualityAssuranceAgent(llmClient);
         this.deploymentAgent = new DeploymentAgent(llmClient, gitClient, gitHubClient);
+        this.refactoringAgent = new RefactoringAgent(llmClient);
     }
 
     // ══════════════════════════════════════════════════════════════
@@ -267,6 +269,21 @@ public class WorkflowOrchestrator {
         visualReportAgent.execute(ctx);
 
         log("Analysis re-run complete.");
+    }
+
+    /**
+     * Runs the optional RefactoringAgent between Steps 7 and 8.
+     * <p>
+     * Generates a refactoring plan from the QA report and codebase, writes
+     * refactored files to disk, and clears the codebase snapshot so the next
+     * analysis or QA re-run reflects the updated code.
+     * Call this after {@code qualityAssuranceAgent.execute()} and before
+     * {@code deploymentAgent.execute()}.
+     */
+    public void runRefactoring() {
+        log("[Refactoring] Generating refactoring plan and applying changes...");
+        refactoringAgent.execute(ctx);
+        log("[Refactoring] Done. refactoringPlan set; " + ctx.getWrittenFiles().size() + " total files tracked.");
     }
 
     // ══════════════════════════════════════════════════════════════
