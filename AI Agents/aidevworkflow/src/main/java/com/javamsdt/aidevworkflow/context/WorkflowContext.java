@@ -81,6 +81,9 @@ public class WorkflowContext {
     // ── Step 8 output: Deployment & Review ────────────────────────
     private String deploymentStatus;
 
+    /** Git feature branch created by DeploymentAgent; stored so the orchestrator can push after approval. */
+    private String featureBranchName;
+
     /** URL of the GitHub PR created by DeploymentAgent. */
     private String prUrl;
 
@@ -100,6 +103,9 @@ public class WorkflowContext {
 
     public String getHtmlReportPath() { return htmlReportPath; }
     public void setHtmlReportPath(String htmlReportPath) { this.htmlReportPath = htmlReportPath; }
+
+    public String getFeatureBranchName() { return featureBranchName; }
+    public void setFeatureBranchName(String featureBranchName) { this.featureBranchName = featureBranchName; }
 
     public String getPrUrl() { return prUrl; }
     public void setPrUrl(String prUrl) { this.prUrl = prUrl; }
@@ -218,6 +224,7 @@ public class WorkflowContext {
                 ", implementation='" + truncate(implementation) + '\'' +
                 ", qaReport='" + truncate(qaReport) + '\'' +
                 ", deploymentStatus='" + truncate(deploymentStatus) + '\'' +
+                ", featureBranchName='" + featureBranchName + '\'' +
                 ", prUrl='" + prUrl + '\'' +
                 ", writtenFiles=" + writtenFiles.size() +
                 ", pendingFiles=" + pendingFiles.size() +

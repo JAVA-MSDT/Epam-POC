@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -34,6 +35,23 @@ public class GitClient {
      */
     public void commitAll(String message) {
         run("git", "add", "-A");
+        run("git", "commit", "-m", message);
+    }
+
+    /**
+     * Stages only the listed relative paths and commits with the given message.
+     * Paths must be relative to the project root (e.g., "src/main/java/Foo.java").
+     *
+     * @param relativePaths files to stage; must be non-empty
+     * @param message       the commit message
+     * @throws RuntimeException if git add or commit exits with a non-zero code
+     */
+    public void commitFiles(List<String> relativePaths, String message) {
+        List<String> addCmd = new ArrayList<>();
+        addCmd.add("git");
+        addCmd.add("add");
+        addCmd.addAll(relativePaths);
+        run(addCmd.toArray(new String[0]));
         run("git", "commit", "-m", message);
     }
 

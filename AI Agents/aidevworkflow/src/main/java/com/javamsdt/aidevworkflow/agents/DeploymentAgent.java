@@ -7,23 +7,37 @@ import com.javamsdt.aidevworkflow.llm.LlmClient;
 import com.javamsdt.aidevworkflow.util.HtmlReportWriter;
 import com.javamsdt.aidevworkflow.util.MarkdownLoader;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Step 8 — Deployment & Review.
  *
  * Reads:  ctx.implementation, ctx.qaReport, ctx.projectRootPath,
  *         ctx.jiraTicketId, ctx.htmlReportPath, ctx.reportFolderPath
- * Writes: ctx.deploymentStatus, ctx.prUrl, ctx.prComments
+ * Writes: ctx.deploymentStatus, ctx.featureBranchName, ctx.committedFiles (execute)
+ *         ctx.prUrl, ctx.prComments (pushAndCreatePr)
  *
- * Workflow:
- *   1. Generates a deployment plan via LLM.
- *   2. Creates a git branch, commits all changes, and pushes to origin.
- *   3. Opens a GitHub PR and stores the URL in ctx.prUrl.
- *   4. Fetches PR review comments (if any) and stores them in ctx.prComments.
- *   5. Updates the HTML report with a "PR Comments" section.
+ * Two-phase workflow:
+ *   Phase 1 — execute(): generates deployment plan, creates feature branch,
+ *             and makes one local git commit per logical group from the plan.
+ *             Does NOT push — branch stays local until human approval.
+ *   Phase 2 — pushAndCreatePr(): called by the orchestrator only after the user
+ *             confirms. Pushes the branch, opens a GitHub PR, fetches PR comments,
+ *             and appends them to the HTML report.
  */
 public class DeploymentAgent {
 
     private static final String BASE_BRANCH = "main";
+
+    // Parses "#### Commit N\nMessage: `<msg>`\nFiles:\n- path\n- path" blocks
+    private static final Pattern COMMIT_GROUP_PATTERN = Pattern.compile(
+            "####\\s+Commit\\s+\\d+[^\\n]*\\nMessage:\\s+`([^`]+)`\\nFiles:\\n((?:-\\s+[^\\n]+\\n?)+)",
+            Pattern.MULTILINE
+    );
+    private static final Pattern FILE_LINE_PATTERN = Pattern.compile("-\\s+(.+)");
 
     private final LlmClient llmClient;
     private final GitClient gitClient;
@@ -41,6 +55,11 @@ public class DeploymentAgent {
         this(llmClient, null, null);
     }
 
+    /**
+     * Phase 1 — generates the deployment plan, creates a local feature branch,
+     * and commits written files in logical groups. Does NOT push.
+     * Call {@link #pushAndCreatePr(WorkflowContext)} after human approval.
+     */
     public void execute(WorkflowContext ctx) {
         String prompt = MarkdownLoader.load("agents/deployment.md")
                 .replace("{{implementation}}", ctx.getImplementation())
@@ -49,30 +68,34 @@ public class DeploymentAgent {
         String deploymentStatus = llmClient.completePrompt(prompt);
         ctx.setDeploymentStatus(deploymentStatus);
 
-        if (gitClient != null && gitHubClient != null) {
-            runGitOps(ctx);
+        if (gitClient != null) {
+            makeLocalCommits(ctx);
         } else {
-            System.out.println("[DeploymentAgent] No git/GitHub clients — skipping commit, push, and PR creation.");
+            System.out.println("[DeploymentAgent] No git client — skipping branch creation and local commits.");
         }
     }
 
-    private void runGitOps(WorkflowContext ctx) {
-        String ticketId = ctx.getJiraTicketId() != null ? ctx.getJiraTicketId() : "feature";
-        String branchName = "feature/" + ticketId.toLowerCase().replace(" ", "-");
-
+    /**
+     * Phase 2 — pushes the feature branch and opens a GitHub PR.
+     * Called by the orchestrator only after the user approves at Gate 3.
+     *
+     * @param ctx workflow context; must have featureBranchName set by execute()
+     */
+    public void pushAndCreatePr(WorkflowContext ctx) {
+        if (gitClient == null || gitHubClient == null) {
+            System.out.println("[DeploymentAgent] No git/GitHub clients — skipping push and PR creation.");
+            return;
+        }
+        String branchName = ctx.getFeatureBranchName();
+        if (branchName == null || branchName.isBlank()) {
+            System.out.println("[DeploymentAgent] No feature branch recorded — nothing to push.");
+            return;
+        }
         try {
-            System.out.println("[DeploymentAgent] Creating branch: " + branchName);
-            gitClient.createBranch(branchName);
-
-            String commitMsg = ticketId + ": implement changes from AI workflow";
-            System.out.println("[DeploymentAgent] Committing: " + commitMsg);
-            gitClient.commitAll(commitMsg);
-            ctx.getCommittedFiles().addAll(ctx.getWrittenFiles());
-            System.out.println("[DeploymentAgent] " + ctx.getCommittedFiles().size() + " file(s) marked committed.");
-
-            System.out.println("[DeploymentAgent] Pushing to origin/" + branchName);
+            System.out.println("[DeploymentAgent] Pushing branch: " + branchName);
             gitClient.push("origin", branchName);
 
+            String ticketId = ctx.getJiraTicketId() != null ? ctx.getJiraTicketId() : "feature";
             String prTitle = ticketId + ": " + extractFirstLine(ctx.getDeploymentStatus());
             String prBody = buildPrBody(ctx);
             System.out.println("[DeploymentAgent] Creating GitHub PR...");
@@ -83,11 +106,66 @@ public class DeploymentAgent {
             fetchAndAppendPrComments(ctx, prUrl);
 
         } catch (Exception e) {
-            System.err.println("[DeploymentAgent] Git/GitHub operation failed: " + e.getMessage());
+            System.err.println("[DeploymentAgent] Push/PR failed: " + e.getMessage());
             ctx.setDeploymentStatus(ctx.getDeploymentStatus()
-                    + "\n\n**Git/GitHub Error:** " + e.getMessage());
+                    + "\n\n**Push/PR Error:** " + e.getMessage());
         }
     }
+
+    private void makeLocalCommits(WorkflowContext ctx) {
+        String ticketId = ctx.getJiraTicketId() != null ? ctx.getJiraTicketId() : "feature";
+        String branchName = "feature/" + ticketId.toLowerCase().replace(" ", "-");
+
+        try {
+            System.out.println("[DeploymentAgent] Creating branch: " + branchName);
+            gitClient.createBranch(branchName);
+            ctx.setFeatureBranchName(branchName);
+
+            List<CommitGroup> groups = parseCommitGroups(ctx.getDeploymentStatus());
+            if (groups.isEmpty()) {
+                System.out.println("[DeploymentAgent] No commit groups parsed — falling back to single commitAll.");
+                String fallbackMsg = "feat(" + ticketId.toLowerCase() + "): implement AI workflow changes";
+                gitClient.commitAll(fallbackMsg);
+                ctx.getCommittedFiles().addAll(ctx.getWrittenFiles());
+            } else {
+                for (CommitGroup group : groups) {
+                    System.out.println("[DeploymentAgent] Committing group: " + group.message);
+                    try {
+                        gitClient.commitFiles(group.files, group.message);
+                        ctx.getCommittedFiles().addAll(group.files);
+                    } catch (Exception e) {
+                        System.err.println("[DeploymentAgent] Commit failed for group '" + group.message + "': " + e.getMessage());
+                    }
+                }
+            }
+            System.out.println("[DeploymentAgent] Local commits done. " + ctx.getCommittedFiles().size() + " file(s) committed.");
+
+        } catch (Exception e) {
+            System.err.println("[DeploymentAgent] Branch/commit failed: " + e.getMessage());
+            ctx.setDeploymentStatus(ctx.getDeploymentStatus()
+                    + "\n\n**Git Error:** " + e.getMessage());
+        }
+    }
+
+    private List<CommitGroup> parseCommitGroups(String deploymentStatus) {
+        List<CommitGroup> groups = new ArrayList<>();
+        Matcher groupMatcher = COMMIT_GROUP_PATTERN.matcher(deploymentStatus);
+        while (groupMatcher.find()) {
+            String message = groupMatcher.group(1).trim();
+            String filesBlock = groupMatcher.group(2);
+            List<String> files = new ArrayList<>();
+            Matcher fileMatcher = FILE_LINE_PATTERN.matcher(filesBlock);
+            while (fileMatcher.find()) {
+                files.add(fileMatcher.group(1).trim());
+            }
+            if (!files.isEmpty()) {
+                groups.add(new CommitGroup(message, files));
+            }
+        }
+        return groups;
+    }
+
+    private record CommitGroup(String message, List<String> files) {}
 
     private void fetchAndAppendPrComments(WorkflowContext ctx, String prUrl) {
         try {

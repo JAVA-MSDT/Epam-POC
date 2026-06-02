@@ -115,10 +115,14 @@ public class WorkflowOrchestrator {
         log("[Step 7] Quality Assurance");
         qualityAssuranceAgent.execute(ctx);
 
-        log("[Step 8] Deployment & Review");
+        log("[Step 8] Deployment & Review — generating plan and making local commits");
         deploymentAgent.execute(ctx);
 
-        humanConfirm("Deployment & Review");
+        if (humanConfirm("Deployment & Review (push branch and open PR?)")) {
+            deploymentAgent.pushAndCreatePr(ctx);
+        } else {
+            log("Deployment halted — branch '" + ctx.getFeatureBranchName() + "' kept local, no PR created.");
+        }
         log("Workflow complete.");
     }
 
@@ -159,10 +163,14 @@ public class WorkflowOrchestrator {
         log("[Steps 6+7] Implementation & QA (combined)");
         runBatchImplementationAndQA();
 
-        log("[Step 8] Deployment & Review");
+        log("[Step 8] Deployment & Review — generating plan and making local commits");
         deploymentAgent.execute(ctx);
 
-        humanConfirm("Deployment & Review");
+        if (humanConfirm("Deployment & Review (push branch and open PR?)")) {
+            deploymentAgent.pushAndCreatePr(ctx);
+        } else {
+            log("Deployment halted — branch '" + ctx.getFeatureBranchName() + "' kept local, no PR created.");
+        }
         log("Workflow complete.");
     }
 
