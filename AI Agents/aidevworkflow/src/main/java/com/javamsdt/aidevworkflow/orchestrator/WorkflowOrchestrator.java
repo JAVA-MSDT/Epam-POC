@@ -7,6 +7,7 @@ import com.javamsdt.aidevworkflow.github.GitHubClient;
 import com.javamsdt.aidevworkflow.jira.JiraClient;
 import com.javamsdt.aidevworkflow.llm.LlmClient;
 import com.javamsdt.aidevworkflow.util.MarkdownLoader;
+import com.javamsdt.aidevworkflow.util.WorkflowContextSerializer;
 
 import java.util.Scanner;
 
@@ -307,16 +308,48 @@ public class WorkflowOrchestrator {
 
     /**
      * Human-in-the-loop confirmation gate.
+     * Auto-saves the current context to the report folder (if set) before prompting.
      * Returns true to continue the workflow, false to halt.
      * When autoApprove is true (e.g., in tests) always returns true.
      */
     boolean humanConfirm(String stepName) {
+        WorkflowContextSerializer.saveToReportFolder(ctx);
         if (autoApprove) return true;
         System.out.printf("%n[HUMAN GATE] Step '%s' completed.%n", stepName);
         System.out.print("Review the context and approve to continue (y/n): ");
         try (Scanner scanner = new Scanner(System.in)) {
             return scanner.nextLine().trim().equalsIgnoreCase("y");
         }
+    }
+
+    /**
+     * Saves the current workflow context to the given file path.
+     *
+     * @param filePath absolute or relative path to the output JSON file
+     */
+    public void saveContext(String filePath) {
+        WorkflowContextSerializer.save(ctx, filePath);
+    }
+
+    /**
+     * Saves the current workflow context to {@code <reportFolderPath>/workflow_context.json}.
+     * Does nothing if {@code ctx.getReportFolderPath()} is not set.
+     */
+    public void saveContext() {
+        WorkflowContextSerializer.saveToReportFolder(ctx);
+    }
+
+    /**
+     * Creates a new orchestrator pre-loaded with a context restored from a JSON file.
+     * Use this to resume a workflow that was halted at a gate in a previous session.
+     *
+     * @param filePath path to a JSON file previously written by {@link #saveContext}
+     * @param llmClient the LLM client to use for subsequent agent calls
+     * @return a new orchestrator with the restored context; git/GitHub clients are not restored
+     */
+    public static WorkflowOrchestrator loadContext(String filePath, LlmClient llmClient) {
+        WorkflowContext ctx = WorkflowContextSerializer.load(filePath);
+        return new WorkflowOrchestrator(llmClient, ctx);
     }
 
     private void log(String message) {
