@@ -2,6 +2,9 @@ package com.javamsdt.aidevworkflow.orchestrator;
 
 import com.javamsdt.aidevworkflow.agents.*;
 import com.javamsdt.aidevworkflow.context.WorkflowContext;
+import com.javamsdt.aidevworkflow.github.GitClient;
+import com.javamsdt.aidevworkflow.github.GitHubClient;
+import com.javamsdt.aidevworkflow.jira.JiraClient;
 import com.javamsdt.aidevworkflow.llm.LlmClient;
 import com.javamsdt.aidevworkflow.util.MarkdownLoader;
 
@@ -31,6 +34,9 @@ public class WorkflowOrchestrator {
     private final LlmClient llmClient;
     private final WorkflowContext ctx;
     private final boolean autoApprove;
+    private final JiraClient jiraClient;
+    private final GitClient gitClient;
+    private final GitHubClient gitHubClient;
 
     private final TicketAnalysisAgent ticketAnalysisAgent;
     private final ProjectSetupAgent projectSetupAgent;
@@ -42,21 +48,29 @@ public class WorkflowOrchestrator {
     private final DeploymentAgent deploymentAgent;
 
     public WorkflowOrchestrator(LlmClient llmClient, WorkflowContext ctx) {
-        this(llmClient, ctx, false);
+        this(llmClient, ctx, false, null, null, null);
     }
 
     public WorkflowOrchestrator(LlmClient llmClient, WorkflowContext ctx, boolean autoApprove) {
+        this(llmClient, ctx, autoApprove, null, null, null);
+    }
+
+    public WorkflowOrchestrator(LlmClient llmClient, WorkflowContext ctx, boolean autoApprove,
+                                 JiraClient jiraClient, GitClient gitClient, GitHubClient gitHubClient) {
         this.llmClient = llmClient;
         this.ctx = ctx;
         this.autoApprove = autoApprove;
-        this.ticketAnalysisAgent = new TicketAnalysisAgent(llmClient);
+        this.jiraClient = jiraClient;
+        this.gitClient = gitClient;
+        this.gitHubClient = gitHubClient;
+        this.ticketAnalysisAgent = new TicketAnalysisAgent(llmClient, jiraClient);
         this.projectSetupAgent = new ProjectSetupAgent(llmClient);
         this.deepDiveAgent = new DeepDiveAgent(llmClient);
         this.visualReportAgent = new VisualReportAgent(llmClient);
         this.reviewAgent = new ReviewAgent(llmClient);
         this.implementationAgent = new ImplementationAgent(llmClient);
         this.qualityAssuranceAgent = new QualityAssuranceAgent(llmClient);
-        this.deploymentAgent = new DeploymentAgent(llmClient);
+        this.deploymentAgent = new DeploymentAgent(llmClient, gitClient, gitHubClient);
     }
 
     // ══════════════════════════════════════════════════════════════

@@ -3,6 +3,7 @@ package com.javamsdt.aidevworkflow;
 import com.javamsdt.aidevworkflow.context.WorkflowContext;
 import com.javamsdt.aidevworkflow.llm.ClaudeApiClient;
 import com.javamsdt.aidevworkflow.llm.LlmClient;
+import com.javamsdt.aidevworkflow.llm.OllamaApiClient;
 import com.javamsdt.aidevworkflow.orchestrator.WorkflowOrchestrator;
 
 /**
@@ -32,7 +33,7 @@ public class Main {
             """;
 
     public static void main(String[] args) {
-        LlmClient llmClient = ClaudeApiClient.fromEnv();
+        LlmClient llmClient = OllamaApiClient.fromEnv();
 
         WorkflowContext ctx = new WorkflowContext();
         ctx.setTicketText(SAMPLE_TICKET);

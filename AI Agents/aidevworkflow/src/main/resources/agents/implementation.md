@@ -2,22 +2,27 @@
 
 ## Purpose
 
-Translate the reviewed requirements and clarifications into concrete implementation
-guidance: class skeletons, key algorithms, and step-by-step coding instructions.
+Translate the reviewed requirements and clarifications into complete, runnable code.
+Each file must be annotated with its target path so the system can write it to disk.
 
 ## Instructions
 
 1. Read the review notes carefully, including the ready-to-implement checklist.
-2. Produce skeleton code for every major class or module identified.
-3. For complex logic, write pseudocode or annotated code snippets.
+2. For every class or module to be created or modified, output a complete code block
+   annotated with its file path on the first line using the format:
+   `// FILE: relative/path/to/ClassName.java`
+3. Write complete, compilable code — not skeletons or TODOs.
 4. List the implementation order (what to build first, second, etc.).
 5. Flag any technical decisions that were left open and propose defaults.
-6. Include error-handling patterns for each integration point.
+6. Include proper error handling at every integration point.
 
 ## Input
 
 Review Notes:
 {{review_notes}}
+
+Project Root:
+{{project_root}}
 
 ## Expected Output
 
@@ -27,25 +32,33 @@ Review Notes:
 2. [second component]
 3. ...
 
-### Class / Module Skeletons
+### Code Files
+
+Each file block MUST start with `// FILE: <relative-path>` as the very first line
+inside the code fence, so the system can extract and write it to disk.
 
 ```java
-// [ClassName] — [single responsibility]
-public class ClassName {
+// FILE: src/main/java/com/example/auth/LoginService.java
+package com.example.auth;
 
-    // [field with purpose comment]
+public class LoginService {
 
-    public ReturnType methodName(ParamType param) {
-        // TODO: [key logic description]
+    public String login(String email, String password) {
+        // full implementation here
     }
 }
 ```
 
-[Repeat for each major class]
+```java
+// FILE: src/main/java/com/example/auth/JwtTokenProvider.java
+package com.example.auth;
 
-### Key Algorithms & Logic
+public class JwtTokenProvider {
+    // full implementation
+}
+```
 
-- **[Algorithm/Logic name]**: [description + pseudocode if complex]
+[Repeat for every file that needs to be created or modified]
 
 ### Error Handling Patterns
 

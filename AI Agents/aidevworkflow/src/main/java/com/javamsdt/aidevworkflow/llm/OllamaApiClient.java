@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit;
 public class OllamaApiClient implements LlmClient {
 
     private static final String DEFAULT_BASE_URL = "http://localhost:11434";
-    private static final String DEFAULT_MODEL = "llama3.2";
+    private static final String DEFAULT_MODEL = "phi3"; // "llama3.2";
     private static final MediaType JSON_MEDIA = MediaType.get("application/json; charset=utf-8");
 
     private final String baseUrl;

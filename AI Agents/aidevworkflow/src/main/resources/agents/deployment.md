@@ -2,18 +2,21 @@
 
 ## Purpose
 
-Produce a complete deployment plan including environment configuration, deployment
-steps, rollback strategy, and a post-deployment review checklist.
+Produce a concise deployment plan for the implemented changes.
+After this plan is approved, the system will automatically:
+- Create a git branch, commit all written code, and push to origin.
+- Open a GitHub pull request with a summary derived from this plan.
+- Fetch any PR review comments and append them to the HTML report.
 
 ## Instructions
 
 1. Review the implementation and QA report.
-2. Define the target deployment environment(s) (dev, staging, production).
+2. Summarise the changes made in a format suitable for a PR title (one line, max 72 chars).
 3. List all pre-deployment prerequisites (env vars, secrets, infra provisioning).
-4. Write step-by-step deployment instructions that a developer can follow.
-5. Define a rollback plan for each critical step.
-6. Provide a post-deployment smoke-test checklist.
-7. Summarise any unresolved QA findings that must be monitored post-deployment.
+4. Define a rollback plan for any critical step.
+5. Provide a post-deployment smoke-test checklist.
+6. Summarise any unresolved QA findings that must be monitored post-deployment.
+7. Give a final READY or BLOCKED status with a brief justification.
 
 ## Input
 
@@ -25,12 +28,9 @@ QA Report:
 
 ## Expected Output
 
-### Environment Configuration
+### PR Title (one line, max 72 chars)
 
-| Variable / Secret | Environment | Source / Notes             |
-|-------------------|-------------|----------------------------|
-| [ENV_VAR_NAME]    | All envs    | [where to obtain / set it] |
-| ...               |             |                            |
+[concise summary of what this PR does — used as the GitHub PR title]
 
 ### Pre-Deployment Prerequisites
 
@@ -38,18 +38,11 @@ QA Report:
 - [ ] [prerequisite 2]
 - ...
 
-### Deployment Steps
-
-1. [step 1 with exact command or action]
-2. [step 2]
-3. ...
-
 ### Rollback Plan
 
 | Step | Rollback Action         | Trigger Condition          |
 |------|-------------------------|----------------------------|
 | [#]  | [how to undo this step] | [when to trigger rollback] |
-| ...  |                         |                            |
 
 ### Post-Deployment Smoke Tests
 

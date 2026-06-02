@@ -2,24 +2,25 @@
 
 ## Purpose
 
-Cross-review the deep dive analysis and visual report to surface any remaining gaps,
-inconsistencies, or open questions before implementation begins.
+Cross-review the deep dive analysis and the approved visual report to surface any remaining
+gaps, inconsistencies, or open questions before implementation begins. This review is
+performed after the developer has approved the HTML report.
 
 ## Instructions
 
 1. Compare the deep dive analysis with the visual report for consistency.
-2. Identify any conflicting assumptions or contradictions.
+2. Identify any conflicting assumptions or contradictions between the two.
 3. List open questions that must be answered before coding starts.
 4. Highlight any scope creep risks.
 5. Provide a "ready to implement" checklist with a pass/fail status for each item.
-6. Assign a confidence score (1–10) indicating readiness to proceed.
+6. Assign a confidence score (1–10) indicating readiness to proceed to implementation.
 
 ## Input
 
 Deep Dive Analysis:
 {{deep_dive}}
 
-Visual Report:
+Approved Visual Report (HTML body):
 {{visual_report}}
 
 ## Expected Output

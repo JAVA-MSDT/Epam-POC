@@ -10,7 +10,14 @@ package com.javamsdt.aidevworkflow.context;
  */
 public class WorkflowContext {
 
-    // ── Step 0: input ─────────────────────────────────────────────
+    // ── External inputs (set before workflow starts) ───────────────
+    /** Jira ticket ID (e.g. "PROJ-123"). Used by TicketAnalysisAgent to fetch from Jira. */
+    private String jiraTicketId;
+
+    /** The root path of the target project being analyzed (used by DeepDiveAgent for code scanning). */
+    private String projectRootPath;
+
+    // ── Step 0: ticket input ───────────────────────────────────────
     private String ticketText;
 
     // ── Step 1 output: Ticket Analysis ────────────────────────────
@@ -19,11 +26,17 @@ public class WorkflowContext {
     // ── Step 2 output: Project Setup ──────────────────────────────
     private String projectSetup;
 
+    /** Absolute path to the report folder created by ProjectSetupAgent. */
+    private String reportFolderPath;
+
     // ── Step 3 output: Deep Dive Analysis ─────────────────────────
     private String deepDive;
 
     // ── Step 4 output: Visual Analysis Report ─────────────────────
     private String visualReport;
+
+    /** Absolute path to the HTML report file written by VisualReportAgent. */
+    private String htmlReportPath;
 
     // ── Step 5 output: Review & Clarification ─────────────────────
     private String reviewNotes;
@@ -37,7 +50,31 @@ public class WorkflowContext {
     // ── Step 8 output: Deployment & Review ────────────────────────
     private String deploymentStatus;
 
+    /** URL of the GitHub PR created by DeploymentAgent. */
+    private String prUrl;
+
+    /** Raw PR comments fetched from GitHub, used to update the HTML report. */
+    private String prComments;
+
     // ── Getters & Setters ──────────────────────────────────────────
+
+    public String getJiraTicketId() { return jiraTicketId; }
+    public void setJiraTicketId(String jiraTicketId) { this.jiraTicketId = jiraTicketId; }
+
+    public String getProjectRootPath() { return projectRootPath; }
+    public void setProjectRootPath(String projectRootPath) { this.projectRootPath = projectRootPath; }
+
+    public String getReportFolderPath() { return reportFolderPath; }
+    public void setReportFolderPath(String reportFolderPath) { this.reportFolderPath = reportFolderPath; }
+
+    public String getHtmlReportPath() { return htmlReportPath; }
+    public void setHtmlReportPath(String htmlReportPath) { this.htmlReportPath = htmlReportPath; }
+
+    public String getPrUrl() { return prUrl; }
+    public void setPrUrl(String prUrl) { this.prUrl = prUrl; }
+
+    public String getPrComments() { return prComments; }
+    public void setPrComments(String prComments) { this.prComments = prComments; }
 
     public String getTicketText() {
         return ticketText;
@@ -114,14 +151,19 @@ public class WorkflowContext {
     @Override
     public String toString() {
         return "WorkflowContext{" +
-                "ticketSummary='" + truncate(ticketSummary) + '\'' +
+                "jiraTicketId='" + jiraTicketId + '\'' +
+                ", projectRootPath='" + projectRootPath + '\'' +
+                ", ticketSummary='" + truncate(ticketSummary) + '\'' +
                 ", projectSetup='" + truncate(projectSetup) + '\'' +
+                ", reportFolderPath='" + reportFolderPath + '\'' +
                 ", deepDive='" + truncate(deepDive) + '\'' +
                 ", visualReport='" + truncate(visualReport) + '\'' +
+                ", htmlReportPath='" + htmlReportPath + '\'' +
                 ", reviewNotes='" + truncate(reviewNotes) + '\'' +
                 ", implementation='" + truncate(implementation) + '\'' +
                 ", qaReport='" + truncate(qaReport) + '\'' +
                 ", deploymentStatus='" + truncate(deploymentStatus) + '\'' +
+                ", prUrl='" + prUrl + '\'' +
                 '}';
     }
 
