@@ -47,10 +47,11 @@ public class ImplementationAgent {
         ctx.setImplementation(response);
 
         if (projectRoot != null && !projectRoot.isBlank()) {
-            List<String> written = writeCodeFiles(projectRoot, response);
-            if (!written.isEmpty()) {
-                System.out.println("[ImplementationAgent] Wrote " + written.size() + " file(s) to disk:");
-                written.forEach(f -> System.out.println("  " + f));
+            populatePendingFiles(ctx, response);
+            writeCodeFiles(ctx, projectRoot, response);
+            if (!ctx.getWrittenFiles().isEmpty()) {
+                System.out.println("[ImplementationAgent] Wrote " + ctx.getWrittenFiles().size() + " file(s) to disk:");
+                ctx.getWrittenFiles().forEach(f -> System.out.println("  " + f));
             } else {
                 System.out.println("[ImplementationAgent] No FILE: annotated blocks found — no files written.");
             }
@@ -59,8 +60,18 @@ public class ImplementationAgent {
         }
     }
 
-    private List<String> writeCodeFiles(String projectRoot, String response) {
-        List<String> writtenPaths = new ArrayList<>();
+    /** Extracts all relative paths from FILE: blocks and registers them as pending before writing starts. */
+    private void populatePendingFiles(WorkflowContext ctx, String response) {
+        List<String> pending = new ArrayList<>();
+        Matcher matcher = FILE_BLOCK_PATTERN.matcher(response);
+        while (matcher.find()) {
+            pending.add(matcher.group(1).trim());
+        }
+        ctx.setPendingFiles(pending);
+        System.out.println("[ImplementationAgent] " + pending.size() + " file(s) pending write.");
+    }
+
+    private void writeCodeFiles(WorkflowContext ctx, String projectRoot, String response) {
         Matcher matcher = FILE_BLOCK_PATTERN.matcher(response);
 
         while (matcher.find()) {
@@ -70,12 +81,12 @@ public class ImplementationAgent {
 
             try {
                 FileSystemUtil.writeFile(fullPath, content);
-                writtenPaths.add(fullPath);
+                ctx.getWrittenFiles().add(fullPath);
+                ctx.getPendingFiles().remove(relativePath);
+                ctx.setImplementationStep(ctx.getImplementationStep() + 1);
             } catch (Exception e) {
                 System.err.println("[ImplementationAgent] Failed to write " + fullPath + ": " + e.getMessage());
             }
         }
-
-        return writtenPaths;
     }
 }

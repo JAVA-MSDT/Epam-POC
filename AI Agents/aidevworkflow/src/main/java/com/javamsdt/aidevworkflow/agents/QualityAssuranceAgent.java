@@ -31,6 +31,8 @@ public class QualityAssuranceAgent {
     }
 
     public void execute(WorkflowContext ctx) {
+        initFileQaStatus(ctx);
+
         String codeContext = resolveCodeContext(ctx);
 
         String prompt = MarkdownLoader.load("agents/quality_assurance.md")
@@ -38,6 +40,23 @@ public class QualityAssuranceAgent {
                 .replace("{{written_code}}", codeContext);
 
         ctx.setQaReport(llmClient.completePrompt(prompt));
+
+        markAllReviewed(ctx);
+    }
+
+    /** Seeds fileQaStatus with PENDING for any writtenFile not already tracked. */
+    private void initFileQaStatus(WorkflowContext ctx) {
+        for (String path : ctx.getWrittenFiles()) {
+            ctx.getFileQaStatus().putIfAbsent(path, "PENDING");
+        }
+    }
+
+    /** Advances all PENDING/REVIEWED entries to REVIEWED after QA completes. */
+    private void markAllReviewed(WorkflowContext ctx) {
+        ctx.getFileQaStatus().replaceAll((path, status) ->
+                "PASS".equals(status) ? "PASS" : "REVIEWED"
+        );
+        System.out.println("[QualityAssuranceAgent] fileQaStatus updated: " + ctx.getFileQaStatus().size() + " entries.");
     }
 
     private String resolveCodeContext(WorkflowContext ctx) {

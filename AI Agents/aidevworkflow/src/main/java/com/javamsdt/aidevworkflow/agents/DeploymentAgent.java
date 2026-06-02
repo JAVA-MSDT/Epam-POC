@@ -67,6 +67,8 @@ public class DeploymentAgent {
             String commitMsg = ticketId + ": implement changes from AI workflow";
             System.out.println("[DeploymentAgent] Committing: " + commitMsg);
             gitClient.commitAll(commitMsg);
+            ctx.getCommittedFiles().addAll(ctx.getWrittenFiles());
+            System.out.println("[DeploymentAgent] " + ctx.getCommittedFiles().size() + " file(s) marked committed.");
 
             System.out.println("[DeploymentAgent] Pushing to origin/" + branchName);
             gitClient.push("origin", branchName);

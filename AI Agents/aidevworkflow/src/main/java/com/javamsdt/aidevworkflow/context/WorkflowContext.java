@@ -1,5 +1,10 @@
 package com.javamsdt.aidevworkflow.context;
 
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * Shared mutable state that travels through all 8 workflow steps.
  * The orchestrator passes this single instance to every agent;
@@ -38,6 +43,25 @@ public class WorkflowContext {
      * without triggering a second filesystem scan. Set to null to force a re-scan.
      */
     private String codebaseSnapshot;
+
+    // ── Progress tracking (populated during Step 6 implementation) ─
+    /** Absolute paths of files successfully written to disk by ImplementationAgent. */
+    private List<String> writtenFiles = new ArrayList<>();
+
+    /** Relative paths extracted from LLM response not yet written (decrements as files are written). */
+    private List<String> pendingFiles = new ArrayList<>();
+
+    /**
+     * Per-file QA status. Key = absolute file path, value = one of:
+     * "PENDING", "REVIEWED", "PASS".
+     */
+    private Map<String, String> fileQaStatus = new LinkedHashMap<>();
+
+    /** Absolute paths of files included in a local git commit by DeploymentAgent. */
+    private List<String> committedFiles = new ArrayList<>();
+
+    /** Monotonically increasing counter incremented each time ImplementationAgent writes a file. */
+    private int implementationStep = 0;
 
     // ── Step 4 output: Visual Analysis Report ─────────────────────
     private String visualReport;
@@ -163,6 +187,21 @@ public class WorkflowContext {
         this.deploymentStatus = deploymentStatus;
     }
 
+    public List<String> getWrittenFiles() { return writtenFiles; }
+    public void setWrittenFiles(List<String> writtenFiles) { this.writtenFiles = writtenFiles; }
+
+    public List<String> getPendingFiles() { return pendingFiles; }
+    public void setPendingFiles(List<String> pendingFiles) { this.pendingFiles = pendingFiles; }
+
+    public Map<String, String> getFileQaStatus() { return fileQaStatus; }
+    public void setFileQaStatus(Map<String, String> fileQaStatus) { this.fileQaStatus = fileQaStatus; }
+
+    public List<String> getCommittedFiles() { return committedFiles; }
+    public void setCommittedFiles(List<String> committedFiles) { this.committedFiles = committedFiles; }
+
+    public int getImplementationStep() { return implementationStep; }
+    public void setImplementationStep(int implementationStep) { this.implementationStep = implementationStep; }
+
     @Override
     public String toString() {
         return "WorkflowContext{" +
@@ -180,6 +219,11 @@ public class WorkflowContext {
                 ", qaReport='" + truncate(qaReport) + '\'' +
                 ", deploymentStatus='" + truncate(deploymentStatus) + '\'' +
                 ", prUrl='" + prUrl + '\'' +
+                ", writtenFiles=" + writtenFiles.size() +
+                ", pendingFiles=" + pendingFiles.size() +
+                ", committedFiles=" + committedFiles.size() +
+                ", implementationStep=" + implementationStep +
+                ", fileQaStatus=" + fileQaStatus.size() + " entries" +
                 '}';
     }
 
