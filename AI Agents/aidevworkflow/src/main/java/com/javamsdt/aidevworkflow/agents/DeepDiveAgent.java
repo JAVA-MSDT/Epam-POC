@@ -34,12 +34,12 @@ public class DeepDiveAgent {
     public void execute(WorkflowContext ctx) {
         String codebaseContext = scanCodebase(ctx);
 
-        String prompt = MarkdownLoader.load("agents/deep_dive.md")
+        String taskPrompt = MarkdownLoader.load("agents/deep_dive.md")
                 .replace("{{ticket_summary}}", ctx.getTicketSummary())
                 .replace("{{project_setup}}", ctx.getProjectSetup())
-                .replace("{{codebase_context}}", codebaseContext);
+                .replace("{{codebase_context}}", "(see codebase context above)");
 
-        ctx.setDeepDive(llmClient.completePrompt(prompt));
+        ctx.setDeepDive(llmClient.completePromptCached(codebaseContext, taskPrompt));
     }
 
     private String scanCodebase(WorkflowContext ctx) {

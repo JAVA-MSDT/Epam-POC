@@ -35,11 +35,11 @@ public class QualityAssuranceAgent {
 
         String codeContext = resolveCodeContext(ctx);
 
-        String prompt = MarkdownLoader.load("agents/quality_assurance.md")
+        String taskPrompt = MarkdownLoader.load("agents/quality_assurance.md")
                 .replace("{{implementation}}", ctx.getImplementation())
-                .replace("{{written_code}}", codeContext);
+                .replace("{{written_code}}", "(see codebase context above)");
 
-        ctx.setQaReport(llmClient.completePrompt(prompt));
+        ctx.setQaReport(llmClient.completePromptCached(codeContext, taskPrompt));
 
         markAllReviewed(ctx);
     }

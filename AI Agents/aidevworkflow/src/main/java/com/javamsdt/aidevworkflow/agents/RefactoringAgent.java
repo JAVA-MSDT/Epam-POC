@@ -48,12 +48,12 @@ public class RefactoringAgent {
     public void execute(WorkflowContext ctx) {
         String codebaseContext = resolveCodebaseContext(ctx);
 
-        String prompt = MarkdownLoader.load("agents/refactoring.md")
+        String taskPrompt = MarkdownLoader.load("agents/refactoring.md")
                 .replace("{{implementation}}", ctx.getImplementation() != null ? ctx.getImplementation() : "(none)")
                 .replace("{{qa_report}}", ctx.getQaReport() != null ? ctx.getQaReport() : "(none)")
-                .replace("{{codebase_snapshot}}", codebaseContext);
+                .replace("{{codebase_snapshot}}", "(see codebase context above)");
 
-        String response = llmClient.completePrompt(prompt);
+        String response = llmClient.completePromptCached(codebaseContext, taskPrompt);
         ctx.setRefactoringPlan(response);
 
         String projectRoot = ctx.getProjectRootPath();
