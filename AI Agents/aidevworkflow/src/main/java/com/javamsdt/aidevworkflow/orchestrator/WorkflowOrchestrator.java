@@ -246,6 +246,30 @@ public class WorkflowOrchestrator {
     }
 
     // ══════════════════════════════════════════════════════════════
+    // Re-run helpers
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * Clears the cached codebase snapshot and re-runs Steps 3+4 (Deep Dive + Visual Report).
+     * <p>
+     * Use this after the codebase has changed (e.g., after implementation) so the analysis
+     * reflects the latest files on disk. Review notes, implementation, and QA results are
+     * intentionally preserved — only the analysis and visual report are refreshed.
+     */
+    public void rerunAnalysis() {
+        log("Re-running analysis with fresh codebase scan...");
+        ctx.setCodebaseSnapshot(null);
+
+        log("[Step 3] Deep Dive Analysis (re-run)");
+        deepDiveAgent.execute(ctx);
+
+        log("[Step 4] Visual Analysis Report (re-run)");
+        visualReportAgent.execute(ctx);
+
+        log("Analysis re-run complete.");
+    }
+
+    // ══════════════════════════════════════════════════════════════
     // Utilities
     // ══════════════════════════════════════════════════════════════
 
