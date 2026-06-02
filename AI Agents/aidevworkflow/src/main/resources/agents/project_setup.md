@@ -53,6 +53,7 @@ Report Folder (created on disk):
 ### Report Artefacts Location
 
 Report folder: `{{report_folder}}`
+
 - HTML analysis report will be written here by the Visual Report agent.
 - Additional artefacts (diagrams, QA reports) will also be saved here.
 

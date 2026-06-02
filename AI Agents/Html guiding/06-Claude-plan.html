@@ -282,6 +282,18 @@
             <li><a href="#decisions">Architecture Decisions</a></li>
             <li><a href="#checklist">File Checklist</a></li>
         </ul>
+        <div class="nav-group" style="padding-left:18px;">Design v2 Review</div>
+        <ul>
+            <li><a href="#design-v2">Agent Merge Eval</a></li>
+            <li><a href="#prompt-mapping">Prompt → Agent Map</a></li>
+            <li><a href="#design-recommendations">Recommendations</a></li>
+        </ul>
+        <div class="nav-group" style="padding-left:18px;">Q&amp;A &amp; Plan</div>
+        <ul>
+            <li><a href="#qa-caching">Q1 — LLM Caching</a></li>
+            <li><a href="#qa-progress">Q2 — Progress Tracking</a></li>
+            <li><a href="#impl-plan">Implementation Plan</a></li>
+        </ul>
     </nav>
     <main>
         <!-- ═══════════════════════════════════════════ -->
@@ -1012,6 +1024,627 @@ public interface LlmClient {
             <div class="note">
                 <b>Total file count:</b> 1 pom.xml + 3 LLM files + 3 infrastructure files + 8 agent classes
                 + 8 markdown prompts + 4 test files = <b>27 files</b> to fully implement the workflow.
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION: DESIGN V2 EVALUATION               -->
+        <!-- ═══════════════════════════════════════════ -->
+        <section id="design-v2">
+            <h2>12. Design v2 Evaluation — Agent Merge Proposals</h2>
+            <p>
+                Four structural changes were proposed for the next iteration of the agent design.
+                Each is evaluated below for correctness, tradeoffs, and implementation risk.
+            </p>
+
+            <h3>Proposal 1 — Merge Steps 1 + 2 + 3 into a Single Analysis Agent</h3>
+            <div class="finding">
+                <div class="file-tag">Merge Proposal</div>
+                <p>
+                    The proposal merges <b>TicketAnalysisAgent</b>, <b>ProjectSetupAgent</b>, and <b>DeepDiveAgent</b>
+                    into a single <code>AnalysisAgent</code> — fetches Jira ticket, sets up report folder,
+                    scans the codebase, and produces unified analysis output in one LLM call.
+                </p>
+                <div class="table-container">
+                    <table>
+                        <tr><th>Aspect</th><th>Assessment</th></tr>
+                        <tr>
+                            <td><b>LLM call savings</b></td>
+                            <td>Reduces from 3 → 1 call for the analysis phase</td>
+                        </tr>
+                        <tr>
+                            <td><b>Context window risk</b></td>
+                            <td style="color:#ff8080;"><b>HIGH</b> — injecting full codebase scan + ticket text + setup instructions into one prompt frequently exceeds 100k token limits on repos with 40+ files</td>
+                        </tr>
+                        <tr>
+                            <td><b>Debuggability</b></td>
+                            <td style="color:#ff8080;"><b>Reduced</b> — when output is incomplete or wrong, impossible to know if ticket parsing, codebase scan, or analysis logic failed</td>
+                        </tr>
+                        <tr>
+                            <td><b>Human gate placement</b></td>
+                            <td>Gate 1 must still exist after this combined step regardless of merge</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="insight">
+                    <b>Verdict — Reject:</b> Keep the current 1+2 merge (TicketAnalysis + ProjectSetup) but
+                    <b>keep DeepDive as a separate call</b>. DeepDive injects large codebase context via
+                    <code>FileSystemUtil.readSourceFiles()</code> — combining it with ticket parsing risks context
+                    overflow and degrades analysis quality. The 3→1 call savings is not worth the reliability loss.
+                </div>
+            </div>
+
+            <h3>Proposal 2 — Make DeepDive and VisualReport Re-callable</h3>
+            <div class="finding">
+                <div class="file-tag">Reusability Proposal</div>
+                <p>
+                    Upgrade <b>DeepDiveAgent</b> and <b>VisualReportAgent</b> from single-run to re-callable,
+                    allowing a fresh analysis or updated HTML report to be triggered at any point —
+                    for example, after adding new source files or refining requirements post-review.
+                </p>
+                <div class="table-container">
+                    <table>
+                        <tr><th>Aspect</th><th>Assessment</th></tr>
+                        <tr>
+                            <td><b>Architectural fit</b></td>
+                            <td style="color:#86efac;"><b>Excellent</b> — agents are already stateless. Re-calling them re-reads WorkflowContext and re-invokes the LLM with fresh codebase scan</td>
+                        </tr>
+                        <tr>
+                            <td><b>Implementation cost</b></td>
+                            <td style="color:#86efac;"><b>Very low</b> — no agent class changes needed. The orchestrator calls <code>deepDiveAgent.execute(ctx)</code> again which overwrites prior results in context</td>
+                        </tr>
+                        <tr>
+                            <td><b>HTML report</b></td>
+                            <td><code>HtmlReportWriter</code> already overwrites <code>analysis_report.html</code> on each call — safe to re-run without leftover state</td>
+                        </tr>
+                        <tr>
+                            <td><b>ReviewAgent loop</b></td>
+                            <td>Already implements up to 5 iteration rounds. Re-triggering DeepDive should reset the loop counter in ReviewAgent</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="insight">
+                    <b>Verdict — Approve:</b> Expose a <code>public void rerunAnalysis()</code> method in
+                    <code>WorkflowOrchestrator</code> that re-executes Steps 3+4 (DeepDive → VisualReport)
+                    and resets the ReviewAgent iteration counter. No agent class changes required —
+                    purely an orchestrator-level addition.
+                </div>
+            </div>
+
+            <h3>Proposal 3 — Merge Steps 6 + 7 with Per-Step Approval</h3>
+            <div class="finding">
+                <div class="file-tag">Merge Proposal</div>
+                <p>
+                    Merge <b>ImplementationAgent</b> and <b>QualityAssuranceAgent</b> so that code is
+                    generated one file at a time, immediately QA-reviewed, and optionally approved by the
+                    developer before moving to the next file.
+                </p>
+                <div class="table-container">
+                    <table>
+                        <tr><th>Aspect</th><th>Assessment</th></tr>
+                        <tr>
+                            <td><b>Current behavior</b></td>
+                            <td>ImplementationAgent writes all <code>// FILE:</code> blocks to disk, then QA reads and reviews in batch</td>
+                        </tr>
+                        <tr>
+                            <td><b>Quality improvement</b></td>
+                            <td style="color:#86efac;"><b>Real</b> — per-file QA catches issues before they propagate into dependent files</td>
+                        </tr>
+                        <tr>
+                            <td><b>LLM call cost</b></td>
+                            <td style="color:#ff8080;"><b>Multiplied</b> — one QA call per file vs. one batch. On 10 generated files: 10 QA calls vs. 1 currently</td>
+                        </tr>
+                        <tr>
+                            <td><b>Optimal middle ground</b></td>
+                            <td>Per-file write with console preview (already partially done via <code>// FILE:</code> parsing), single batch QA after all files written</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="insight">
+                    <b>Verdict — Partial Approve:</b> Implement the per-file write loop with console confirmation
+                    per file in <code>ImplementationAgent</code> (already parses <code>// FILE:</code> blocks).
+                    Keep QA as a single batch review after all files are written — this preserves efficiency.
+                    Add an <code>interactiveMode</code> flag to the orchestrator for the per-file confirmation gate;
+                    set it <code>false</code> in automated runs.
+                </div>
+            </div>
+
+            <h3>Proposal 4 — Step-by-Step Commits, Push+PR on Final Approval, PR Comment Listener</h3>
+            <div class="finding">
+                <div class="file-tag">Deployment Proposal</div>
+                <p>
+                    Redesign <b>DeploymentAgent</b> to: (1) create one local commit per logical file group,
+                    (2) push and open the PR only on final human approval,
+                    (3) poll or listen for PR review comments and feed them back into the workflow.
+                </p>
+                <div class="table-container">
+                    <table>
+                        <tr><th>Aspect</th><th>Assessment</th></tr>
+                        <tr>
+                            <td><b>Step-by-step local commits</b></td>
+                            <td style="color:#86efac;"><b>Excellent</b> — aligns with conventional commit best practices; each logical group gets a meaningful commit message generated by the LLM</td>
+                        </tr>
+                        <tr>
+                            <td><b>Push on approval only</b></td>
+                            <td style="color:#86efac;"><b>Excellent</b> — critical safety gate. <code>GitClient.push()</code> must only be called after the final human confirmation</td>
+                        </tr>
+                        <tr>
+                            <td><b>PR comment live listener</b></td>
+                            <td style="color:#fcd34d;"><b>Medium risk</b> — background polling requires thread management, GitHub rate limit handling, auth token refresh, and PR lifecycle events</td>
+                        </tr>
+                        <tr>
+                            <td><b>Comment-to-workflow feedback</b></td>
+                            <td>PR comments re-triggering ReviewAgent or ImplementationAgent requires a new cycle re-entry path not yet modeled in the orchestrator</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="insight">
+                    <b>Verdict — Approve core, defer listener:</b> Implement step-by-step commits and
+                    push-on-approval immediately — low risk, high value, GitClient already supports it.
+                    For PR comments: implement as a <i>one-shot fetch</i> triggered by a new human gate
+                    (<i>"Check for PR review comments? [y/n]"</i>), append to HTML report, and offer to
+                    re-run the workflow from Step 3. Full async polling is a future Phase 2 enhancement.
+                </div>
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION: PROMPT TO AGENT MAPPING            -->
+        <!-- ═══════════════════════════════════════════ -->
+        <section id="prompt-mapping">
+            <h2>13. Prompt Library → Agent Mapping (07-prompts.html)</h2>
+            <p>
+                The prompt library in <code>07-prompts.html</code> contains 7 hand-crafted prompts for
+                AI-assisted development. Each maps to one or more agents in the workflow. The table shows
+                current coverage and what needs updating.
+            </p>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Prompt Name</th>
+                        <th>Primary Agent</th>
+                        <th>Secondary Agent</th>
+                        <th>Status</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td><b>Requirements Generation</b></td>
+                        <td>TicketAnalysisAgent<br><code>ticket_analysis.md</code></td>
+                        <td>DeepDiveAgent<br><code>deep_dive.md</code></td>
+                        <td style="color:#86efac;">✓ <b>Covered</b> — ticket analysis handles requirements + clarifying questions; deep dive covers codebase impact, edge cases, and incremental steps</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td><b>HTML Generation Breakdown</b></td>
+                        <td>VisualReportAgent<br><code>visual_report.md</code></td>
+                        <td>—</td>
+                        <td style="color:#fcd34d;">⚠ <b>Partial</b> — agent exists but <code>visual_report.md</code> does not yet instruct incremental HTML building. The skeleton→styling→findings-one-at-a-time strategy from Prompt 2 must be embedded in the prompt</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td><b>Test Cases (JUnit 5)</b></td>
+                        <td>QualityAssuranceAgent<br><code>quality_assurance.md</code></td>
+                        <td>—</td>
+                        <td style="color:#fcd34d;">⚠ <b>Partial</b> — QA agent reviews code but does not yet generate <code>@Nested</code> / Given-When-Then test classes. Add test generation output section to <code>quality_assurance.md</code></td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td><b>Code Review</b></td>
+                        <td>ReviewAgent<br><code>review.md</code></td>
+                        <td>QualityAssuranceAgent</td>
+                        <td style="color:#86efac;">✓ <b>Covered</b> — ReviewAgent handles the 5-category review (Quality, Correctness, Security, Performance, Maintainability) with severity labels matching Prompt 4 exactly</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td><b>Commit Message Generator</b></td>
+                        <td>DeploymentAgent<br><code>deployment.md</code></td>
+                        <td>—</td>
+                        <td style="color:#fcd34d;">⚠ <b>Partial</b> — deployment.md generates a PR title but not per-commit messages in conventional format. Add commit message generation for each file group to <code>deployment.md</code></td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td><b>Documentation Comments</b></td>
+                        <td>ImplementationAgent<br><code>implementation.md</code></td>
+                        <td>—</td>
+                        <td style="color:#ff8080;">✗ <b>Gap</b> — ImplementationAgent generates code but not Javadoc. Add a documentation pass to <code>implementation.md</code>: after each generated method, also produce the Javadoc comment with @param, @return, and @throws</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td><b>Refactoring Guide</b></td>
+                        <td>— (no agent)</td>
+                        <td>ImplementationAgent</td>
+                        <td style="color:#ff8080;">✗ <b>Gap</b> — no agent handles safe incremental refactoring. Create a dedicated <code>RefactoringAgent</code> + <code>refactoring.md</code>, triggered when the Jira ticket type is <i>Refactoring</i></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="note">
+                <b>Gap Summary:</b> Prompts 6 and 7 have no current agent coverage.
+                Prompts 2, 3, and 5 are partially covered but need their markdown prompt files updated.
+                Prompts 1 and 4 are fully handled by existing agents.
+            </div>
+
+            <h3>Actionable Markdown Prompt Updates</h3>
+
+            <div class="phase">
+                <span class="phase-num">A</span><b>Update <code>visual_report.md</code> — Incremental HTML Building</b>
+                <p>
+                    Add to instructions: <i>"Build the HTML page incrementally — first the skeleton structure,
+                    then apply styling, then add each finding one at a time. After each addition, verify all
+                    prior findings are still present and context is preserved before continuing."</i>
+                    This directly embeds the latency-mitigation strategy from Prompt 2.
+                </p>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">B</span><b>Update <code>quality_assurance.md</code> — Add Test Generation</b>
+                <p>
+                    Add a second output section: <i>"For each reviewed class, generate a JUnit 5 test class using
+                    <code>@Nested</code> for grouped tests, <code>@DisplayName</code> for clarity, Given-When-Then
+                    pattern, AssertJ fluent assertions, and <code>@Mock</code> / <code>@InjectMocks</code> for
+                    dependencies. Use descriptive method names: <code>should_ReturnResult_When_ConditionMet()</code>."</i>
+                </p>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">C</span><b>Update <code>deployment.md</code> — Per-Commit Conventional Messages</b>
+                <p>
+                    Add to instructions: <i>"For each logical file group, generate a conventional commit message:
+                    <code>&lt;type&gt;(&lt;scope&gt;): &lt;summary under 72 chars&gt;</code>. Types: feat | fix |
+                    refactor | test | docs | chore. Body explains WHY, not WHAT. Use imperative mood: 'add', 'fix',
+                    'update' — not 'added', 'fixed'."</i>
+                </p>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">D</span><b>Update <code>implementation.md</code> — Javadoc Generation</b>
+                <p>
+                    Add to instructions: <i>"For each generated method or class, add the appropriate Javadoc comment.
+                    Document: what the method does (not how), each @param with type and valid values, @return type
+                    and meaning, @throws exceptions and conditions, and any non-obvious preconditions or side effects.
+                    Do not add comments for trivial getters/setters unless behavior is non-obvious."</i>
+                </p>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">E</span><b>Create <code>refactoring.md</code> + <code>RefactoringAgent.java</code></b>
+                <p>
+                    Create <code>resources/agents/refactoring.md</code> modeled on Prompt 7: safe incremental
+                    refactoring plan with before/after code, behavior preservation confirmation, and regression risk
+                    flags. Trigger from a new <code>RefactoringAgent</code> in the orchestrator when
+                    <code>ctx.getJiraTicket().issueType()</code> equals <i>"Refactoring"</i>.
+                    No changes to the main 8-agent pipeline for other ticket types.
+                </p>
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION: RECOMMENDATIONS                    -->
+        <!-- ═══════════════════════════════════════════ -->
+        <section id="design-recommendations">
+            <h2>14. Design Recommendations — Prioritized Action List</h2>
+
+            <div class="decision">
+                <div class="decision-label">Priority 1 — Immediate (Zero Risk, High Value)</div>
+                <h4>Update 4 markdown prompt files with content from 07-prompts.html</h4>
+                <ul>
+                    <li>Add incremental HTML building instructions to <code>visual_report.md</code></li>
+                    <li>Add JUnit 5 / Given-When-Then test generation section to <code>quality_assurance.md</code></li>
+                    <li>Add conventional commit message format and per-group generation to <code>deployment.md</code></li>
+                    <li>Add Javadoc generation pass instructions to <code>implementation.md</code></li>
+                </ul>
+                <p><b>Effort:</b> 1–2 hours. <b>Risk:</b> None — markdown-only changes, zero Java changes required.</p>
+            </div>
+
+            <div class="decision">
+                <div class="decision-label">Priority 2 — Short Term (Low Risk, High Value)</div>
+                <h4>Implement step-by-step commits + push-on-approval in DeploymentAgent</h4>
+                <ul>
+                    <li>Modify <code>runGitOps()</code> to call <code>gitClient.commitAll(message)</code> after each file group, where message is generated by the LLM per Prompt 5</li>
+                    <li>Move <code>gitClient.push()</code> and <code>gitHubClient.createPullRequest()</code> behind the final human gate</li>
+                    <li>Replace live PR comment polling with one-shot fetch triggered by a new <i>"Check for PR comments? [y/n]"</i> human gate</li>
+                </ul>
+                <p><b>Effort:</b> 3–4 hours. <b>Risk:</b> Low — GitClient API already supports all needed operations.</p>
+            </div>
+
+            <div class="decision">
+                <div class="decision-label">Priority 3 — Short Term (No Risk, Medium Value)</div>
+                <h4>Expose rerunAnalysis() in WorkflowOrchestrator</h4>
+                <ul>
+                    <li>Add <code>public void rerunAnalysis()</code> that re-executes Steps 3+4 (DeepDive → VisualReport) with a fresh codebase scan</li>
+                    <li>Resets the ReviewAgent iteration counter so the developer can do another round of browser-based feedback</li>
+                    <li>No agent class changes needed — purely an orchestrator method addition</li>
+                </ul>
+                <p><b>Effort:</b> 30 minutes. <b>Risk:</b> None.</p>
+            </div>
+
+            <div class="decision">
+                <div class="decision-label">Priority 4 — Medium Term (Low Risk, Medium Value)</div>
+                <h4>Create RefactoringAgent + refactoring.md (Prompt 7 coverage)</h4>
+                <ul>
+                    <li>Create <code>agents/RefactoringAgent.java</code> following the existing stateless agent pattern</li>
+                    <li>Create <code>resources/agents/refactoring.md</code> based directly on Prompt 7: step-by-step plan, before/after code, behavior preservation, regression risk flags</li>
+                    <li>Trigger conditionally in orchestrator based on Jira ticket <code>issueType</code> — no impact on non-refactoring workflows</li>
+                </ul>
+                <p><b>Effort:</b> 2–3 hours. <b>Risk:</b> Low — follows the established agent pattern with no orchestrator restructuring.</p>
+            </div>
+
+            <div class="decision">
+                <div class="decision-label">Priority 5 — Defer (Risky for Low Return)</div>
+                <h4>Do NOT fully merge Steps 1+2+3 or merge Steps 6+7 into single classes</h4>
+                <p>
+                    The context window risk of a 3-step analysis merge outweighs the 1-call savings.
+                    The current 1+2 merge is the optimal balance point.
+                    DeepDive must remain a separate call to safely inject large codebase context.
+                </p>
+                <p>
+                    For Steps 6+7: the pipeline approach (Implementation → batch QA) is already implemented
+                    and efficient. Per-file confirmation is better added as an <code>interactiveMode</code>
+                    flag on the orchestrator than as a class merge that multiplies LLM call count by the
+                    number of generated files.
+                </p>
+            </div>
+
+            <div class="note">
+                <b>Overall Assessment:</b> The v2 design has two strong proposals (reusable analysis re-run,
+                step-by-step deployment) and two over-aggressive ones (3-step analysis merge, per-file QA loop).
+                The 4 markdown prompt file updates deliver the most immediate value with zero risk.
+                Following this priority list captures all the real gains from v2 while avoiding the reliability
+                and cost pitfalls of the aggressive merges.
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION: Q&A — LLM CACHING                  -->
+        <!-- ═══════════════════════════════════════════ -->
+        <section id="qa-caching">
+            <h2>15. Q&amp;A — Can the LLM Remember the Codebase Between Calls?</h2>
+            <p>
+                <b>Short answer — No by default, but Yes with explicit caching support.</b>
+                LLMs are completely stateless; every API call is independent with zero memory of prior calls.
+                When <code>DeepDiveAgent</code> injects the 40-file codebase scan, that context lives only
+                inside that one request. The next agent call starts from zero.
+            </p>
+
+            <h3>Strategy A — Store Once in WorkflowContext, Re-inject Cheaply</h3>
+            <div class="finding">
+                <div class="file-tag">Recommended — Phase 1</div>
+                <p>
+                    <code>FileSystemUtil.readSourceFiles()</code> is the expensive part (filesystem I/O).
+                    The result is a plain String — store it once in <code>WorkflowContext</code> and every
+                    subsequent agent reads from there instead of re-scanning disk.
+                    Filesystem cost is paid once, but token cost is still paid on every LLM call that injects the snapshot.
+                </p>
+                <div class="code-block">// In WorkflowContext — add this field
+private String codebaseSnapshot;  // set once by DeepDiveAgent, reused by QA/Implementation
+
+// In DeepDiveAgent.execute()
+if (ctx.getCodebaseSnapshot() == null) {
+    ctx.setCodebaseSnapshot(
+        FileSystemUtil.readSourceFiles(ctx.getProjectRootPath(), EXTENSIONS, 40)
+    );
+}
+String prompt = MarkdownLoader.load("agents/deep_dive.md")
+    .replace("{{codebase_context}}", ctx.getCodebaseSnapshot());</div>
+            </div>
+
+            <h3>Strategy B — Anthropic Prompt Caching (~90% Token Cost Reduction)</h3>
+            <div class="finding">
+                <div class="file-tag">Phase 2</div>
+                <p>
+                    Anthropic supports server-side prompt caching via a <code>cache_control</code> marker.
+                    If you send the same large prefix (the codebase scan) in consecutive calls within 5 minutes,
+                    Anthropic caches it and charges ~10% of normal input token cost on cache hits.
+                </p>
+                <div class="decision">
+                    <div class="decision-label">Catch — LlmClient Interface Must Be Extended</div>
+                    <p>
+                        The current <code>LlmClient</code> interface only accepts a single <code>String prompt</code> —
+                        it has no way to pass cache markers. Extending it affects all three LLM implementations
+                        (Claude, OpenAI, Ollama). This is a Phase 2 enhancement.
+                    </p>
+                </div>
+                <div class="code-block">// Extended LlmClient interface (Phase 2)
+public interface LlmClient {
+    String completePrompt(String prompt);                          // current — unchanged
+    String completePrompt(String systemPrompt, String userPrompt,  // Phase 2 overload
+                          boolean cacheSystemPrompt);
+}
+
+// In ClaudeApiClient — mark codebase snapshot block as cacheable
+// POST body: "cache_control": {"type": "ephemeral"}
+// on the content block containing the codebase scan</div>
+            </div>
+
+            <div class="insight">
+                <b>Impact on Steps 6+7:</b> Once the codebase snapshot is stored in WorkflowContext (Strategy A),
+                ImplementationAgent and QualityAssuranceAgent reuse it without re-scanning disk.
+                Add Strategy B (Prompt Caching) and the large codebase prefix costs ~90% less on every
+                QA and Implementation call — making Steps 6+7 genuinely cheap to re-run or iterate on.
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION: Q&A — PROGRESS TRACKING            -->
+        <!-- ═══════════════════════════════════════════ -->
+        <section id="qa-progress">
+            <h2>16. Q&amp;A — Can Agents Track Implementation Progress?</h2>
+            <p>
+                <b>Yes — <code>WorkflowContext</code> is the right place.</b>
+                Currently it only stores final text outputs per step. Adding progress-tracking fields
+                enables the orchestrator to know exactly which files have been written, reviewed, and
+                committed — and resume from the correct point if something fails.
+            </p>
+
+            <div class="finding">
+                <div class="file-tag">WorkflowContext Extension</div>
+                <div class="code-block">// Add these fields to WorkflowContext
+private List&lt;String&gt; writtenFiles    = new ArrayList&lt;&gt;();  // files written to disk
+private List&lt;String&gt; pendingFiles    = new ArrayList&lt;&gt;();  // parsed but not yet written
+private Map&lt;String,String&gt; fileQaStatus = new LinkedHashMap&lt;&gt;(); // file → PASS/FAIL/PENDING
+private List&lt;String&gt; committedFiles  = new ArrayList&lt;&gt;();  // files in a local git commit
+private int implementationStep = 0;                          // which FILE: block we are on</div>
+            </div>
+
+            <h3>Which Agents Get This Capability</h3>
+            <div class="table-container">
+                <table>
+                    <tr><th>Agent</th><th>Tracks</th><th>Why Needed</th></tr>
+                    <tr>
+                        <td><code>ImplementationAgent</code></td>
+                        <td><code>writtenFiles</code>, <code>pendingFiles</code>, <code>implementationStep</code></td>
+                        <td>Already parses <code>// FILE:</code> blocks one-by-one; needs to record which succeeded so a retry skips already-written files</td>
+                    </tr>
+                    <tr>
+                        <td><code>QualityAssuranceAgent</code></td>
+                        <td><code>fileQaStatus</code> per file</td>
+                        <td>Per-file review result lets the orchestrator decide whether to proceed or re-implement specific failing files</td>
+                    </tr>
+                    <tr>
+                        <td><code>DeploymentAgent</code></td>
+                        <td><code>committedFiles</code></td>
+                        <td>Step-by-step commits require knowing what is already committed vs. pending push</td>
+                    </tr>
+                    <tr>
+                        <td><code>WorkflowOrchestrator</code></td>
+                        <td>All of the above via <code>ctx</code></td>
+                        <td>Coordinator reads progress fields to decide: proceed, retry a specific file, or halt</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="decision">
+                <div class="decision-label">Persistence Caveat</div>
+                <p>
+                    WorkflowContext is in-memory only. If the JVM exits between steps, progress is lost.
+                    For true resumable workflows, serialize WorkflowContext to JSON after each agent completes
+                    (e.g. <code>reports/{ticketId}/workflow_state.json</code>).
+                    This is a natural Phase 2 addition using Jackson's ObjectMapper.
+                </p>
+            </div>
+
+            <div class="insight">
+                <b>Combined Effect:</b> With <code>codebaseSnapshot</code> stored once (Q1) and per-file progress
+                tracked (Q2), ImplementationAgent can be re-run on only the failing files, and
+                QualityAssuranceAgent can skip files already marked PASS — making the entire Steps 6+7 loop
+                genuinely incremental and context-efficient.
+            </div>
+        </section>
+
+        <hr class="separator">
+
+        <!-- ═══════════════════════════════════════════ -->
+        <!-- SECTION: IMPLEMENTATION PLAN                -->
+        <!-- ═══════════════════════════════════════════ -->
+        <section id="impl-plan">
+            <h2>17. Implementation Plan — Ordered Action List</h2>
+            <p>Work top-to-bottom. Each item is independently committable.</p>
+
+            <div class="phase">
+                <span class="phase-num">1</span><b>Update 4 markdown prompt files</b>
+                <span style="background:#2d2550;color:#a78bfa;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Markdown only — zero Java changes</span>
+                <ul style="margin-top:.6rem;">
+                    <li><code>visual_report.md</code> — add incremental HTML building: skeleton → styling → findings one-at-a-time with verification after each addition</li>
+                    <li><code>quality_assurance.md</code> — add JUnit 5 test generation: <code>@Nested</code>, Given-When-Then, AssertJ, Mockito <code>@Mock/@InjectMocks</code></li>
+                    <li><code>deployment.md</code> — add conventional commit message generation per file group: <code>&lt;type&gt;(&lt;scope&gt;): &lt;summary&gt;</code>, imperative mood, body explains WHY</li>
+                    <li><code>implementation.md</code> — add Javadoc generation pass: @param, @return, @throws, non-obvious preconditions, no trivial getter comments</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">2</span><b>Add <code>codebaseSnapshot</code> to WorkflowContext</b>
+                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+                <p>Scan filesystem once; all agents reuse the cached string.</p>
+                <ul>
+                    <li>Add <code>private String codebaseSnapshot</code> + getter/setter to <code>WorkflowContext</code></li>
+                    <li>Update <code>DeepDiveAgent</code>: scan only if <code>ctx.getCodebaseSnapshot() == null</code></li>
+                    <li>Update <code>QualityAssuranceAgent</code>: use <code>ctx.getCodebaseSnapshot()</code> instead of calling <code>readSourceFiles()</code> again</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">3</span><b>Add progress tracking fields to WorkflowContext</b>
+                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+                <ul style="margin-top:.6rem;">
+                    <li>Add <code>writtenFiles</code>, <code>pendingFiles</code>, <code>committedFiles</code> (List&lt;String&gt;) with getters/setters</li>
+                    <li>Add <code>fileQaStatus</code> (Map&lt;String,String&gt;: file path → PASS/FAIL/PENDING)</li>
+                    <li>Update <code>ImplementationAgent</code>: populate <code>writtenFiles</code> / <code>pendingFiles</code> per <code>// FILE:</code> block</li>
+                    <li>Update <code>QualityAssuranceAgent</code>: write to <code>fileQaStatus</code>, skip files already marked PASS on re-run</li>
+                    <li>Update <code>DeploymentAgent</code>: populate <code>committedFiles</code> after each local commit</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">4</span><b>Redesign DeploymentAgent — step-by-step commits, push on approval only</b>
+                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+                <ul style="margin-top:.6rem;">
+                    <li>After each file group is written, call <code>gitClient.commitAll(llmGeneratedMessage)</code> — one commit per logical group</li>
+                    <li>Move <code>gitClient.push()</code> and <code>gitHubClient.createPullRequest()</code> behind the final human approval gate</li>
+                    <li>Replace live PR comment polling with a one-shot fetch: new human gate <em>"Check for PR review comments? [y/n]"</em></li>
+                    <li>If comments fetched: append to HTML report and offer to re-run workflow from Step 3</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">5</span><b>Expose <code>rerunAnalysis()</code> in WorkflowOrchestrator</b>
+                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+                <ul style="margin-top:.6rem;">
+                    <li>Add <code>public void rerunAnalysis()</code> — clears <code>codebaseSnapshot</code> first for a fresh scan, then re-runs DeepDiveAgent → VisualReportAgent</li>
+                    <li>Reset ReviewAgent iteration counter to 0</li>
+                    <li>No agent class changes required</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">6</span><b>Create RefactoringAgent + <code>refactoring.md</code></b>
+                <span style="background:#2d2550;color:#a78bfa;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Markdown</span>
+                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.3rem;">Java</span>
+                <ul style="margin-top:.6rem;">
+                    <li>Create <code>resources/agents/refactoring.md</code>: step-by-step plan, before/after code, behavior preservation check, regression risk flags, no external interface changes</li>
+                    <li>Create <code>agents/RefactoringAgent.java</code> following the existing stateless agent pattern</li>
+                    <li>Trigger conditionally when <code>ctx.getJiraTicket().issueType().equalsIgnoreCase("Refactoring")</code></li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">7</span><b>WorkflowContext persistence — serialize to JSON on disk</b>
+                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+                <span style="background:#261f10;color:#f59e0b;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.3rem;">Architecture</span>
+                <ul style="margin-top:.6rem;">
+                    <li>Add <code>WorkflowContextSerializer</code> utility: <code>save(ctx, reportFolderPath)</code> writes <code>workflow_state.json</code> using Jackson ObjectMapper</li>
+                    <li>Add <code>load(reportFolderPath)</code> to restore context and resume from last completed step</li>
+                    <li>Call <code>save()</code> in WorkflowOrchestrator after each agent completes successfully</li>
+                    <li>Add <code>resumeWorkflow(String reportFolderPath)</code> entry point to the orchestrator</li>
+                </ul>
+            </div>
+
+            <div class="phase">
+                <span class="phase-num">8</span><b>Extend LlmClient for Anthropic Prompt Caching</b>
+                <span style="background:#1a2635;color:#38bdf8;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Phase 2</span>
+                <p>~90% token cost reduction on repeated large codebase-context calls. Implement after Step 2 is stable and there is measurable API cost to justify the effort.</p>
+                <ul>
+                    <li>Extend <code>LlmClient</code>: add <code>completePrompt(String systemPrompt, String userPrompt, boolean cacheSystem)</code></li>
+                    <li>Implement in <code>ClaudeApiClient</code>: mark system prompt block with <code>"cache_control": {"type": "ephemeral"}</code></li>
+                    <li>Keep existing <code>completePrompt(String prompt)</code> unchanged — no breaking change for OpenAI/Ollama</li>
+                    <li>Update DeepDiveAgent, QualityAssuranceAgent, ImplementationAgent to use the caching overload</li>
+                </ul>
+            </div>
+
+            <div class="note">
+                <b>Starting point:</b> Item 1 (markdown-only changes) and Item 2 (<code>codebaseSnapshot</code>)
+                can be done in any order and have zero risk. Items 3 and 4 build on Item 2.
+                Items 7 and 8 are Phase 2 — do not block on them.
             </div>
         </section>
 

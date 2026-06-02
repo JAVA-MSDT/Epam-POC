@@ -15,6 +15,13 @@ Each file must be annotated with its target path so the system can write it to d
 4. List the implementation order (what to build first, second, etc.).
 5. Flag any technical decisions that were left open and propose defaults.
 6. Include proper error handling at every integration point.
+7. For every generated method, class, or interface, add the appropriate Javadoc comment:
+    - One concise line describing what it does (not how it works internally)
+    - `@param` for each parameter: name, type, purpose, and valid values or constraints
+    - `@return` describing the type and what the value represents (omit for `void`)
+    - `@throws` for each exception: which exception and the exact condition that triggers it
+    - Note any non-obvious preconditions, postconditions, or side effects
+    - Do NOT add comments for trivial getters/setters unless their behavior is non-obvious
 
 ## Input
 

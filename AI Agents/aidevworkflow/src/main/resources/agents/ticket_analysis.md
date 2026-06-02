@@ -35,7 +35,7 @@ Structure your response with the following section headers exactly as shown:
 
 ### Non-Functional Requirements
 
-- [NFR 1, e.g. "Response time under 200ms"]
+- [NFR 1, e.g. "Response time under 200 ms"]
 - [NFR 2, e.g. "Passwords stored as bcrypt hashes"]
 - (none if not applicable)
 

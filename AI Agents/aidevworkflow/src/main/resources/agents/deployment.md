@@ -4,6 +4,7 @@
 
 Produce a concise deployment plan for the implemented changes.
 After this plan is approved, the system will automatically:
+
 - Create a git branch, commit all written code, and push to origin.
 - Open a GitHub pull request with a summary derived from this plan.
 - Fetch any PR review comments and append them to the HTML report.
@@ -11,12 +12,19 @@ After this plan is approved, the system will automatically:
 ## Instructions
 
 1. Review the implementation and QA report.
-2. Summarise the changes made in a format suitable for a PR title (one line, max 72 chars).
-3. List all pre-deployment prerequisites (env vars, secrets, infra provisioning).
-4. Define a rollback plan for any critical step.
-5. Provide a post-deployment smoke-test checklist.
-6. Summarise any unresolved QA findings that must be monitored post-deployment.
-7. Give a final READY or BLOCKED status with a brief justification.
+2. Summarize the changes made in a format suitable for a PR title (one line, max 72 chars).
+3. Group the generated files into logical commit groups (e.g., "domain model", "service layer",
+   "tests", "config"). For each group, generate a conventional commit message:
+    - Format: `<type>(<scope>): <short summary>` — summary must be under 72 characters
+    - Types: `feat` | `fix` | `refactor` | `test` | `docs` | `chore` | `perf` | `style`
+    - Use imperative mood: "add", "fix", "update" — not "added", "fixed", "updated"
+    - Body (optional, wrapped at 72 chars): explains WHY the change was made, not WHAT
+    - Footer: reference ticket or issue if known (e.g., `Closes #101`)
+4. List all pre-deployment prerequisites (env vars, secrets, infra provisioning).
+5. Define a rollback plan for any critical step.
+6. Provide a post-deployment smoke-test checklist.
+7. Summarize any unresolved QA findings that must be monitored post-deployment.
+8. Give a final READY or BLOCKED status with a brief justification.
 
 ## Input
 
