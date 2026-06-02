@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>AI-Enhanced Workflow & Agent System Design</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            background: #232323;
+            color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background: #1a1a1a;
+            padding: 24px 0 16px 0;
+            text-align: center;
+            border-bottom: 2px solid #444;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 2.2em;
+            color: #ffb347;
+        }
+        nav {
+            width: 260px;
+            background: #181818;
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 100%;
+            border-right: 2px solid #444;
+            padding-top: 40px;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0 0 0 20px;
+        }
+        nav ul li {
+            margin: 18px 0;
+        }
+        nav ul li a {
+            color: #ffb347;
+            text-decoration: none;
+            font-size: 1.1em;
+            transition: color 0.2s;
+        }
+        nav ul li a:hover {
+            color: #fff;
+        }
+        main {
+            margin-left: 280px;
+            padding: 32px 40px 40px 40px;
+            max-width: 100
+0px;
+        }
+        h2 {
+            color: #ffb347;
+            border-bottom: 1px solid #444;
+            padding-bottom: 6px;
+        }
+        h3 {
+            color: #ffd580;
+        }
+        .step {
+            background: #2d2d2d;
+            border-left: 5px solid #ffb347;
+            margin: 18px 0;
+            padding: 18px 22px;
+            border-radius: 8px;
+        }
+        .code-block {
+            background: #181818;
+            color: #b5e853;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-family: 'Fira Mono', 'Consolas', monospace;
+            font-size: 1em;
+            overflow-x: auto;
+            margin: 12px 0;
+        }
+        a {
+            color: #ffd580;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 18px 0;
+        }
+        th, td {
+            border: 1px solid #444;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background: #333;
+            color: #ffb347;
+        }
+        tr:nth-child(even) {
+            background: #262626;
+        }
+        .note {
+            background: #333;
+            color: #ffd580;
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin: 14px 0;
+            font-size: 1em;
+        }
+        .diagram {
+            display: flex;
+            justify-content: center;
+            margin: 32px 0;
+        }
+        .legend {
+            margin: 12px 0 24px 0;
+            padding: 10px 16px;
+            background: #181818;
+            border-radius: 6px;
+            color: #b5e853;
+        }
+        @media (max-width: 900px) {
+            nav {
+                position: static;
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 2px solid #444;
+                padding-top: 0;
+            }
+            main {
+                margin-left: 0;
+                padding: 24px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>AI-Enhanced Workflow & Agent System Design</h1>
+        <p>Advanced Guide: Multi-Agent Orchestration, Java Integration, and System Architecture</p>
+    </header>
+    <nav>
+        <ul>
+            <li><a href="#intro">Introduction</a></li>
+            <li><a href="#workflow">1. Workflow Overview</a></li>
+            <li><a href="#system-design">2. System Design & Architecture</a></li>
+            <li><a href="#agent-concepts">3. Advanced Agent Concepts</a></li>
+            <li><a href="#implementation">4. Implementation Guide (Java + Markdown)</a></li>
+            <li><a href="#resources">5. Further Resources</a></li>
+        </ul>
+    </nav>
+    <main>
+        <section id="intro">
+            <h2>Introduction</h2>
+            <p>
+                This guide provides a comprehensive, visual, and practical approach to building an <b>AI-enhanced development workflow</b> using <b>multi-agent systems</b>, <b>Java orchestration</b>, and <b>markdown-based agent definitions</b> (as in Claude). It is tailored for advanced engineers seeking to design, implement, and scale such workflows.
+            </p>
+        </section>
+
+        <section id="workflow">
+            <h2>1. Workflow Overview</h2>
+            <div class="legend">
+                <b>8-Step AI-Enhanced Development Workflow:</b>
+                <ol>
+                    <li>Ticket Analysis</li>
+                    <li>Project Setup</li>
+                    <li>AI-Powered Deep Dive</li>
+                    <li>Visual Analysis Report</li>
+                    <li>Review & Clarification</li>
+                    <li>Implementation</li>
+                    <li>Quality Assurance</li>
+                    <li>Deployment & Review</li>
+                </ol>
+            </div>
+            <div class="diagram">
+                <!-- SVG Diagram for Workflow -->
+                <svg width="800" height="420" viewBox="0 0 800 420">
+                    <!-- Orchestrator -->
+                    <rect x="340" y="20" width="120" height="50" rx="12" fill="#ffb347" stroke="#fff" stroke-width="2"/>
+                    <text x="400" y="50" text-anchor="middle" fill="#232323" font-size="18" font-weight="bold">Orchestrator</text>
+                    <!-- Agents -->
+                    <rect x="60" y="100" width="160" height="40" rx="10" fill="#6ec6ff"/>
+                    <text x="140" y="125" text-anchor="middle" fill="#232323" font-size="15">1. Ticket Analysis</text>
+                    <rect x="60" y="170"
+ width="160" height="40" rx="10" fill="#ffd54f"/>
+                    <text x="140" y="195" text-anchor="middle" fill="#232323" font-size="15">2. Project Setup</text>
+                    <rect x="60" y="240" width="160" height="40" rx="10" fill="#ba68c8"/>
+                    <text x="140" y="265" text-anchor="middle" fill="#232323" font-size="15">3. Deep Dive</text>
+                    <rect x="60" y="310" width="160" height="40" rx="10" fill="#4dd0e1"/>
+                    <text x="140" y="335" text-anchor="middle" fill="#232323" font-size="15">4. Visual Report</text>
+                    <rect x="580" y="100" width="160" height="40" rx="10" fill="#aed581"/>
+                    <text x="660" y="125" text-anchor="middle" fill="#232323" font-size="15">5. Review</text>
+                    <rect x="580" y="170" width="160" height="40" rx="10" fill="#ff8a65"/>
+                    <text x="660" y="195" text-anchor="middle" fill="#232323" font-size="15">6. Implementation</text>
+                    <rect x="580" y="240" width="160" height="40" rx="10" fill="#81d4fa"/>
+                    <text x="660" y="265" text-anchor="middle" fill="#232323" font-size="15">7. QA</text>
+                    <rect x="580" y="310" width="160" height="40" rx="10" fill="#f06292"/>
+                    <text x="660" y="335" text-anchor="middle" fill="#232323" font-size="15">8. Deployment</text>
+                    <!-- Arrows from Orchestrator to Agents -->
+                    <line x1="400" y1="70" x2="140" y2="100" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="400" y1="70" x2="660" y2="100" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <!-- Arrows between left agents -->
+                    <line x1="140" y1="140" x2="140" y2="170" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="140" y1="210" x2="140" y2="240" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="140" y1="280" x2="140" y2="310" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <!-- Arrows between right agents -->
+                    <line x1="660" y1="140" x2="660" y2="170" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="660" y1="210" x2="660" y2="240" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <line x1="660" y1="280" x2="660" y2="310" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
+                    <!-- External Systems -->
+                    <rect x="10" y="380" width="120" height="30" rx="8" fill="#fffde7" stroke="#ffd54f" stroke-width="2"/>
+                    <text x="70" y="400" text-anchor="middle" fill="#232323" font-size="14">Jira</text>
+                    <rect x="670" y="380" width="120" height="30" rx="8" fill="#e3f2fd" stroke="#81d4fa" stroke-width="2"/>
+                    <text x="730" y="400" text-anchor="middle" fill="#232323" font-size="14">GitHub</text>
+                    <!-- Lines to agents -->
+                    <line x1="70" y1="380" x2="140" y2="350" stroke="#ffd54f" stroke-width="2"/>
+                    <line x1="730" y1="380" x2="660" y2="350" stroke="#81d4fa" stroke-width="2"/>
+                    <!-- Arrowhead marker -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#fff"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            <div class="note">
+                <b>Legend:</b> The orchestrator (Java service) coordinates all agents. Each agent handles a workflow step. Jira and GitHub are external systems accessed via APIs.
+            </div>
+        </section>
+
+        <section id="system-design">
+            <h2>2. System Design & Architecture</h2>
+            <h3>High-Level Architecture</h3>
+            <div class="diagram">
+                <!-- Simple system architecture SVG -->
+                
+<svg width="700" height="260" viewBox="0 0 700 260">
+                    <!-- Orchestrator -->
+                    <rect x="280" y="30" width="140" height="50" rx="12" fill="#ffb347" stroke="#fff" stroke-width="2"/>
+                    <text x="350" y="60" text-anchor="middle" fill="#232323" font-size="18" font-weight="bold">Orchestrator</text>
+                    <!-- Agents -->
+                    <rect x="60" y="120" width="120" height="40" rx="10" fill="#6ec6ff"/>
+                    <text x="120" y="145" text-anchor="middle" fill="#232323" font-size="14">Agent(s)</text>
+                    <rect x="520" y="120" width="120" height="40" rx="10" fill="#81d4fa"/>
+                    <text x="580" y="145" text-anchor="middle" fill="#232323" font-size="14">Agent(s)</text>
+                    <!-- LLM -->
+                    <rect x="280" y="200" width="140" height="40" rx="10" fill="#ba68c8"/>
+                    <text x="350" y="225" text-anchor="middle" fill="#232323" font-size="14">Claude LLM API</text>
+                    <!-- Arrows -->
+                    <line x1="350" y1="80" x2="120" y2="120" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead2)"/>
+                    <line x1="350" y1="80" x2="580" y2="120" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead2)"/>
+                    <line x1="120" y1="160" x2="350" y2="200" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead2)"/>
+                    <line x1="580" y1="160" x2="350" y2="200" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead2)"/>
+                    <!-- Arrowhead marker -->
+                    <defs>
+                        <marker id="arrowhead2" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#fff"/>
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            <ul>
+                <li><b>Orchestrator (Java):</b> Coordinates agent execution, manages state, error handling, and workflow logic.</li>
+                <li><b>Agents:</b> Each agent is responsible for a single workflow step. Agents are defined in markdown and invoked by the orchestrator.</li>
+                <li><b>Claude LLM API:</b> Executes agent instructions, returns results to orchestrator.</li>
+                <li><b>External Systems:</b> Jira, GitHub, etc., accessed via REST APIs by agents or orchestrator as needed.</li>
+            </ul>
+        </section>
+
+        <section id="agent-concepts">
+            <h2>3. Advanced Agent Concepts</h2>
+            <ul>
+                <li><b>Stateless vs. Stateful Agents:</b> Stateless agents process each request independently; stateful agents maintain context (e.g., conversation history, workflow state).</li>
+                <li><b>Agent Specialization:</b> Each agent should have a single responsibility (SRP). This makes them composable and testable.</li>
+                <li><b>Agent Communication:</b> Agents can communicate via orchestrator (recommended for control) or directly (for event-driven or peer-to-peer systems).</li>
+                <li><b>Security:</b> Use least-privilege API keys/tokens for external system access. Log all actions for auditability.</li>
+                <li><b>Error Handling:</b> Implement retries, fallbacks, and escalation (e.g., human-in-the-loop) for robustness.</li>
+                <li><b>Observability:</b> Monitor agent performance, collect metrics, and log errors for continuous improvement.</li>
+                <li><b>Extensibility:</b> Design agents as plug-ins; add or swap agents without breaking the workflow.</li>
+            </ul>
+            <div class="note">
+                <b>Tip:</b> Use configuration files or service discovery for agent endpoints and credentials. This enables easy scaling and maintenance.
+            </div>
+        </section>
+
+        <section id="implementation">
+            <h2>4. Implementation Guide (Java + Markdown)</h2>
+            <div class="step">
+                <h3>Step 1: Project Setup</h3>
+                <ul>
+                    <li>Use <b>IntelliJ IDEA</b> and create a new Java project.</li>
+                    <li>Add dependencies for HTTP requests (e.g., OkHttp, Apache HttpClient).</li>
+                    <li>Organize your project: <code>orchestrator/</code>, <code>agents/</code>, <code>resources/agents/</code> (for markdown
+ files).</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3>Step 2: Define Agents in Markdown</h3>
+                <div class="code-block">
+# Agent: Ticket Analysis
+
+## Purpose
+Summarize and analyze incoming tickets for key requirements and ambiguities.
+
+## Instructions
+- Read the ticket details provided.
+- Extract main requirements.
+- Identify unclear or missing information.
+- Suggest clarifying questions.
+
+## Input
+- Ticket text
+
+## Output
+- Summary
+- List of requirements
+- List of clarifying questions
+                </div>
+                <ul>
+                    <li>Each agent markdown file describes its purpose, instructions, input, and output.</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3>Step 3: Java Orchestrator</h3>
+                <ul>
+                    <li>Loads agent markdown files, fills in variables, and sends prompts to Claude API.</li>
+                    <li>Handles workflow logic, state, and error handling.</li>
+                </ul>
+                <div class="code-block">
+public class Orchestrator {
+    public void runWorkflow() {
+        String ticketText = fetchTicketFromJira();
+        String ticketPrompt = loadMarkdown("ticket_analysis.md").replace("{{ticket_text}}", ticketText);
+        String ticketResult = callClaudeAPI(ticketPrompt);
+
+        // Parse and pass to next agent...
+    }
+}
+                </div>
+            </div>
+            <div class="step">
+                <h3>Step 4: Agent Classes</h3>
+                <ul>
+                    <li>Each agent can be a Java class that loads its markdown, sends it to Claude, and parses the response.</li>
+                </ul>
+                <div class="code-block">
+public class TicketAnalysisAgent {
+    public TicketAnalysisResult analyze(String ticketText) {
+        String prompt = loadAndFillMarkdown("ticket_analysis.md", ticketText);
+        String response = sendToClaude(prompt);
+        return parseTicketAnalysis(response);
+    }
+}
+                </div>
+            </div>
+            <div class="step">
+                <h3>Step 5: External System Integration</h3>
+                <ul>
+                    <li>Use REST APIs to fetch tickets from Jira, push code to GitHub, etc.</li>
+                    <li>Agents or orchestrator can handle these integrations.</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3>Step 6: Error Handling & Observability</h3>
+                <ul>
+                    <li>Implement retries, logging, and escalation for failed agent actions.</li>
+                    <li>Monitor agent performance and collect metrics.</li>
+                </ul>
+            </div>
+            <div class="step">
+                <h3>Step 7: Extending the Workflow</h3>
+                <ul>
+                    <li>Add new agents by creating new markdown files and Java classes.</li>
+                    <li>Update the orchestrator to include new workflow steps.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="resources">
+            <h2>5. Further Resources</h2>
+            <ul>
+                <li><a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents Documentation</a></li>
+                <li><a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API (for LLM integration)</a></li>
+                <li><a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a></li>
+                <li><a href="https://en.wikipedia.org/wiki/Multi-agent_system" target="_blank">Multi-Agent Systems (Wikipedia)</a></li>
+                <li><a href="https://microservices.io/patterns/data/saga.html" target="_blank">Orchestration vs. Choreography</a></li>
+            </ul>
+        </section>
+    </main>
+</body>
+</html>

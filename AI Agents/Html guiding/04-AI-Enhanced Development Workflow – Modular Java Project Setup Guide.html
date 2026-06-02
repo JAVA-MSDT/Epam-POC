@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI-Enhanced Development Workflow – Modular Java Project Setup Guide</title>
+  <style>
+    body { font-family: Arial, sans-serif; background: #f8f8f8; color: #222; margin: 0; padding: 0 0 40px 0;}
+    .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 32px 36px 36px 36px; border-radius: 10px; box-shadow: 0 2px 16px #0001;}
+    h1, h2, h3 { color: #1a73e8; }
+    pre, code { background: #f4f4f4; border-radius: 5px; padding: 2px 6px; }
+    pre { padding: 12px; overflow-x: auto; }
+    ul, ol { margin-bottom: 18px; }
+    .section { margin-bottom: 36px; }
+    .code-title { font-size: 1em; color: #888; margin-bottom: 0; }
+    hr { border: none; border-top: 1px solid #eee; margin: 32px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>AI-Enhanced Development Workflow – Modular Java Project Setup Guide</h1>
+    <p>
+      This guide will help you set up a modular, extensible Java project for an AI-powered 8-step development workflow using Maven.<br>
+      The structure is designed for clarity, maintainability, and future extension (e.g., Spring integration, pluggable LLMs).
+    </p>
+    <hr>
+
+    <div class="section">
+      <h2>📁 Project Structure</h2>
+      <pre><code>aidevworkflow/
+├── pom.xml
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── javamsdt/
+│   │   │           └── aidevworkflow/
+│   │   │               ├── agents/
+│   │   │               │   ├── TicketAnalysisAgent.java
+│   │   │               │   ├── ProjectSetupAgent.java
+│   │   │               │   ├── DeepDiveAgent.java
+│   │   │               │   ├── VisualReportAgent.java
+│   │   │               │   ├── ReviewAgent.java
+│   │   │               │   ├── ImplementationAgent.java
+│   │   │               │   ├── QualityAssuranceAgent.java
+│   │   │               │   ├── DeploymentAgent.java
+│   │   │               ├── orchestrator/
+│   │   │               │   └── WorkflowOrchestrator.java
+│   │   │               ├── context/
+│   │   │               │   └── WorkflowContext.java
+│   │   │               ├── llm/
+│   │   │               │   ├── LlmClient.java
+│   │  
+ │               │   ├── ClaudeApiClient.java
+│   │   │               │   └── OpenAiApiClient.java
+│   │   │               └── util/
+│   │   │                   └── MarkdownLoader.java
+│   │   └── resources/
+│   │       └── agents/
+│   │           ├── ticket_analysis.md
+│   │           ├── project_setup.md
+│   │           ├── deep_dive.md
+│   │           ├── visual_report.md
+│   │           ├── review.md
+│   │           ├── implementation.md
+│   │           ├── quality_assurance.md
+│   │           └── deployment.md
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── javamsdt/
+│                   └── aidevworkflow/
+│                       └── ... (unit tests)
+</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>🏗️ Step-by-Step Instructions</h2>
+      <ol>
+        <li>
+          <b>Initialize Maven Project</b>
+          <pre><code>mvn archetype:generate -DgroupId=com.javamsdt.aidevworkflow -DartifactId=aidevworkflow -DarchetypeArtifactId=maven-archetype-quickstart -DinteractiveMode=false
+</code></pre>
+        </li>
+        <li>
+          <b>Create Package Structure</b>
+          <ul>
+            <li>Under <code>src/main/java/com/javamsdt/aidevworkflow/</code>, create the following packages:</li>
+            <li><code>agents/</code> (one class per agent)</li>
+            <li><code>orchestrator/</code> (main workflow logic)</li>
+            <li><code>context/</code> (shared state/data models)</li>
+            <li><code>llm/</code> (LLM abstraction and implementations)</li>
+            <li><code>util/</code> (utility classes, e.g., for loading markdown)</li>
+          </ul>
+        </li>
+        <li>
+          <b>Agent Classes</b>
+          <ul>
+            <li>Each agent (e.g., <code>TicketAnalysisAgent</code>) should:</li>
+            <li>Load its markdown prompt from <code>resources/agents/</code></li>
+            <li>Use the LLM client interface to process input and return output</li>
+            <li>Be stateless (recommended) for easy testing and scaling</li>
+          </ul>
+        </li>
+        <li>
+          <b>Orchestrator</b>
+          <ul>
+            <li><code>WorkflowOrchestrator</code> coordinates agent execution, manages context, and handles human-in-the-loop checkpoints.</li>
+            <li>It should be easy to refactor into a Spring <code>@Service</code> or <code>@Component</code> later.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Context</b>
+          <ul>
+            <li><code>WorkflowContext</code> holds all shared data/state for a workflow run.</li>
+            <li>Pass this context between agents.</li>
+          </ul>
+        </li>
+        <li>
+          <b>LLM Abstraction</b>
+          <ul>
+            <li><code>LlmClient</code> is an interface (or abstract class) for LLM operations.</li>
+            <li>Implementations: <code>ClaudeApiClient</code>, <code>OpenAiApiClient</code>, etc.</li>
+            <li>The orchestrator and agents depend on <code>LlmClient</code>, not a specific LLM.</li>
+          </ul>
+          <div class="code-title">Sample LLM Client Interface</div>
+          <pre><code>package com.javamsdt.aidevworkflow.llm;
+
+public interface LlmClient {
+    String completePrompt(String prompt);
+}
+</code></pre>
+        </li>
+        <li>
+          <b>Markdown Loader Utility</b>
+          <ul>
+            <li><code>MarkdownLoader</code> loads and fills markdown templates from resources.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Resources</b>
+          <ul>
+            <li>Place agent markdown definitions in <code>src/main/resources/agents/</code>.</li>
+            <li>Each agent loads its prompt at runtime.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Testing</b>
+          <ul>
+            <li>Place unit tests under <code>src/test/java/com/javamsdt/aidevworkflow/</code>.</li>
+          </ul>
+        </li>
+        <li>
+          <b>Spring-Ready Structure</b>
+          <ul>
+            <li>The modular package layout
+ and interface-driven design make it easy to:</li>
+            <li>Add Spring Boot later (<code>@Component</code>, <code>@Service</code>, <code>@Autowired</code>)</li>
+            <li>Use dependency injection for LLM clients, orchestrator, etc.</li>
+          </ul>
+        </li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>🔄 Extending or Swapping LLMs</h2>
+      <ul>
+        <li>To use a different LLM, implement the <code>LlmClient</code> interface (e.g., <code>GeminiApiClient</code>).</li>
+        <li>Configure which LLM to use via properties, environment variables, or Spring profiles.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>👤 Human-in-the-Loop</h2>
+      <ul>
+        <li>Insert checkpoints in the orchestrator for human confirmation (e.g., via CLI, web UI, or notification).</li>
+        <li>Example: After project setup, before deployment.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>📝 Sample Agent Class Skeleton</h2>
+      <pre><code>package com.javamsdt.aidevworkflow.agents;
+
+import com.javamsdt.aidevworkflow.llm.LlmClient;
+
+public class TicketAnalysisAgent {
+    private final LlmClient llmClient;
+
+    public TicketAnalysisAgent(LlmClient llmClient) {
+        this.llmClient = llmClient;
+    }
+
+    public String analyze(String ticketText) {
+        String prompt = MarkdownLoader.load("agents/ticket_analysis.md").replace("{{ticket}}", ticketText);
+        return llmClient.completePrompt(prompt);
+    }
+}
+</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>📝 Sample Orchestrator Skeleton</h2>
+      <pre><code>package com.javamsdt.aidevworkflow.orchestrator;
+
+import com.javamsdt.aidevworkflow.context.WorkflowContext;
+import com.javamsdt.aidevworkflow.agents.*;
+
+public class WorkflowOrchestrator {
+    // Inject agents and context
+    public void runWorkflow() {
+        // Call agents in sequence, manage context, handle human-in-the-loop
+    }
+}
+</code></pre>
+    </div>
+
+    <div class="section">
+      <h2>🚀 Next Steps</h2>
+      <ol>
+        <li>Scaffold the project as above.</li>
+        <li>Implement each agent, the orchestrator, and LLM clients.</li>
+        <li>Add markdown prompts and test end-to-end.</li>
+        <li>(Optional) Refactor to Spring Boot for advanced features.</li>
+      </ol>
+    </div>
+
+    <div class="section">
+      <h2>✅ Best Practices Recap</h2>
+      <ul>
+        <li><b>One Maven project</b> for all workflow steps.</li>
+        <li><b>Separate files/classes</b> for each agent, orchestrator, context, LLM clients, and utilities.</li>
+        <li><b>Resources folder</b> for markdown agent definitions.</li>
+        <li><b>Interface-driven LLM integration</b> for flexibility.</li>
+        <li><b>Spring-ready structure</b> for future extensibility.</li>
+        <li><b>Human-in-the-loop</b> checkpoints for quality and safety.</li>
+      </ul>
+      <p><b>This structure is modular, testable, and ready for future extension.</b></p>
+    </div>
+  </div>
+</body>
+</html>
