@@ -32,6 +32,13 @@ public class WorkflowContext {
     // ── Step 3 output: Deep Dive Analysis ─────────────────────────
     private String deepDive;
 
+    /**
+     * Cached codebase snapshot produced by DeepDiveAgent on its first run.
+     * Stored here so QualityAssuranceAgent and ImplementationAgent can reuse it
+     * without triggering a second filesystem scan. Set to null to force a re-scan.
+     */
+    private String codebaseSnapshot;
+
     // ── Step 4 output: Visual Analysis Report ─────────────────────
     private String visualReport;
 
@@ -108,6 +115,14 @@ public class WorkflowContext {
         this.deepDive = deepDive;
     }
 
+    public String getCodebaseSnapshot() {
+        return codebaseSnapshot;
+    }
+
+    public void setCodebaseSnapshot(String codebaseSnapshot) {
+        this.codebaseSnapshot = codebaseSnapshot;
+    }
+
     public String getVisualReport() {
         return visualReport;
     }
@@ -157,6 +172,7 @@ public class WorkflowContext {
                 ", projectSetup='" + truncate(projectSetup) + '\'' +
                 ", reportFolderPath='" + reportFolderPath + '\'' +
                 ", deepDive='" + truncate(deepDive) + '\'' +
+                ", codebaseSnapshot='" + (codebaseSnapshot != null ? "[cached, " + codebaseSnapshot.length() + " chars]" : "null") + '\'' +
                 ", visualReport='" + truncate(visualReport) + '\'' +
                 ", htmlReportPath='" + htmlReportPath + '\'' +
                 ", reviewNotes='" + truncate(reviewNotes) + '\'' +

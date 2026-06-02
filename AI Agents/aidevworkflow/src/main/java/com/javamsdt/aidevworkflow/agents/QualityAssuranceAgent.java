@@ -41,6 +41,10 @@ public class QualityAssuranceAgent {
     }
 
     private String resolveCodeContext(WorkflowContext ctx) {
+        if (ctx.getCodebaseSnapshot() != null && !ctx.getCodebaseSnapshot().isBlank()) {
+            System.out.println("[QualityAssuranceAgent] Reusing cached codebase snapshot (" + ctx.getCodebaseSnapshot().length() + " chars).");
+            return ctx.getCodebaseSnapshot();
+        }
         String projectRoot = ctx.getProjectRootPath();
         if (projectRoot == null || projectRoot.isBlank()) {
             System.out.println("[QualityAssuranceAgent] No projectRootPath — reviewing implementation plan text only.");
@@ -48,6 +52,9 @@ public class QualityAssuranceAgent {
         }
         System.out.println("[QualityAssuranceAgent] Reading written code from: " + projectRoot);
         String files = FileSystemUtil.readSourceFiles(projectRoot, CODE_EXTENSIONS, MAX_FILES);
+        if (!files.isBlank()) {
+            ctx.setCodebaseSnapshot(files);
+        }
         return files.isBlank()
                 ? "(no source files found under " + projectRoot + ")"
                 : files;

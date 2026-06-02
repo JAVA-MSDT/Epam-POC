@@ -43,6 +43,10 @@ public class DeepDiveAgent {
     }
 
     private String scanCodebase(WorkflowContext ctx) {
+        if (ctx.getCodebaseSnapshot() != null && !ctx.getCodebaseSnapshot().isBlank()) {
+            System.out.println("[DeepDiveAgent] Reusing cached codebase snapshot (" + ctx.getCodebaseSnapshot().length() + " chars).");
+            return ctx.getCodebaseSnapshot();
+        }
         String rootPath = ctx.getProjectRootPath();
         if (rootPath == null || rootPath.isBlank()) {
             System.out.println("[DeepDiveAgent] No projectRootPath set — skipping codebase scan.");
@@ -53,6 +57,8 @@ public class DeepDiveAgent {
         if (files.isBlank()) {
             return "(codebase scan found no matching source files under: " + rootPath + ")";
         }
+        ctx.setCodebaseSnapshot(files);
+        System.out.println("[DeepDiveAgent] Codebase snapshot cached (" + files.length() + " chars).");
         return files;
     }
 }
