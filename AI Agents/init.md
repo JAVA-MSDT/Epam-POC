@@ -17,6 +17,18 @@ follow these steps when generating the HTML files:
 
 By following this step-by-step approach, you should be able to finalize the HTML page more efficiently and accurately.
 
+## Creating a single agent from scratch
+
+- I would like to create a single AI agent that will do the following
+  - Have access to Jira ticket.
+  - Make a deep analysis of the ticket requirements.
+  - Create a folder locally to be used later (This step will be only once, so anytime trying to create an existing folder ignore it).
+  - The output of this agent will be the detailed ticket analysis that later will be used as an input for another agent (Just FYI).
+  - I would like to use a different LLM model for this agent, so I think the LLMClient should be extendable, for the moment, extend it to use Ollama.
+  - Tech stack (Java Modular project using maven able to be extended in the future to be a springboot application)
+- Agent workflow
+  - Access to jira specific ticket → deep analysis of the ticket requirements → create a folder locally to be used later (This step will be only once,
+
 ## Follow-up Architecture diagram
 
 - Now would like to add under the setup folder another Markdown file that will have an architecture diagram
