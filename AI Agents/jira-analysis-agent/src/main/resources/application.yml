@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: jira-analysis-agent
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.1:8b
+        options:
+          temperature: 0.2
+          num-ctx: 8192
+  cache:
+    type: caffeine
+    caffeine:
+      spec: maximumSize=500,expireAfterWrite=600s
+
+server:
+  port: 8080
+
+agent:
+  plugins:
+    external-config-path: ./external-config
+    strategy: EXTERNAL_FIRST
+    hot-reload:
+      enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  tracing:
+    sampling:
+      probability: 1.0
+
+logging:
+  level:
+    com.javamsdt.agent: DEBUG

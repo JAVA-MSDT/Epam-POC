@@ -1,0 +1,17 @@
+spring:
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        model: llama3.1:8b
+
+agent:
+  plugins:
+    external-config-path: ./target/test-external-config
+    strategy: INTERNAL_FIRST
+    hot-reload:
+      enabled: false
+
+logging:
+  level:
+    com.javamsdt.agent: WARN

@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jira Analysis Agent - Complete Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 10px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .nav {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .nav ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        
+        .nav a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        .nav a:hover {
+            background-color: #f0f2ff;
+        }
+        
+        .section {
+            background: white;
+            margin-bottom: 30px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+        }
+        
+        .section h2 {
+            color: #667eea;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+        
+        .section h3 {
+            color: #555;
+            font-size: 1.3em;
+            margin: 25px 0 15px 0;
+        }
+        
+        .architecture-diagram {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .flow-diagram {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .flow-box {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            flex: 1;
+            min-width: 150px;
+            position: relative;
+        }
+        
+        .flow-box::after {
+            content: '→';
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5em;
+            color: #667eea;
+        }
+        
+        .flow-box:last-child::after {
+            display: none;
+        }
+        
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .code-block .comment {
+            color: #68d391;
+        }
+        
+        .code-block .keyword {
+            color: #f687b3;
+        }
+        
+        .code-block .string {
+            color: #fbb6ce;
+        }
+        
+        .highlight-box {
+            background: #e6fffa;
+            border-left: 4px solid #38b2ac;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .warning-box {
+            background: #fffbeb;
+            border-left: 4px solid #f6ad55;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .success-box {
+            background: #f0fff4;
+            border-left: 4px solid #48bb78;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background: #f7fafc;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+        }
+        
+        .feature-card h4 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+        
+        .api-endpoint {
+            background: #1a202c;
+            color: #e2e8f0;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .method {
+            background: #38a169;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 3px;
+            margin-right: 10px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+        
+        .method.post {
+            background: #3182ce;
+        }
+        
+        .method.get {
+            background: #38a169;
+        }
+        
+        .setup-steps {
+            counter-reset: step-counter;
+        }
+        
+        .setup-step {
+            counter-increment: step-counter;
+            background: #f7fafc;
+            padding: 20px;
+            margin: 15px 0;
+            border-
+radius: 8px;
+            border-left: 4px solid #667eea;
+            position: relative;
+        }
+        
+        .setup-step::before {
+            content: counter(step-counter);
+            position: absolute;
+            left: -15px;
+            top: 20px;
+            background: #667eea;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .setup-step h4 {
+            margin-bottom: 10px;
+            color: #667eea;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        th {
+            background: #f7fafc;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.8em;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+        
+        .badge.required {
+            background: #fed7d7;
+            color: #c53030;
+        }
+        
+        .badge.optional {
+            background: #bee3f8;
+            color: #2b6cb0;
+        }
+        
+        .badge.default {
+            background: #d6f5d6;
+            color: #276749;
+        }
+        
+        @media (max-width: 768px) {
+            .flow-diagram {
+                flex-direction: column;
+            }
+            
+            .flow-box::after {
+                content: '↓';
+                right: 50%;
+                top: 100%;
+                transform: translateX(50%);
+            }
+            
+            .nav ul {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Jira Analysis Agent</h1>
+            <p>Production-Ready AI Agent for Intelligent Jira Ticket Analysis</p>
+            <p><strong>Spring AI 1.0 | Ollama | Plugin Architecture</strong></p>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="nav">
+            <ul>
+                <li><a href="#overview">Overview</a></li>
+                <li><a href="#architecture">Architecture</a></li>
+                <li><a href="#setup">Setup Guide</a></li>
+                <li><a href="#usage">Usage</a></li>
+                <li><a href="#api">API Reference</a></li>
+                <li><a href="#plugins">Plugin System</a></li>
+                <li><a href="#monitoring">Monitoring</a></li>
+                <li><a href="#examples">Examples</a></li>
+            </ul>
+        </nav>
+
+        <!-- Overview Section -->
+        <section id="overview" class="section">
+            <h2>📋 System Overview</h2>
+            
+            <div class="highlight-box">
+                <strong>What is the Jira Analysis Agent?</strong><br>
+                A production-ready AI agent built with Spring AI 1.0 that automatically analyzes Jira tickets to provide comprehensive insights including requirements analysis, technical assessment, risk evaluation, and effort estimation.
+            </div>
+
+            <h3>🎯 Key Features</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🔍 Deep Analysis</h4>
+                    <p>Comprehensive ticket analysis including functional requirements, technical complexity, and risk assessment.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔌 Plugin Architecture</h4>
+                    <p>Flexible prompt system with hot-reload capabilities and external configuration support.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>⚡ High Performance</h4>
+                    <p>Caffeine caching, async processing, and optimized file watching for maximum throughput.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Production Ready</h4>
+                    <p>Complete observability, health checks, metrics, and enterprise-grade error handling.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🤖 AI Powered</h4>
+                    <p>Uses Ollama with LLa
+MA models for local, private AI processing with Spring AI integration.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔄 Hot Reload</h4>
+                    <p>Update prompts and configurations without restarting the application.</p>
+                </div>
+            </div>
+
+            <h3>🏗️ System Workflow</h3>
+            <div class="flow-diagram">
+                <div class="flow-box">
+                    <strong>1. Request</strong><br>
+                    REST API Call<br>
+                    <small>POST /api/v1/analysis/tickets/{id}</small>
+                </div>
+                <div class="flow-box">
+                    <strong>2. Plugin Load</strong><br>
+                    Load Prompt<br>
+                    <small>Cached with hot-reload</small>
+                </div>
+                <div class="flow-box">
+                    <strong>3. Jira Fetch</strong><br>
+                    Retrieve Ticket<br>
+                    <small>Via Jira REST API</small>
+                </div>
+                <div class="flow-box">
+                    <strong>4. AI Analysis</strong><br>
+                    LLM Processing<br>
+                    <small>Ollama + Spring AI</small>
+                </div>
+                <div class="flow-box">
+                    <strong>5. Response</strong><br>
+                    Structured JSON<br>
+                    <small>Comprehensive analysis</small>
+                </div>
+            </div>
+        </section>
+
+        <!-- Architecture Section -->
+        <section id="architecture" class="section">
+            <h2>🏛️ System Architecture</h2>
+
+            <div class="architecture-diagram">
+                <h3>📐 Module Architecture</h3>
+                <div style="text-align: left; max-width: 800px; margin: 0 auto;">
+                    <pre style="background: #f8f9fa; padding: 20px; border-radius: 8px; font-family: monospace;">
+┌─────────────────────────────────────────────────────────────┐
+│                    🌐 REST API Layer                        │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐ │
+│  │ AnalysisController│  │MonitoringController│  │HealthCheck │ │
+│  └─────────────────┘  └─────────────────┘  └─────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                   🧠 Service Layer                          │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │         OptimizedJiraAnalysisService                    │ │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐ │ │
+│  │  │ ChatClient  │  │   Caching   │  │   Observability │ │ │
+│  │  └─────────────┘  └─────────────┘  └─────────────────┘ │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                  🔌 Plugin System                           │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │         OptimizedPromptPluginManager                    │ │
+│  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────────┐ │ │
+│  │  │   Caffeine  │  │ File Watch  │  │   Hot Reload    │ │ │
+│  │  │    Cache    │  │   Service   │  │    System       │ │ │
+│  │  └─────────────┘  └─────────────┘  └─────────────────┘ │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                    🛠️ Tools Layer                           │
+│  ┌─────────────────┐              ┌─────────────────────────┐ │
+│  │ JiraRetrievalTool│              │   FileSystemTool        │ │
+│  │ ┌─────────────┐ │              │
+ ┌─────────────────────┐ │ │
+│  │ │ WebClient   │ │              │ │  Folder Creation    │ │ │
+│  │ │ Integration │ │              │ │  Analysis Storage   │ │ │
+│  │ └─────────────┘ │              │ └─────────────────────┘ │ │
+│  └─────────────────┘              └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                                │
+┌─────────────────────────────────────────────────────────────┐
+│                   🤖 AI Integration                         │
+│  ┌─────────────────┐              ┌─────────────────────────┐ │
+│  │   Spring AI     │              │        Ollama           │ │
+│  │ ┌─────────────┐ │              │ ┌─────────────────────┐ │ │
+│  │ │ ChatClient  │ │◄────────────►│ │    LLaMA 3.1:8b     │ │ │
+│  │ │   Builder   │ │              │ │   Local Processing  │ │ │
+│  │ └─────────────┘ │              │ └─────────────────────┘ │ │
+│  └─────────────────┘              └─────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+                    </pre>
+                </div>
+            </div>
+
+            <h3>🔄 Data Flow</h3>
+            <div class="highlight-box">
+                <strong>Request Processing Flow:</strong>
+                <ol>
+                    <li><strong>API Request</strong> → REST Controller receives analysis request</li>
+                    <li><strong>Plugin Loading</strong> → Prompt loaded from cache or file system</li>
+                    <li><strong>Jira Integration</strong> → Ticket data retrieved via Jira REST API</li>
+                    <li><strong>AI Processing</strong> → Spring AI ChatClient processes with Ollama</li>
+                    <li><strong>Tool Execution</strong> → File system operations and data storage</li>
+                    <li><strong>Response</strong> → Structured JSON analysis returned</li>
+                </ol>
+            </div>
+
+            <h3>📦 Core Components</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Component</th>
+                        <th>Responsibility</th>
+                        <th>Technology</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>AnalysisController</strong></td>
+                        <td>REST API endpoints for ticket analysis</td>
+                        <td>Spring Web</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OptimizedJiraAnalysisService</strong></td>
+                        <td>Core business logic and AI orchestration</td>
+                        <td>Spring AI ChatClient</td>
+                    </tr>
+                    <tr>
+                        <td><strong>OptimizedPromptPluginManager</strong></td>
+                        <td>Plugin loading, caching, and hot-reload</td>
+                        <td>Caffeine Cache</td>
+                    </tr>
+                    <tr>
+                        <td><strong>JiraRetrievalTool</strong></td>
+                        <td>Jira API integration and ticket retrieval</td>
+                        <td>WebClient</td>
+                    </tr>
+                    <tr>
+                        <td><strong>FileSystemTool</strong></td>
+                        <td>Local file operations and storage</td>
+                        <td>Java NIO</td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+
+        <!-- Setup Guide -->
+        <section id="setup" class="section">
+            <h2>⚙️ Setup Guide</h2>
+
+            <div class="warning-box">
+                <strong>Prerequisites:</strong> Java 21+, Maven 3.8+, Docker (optional), Ollama
+            </div>
+
+            <div class="setup-steps">
+                <div class="setup-step">
+                    <h4>Install Ollama</h4>
+                    <div class="code-block">
+<span class="comment"># Install Ollama</span>
+curl -fsSL https://ollama.ai/install.sh | sh
+
+<span class="comment"># Pull LLaMA model</span>
+ollama pull llama3.1:8b
+
+<span class="comment"># Verify installation</span>
+ollama list
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <h4>Clone and Build Project</h4>
+                    <div class="code-block">
+<span class="comment"># Clone repository</span>
+git clone https://github.com/your-org/jira-analysis-agent.git
+cd jira-analysis-agent
+
+<span class="comment"># Build project</span>
+mvn clean install
+
+
+<span class="comment"># Run tests</span>
+mvn test
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <h4>Configure Environment</h4>
+                    <div class="code-block">
+<span class="comment"># Create application-local.yml</span>
+spring:
+  ai:
+    ollama:
+      base-url: http://localhost:11434
+      chat:
+        options:
+          model: llama3.1:8b
+
+<span class="comment"># Jira Configuration</span>
+jira:
+  base-url: https://your-company.atlassian.net
+  username: your-email@company.com
+  api-token: your-jira-api-token
+
+<span class="comment"># Agent Configuration</span>
+agent:
+  output-directory: ./analysis-output
+  plugins:
+    external-config-path: ./external-config
+    hot-reload:
+      enabled: true
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <h4>Set Environment Variables</h4>
+                    <div class="code-block">
+<span class="comment"># Required environment variables</span>
+export JIRA_BASE_URL=https://your-company.atlassian.net
+export JIRA_USERNAME=your-email@company.com
+export JIRA_API_TOKEN=your-jira-api-token
+
+<span class="comment"># Optional configurations</span>
+export AGENT_OUTPUT_DIR=./analysis-output
+export AGENT_EXTERNAL_CONFIG=./external-config
+export AGENT_HOT_RELOAD=true
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <h4>Create Plugin Directory Structure</h4>
+                    <div class="code-block">
+<span class="comment"># Create external plugin directories</span>
+mkdir -p external-config/prompts
+mkdir -p external-config/agents
+mkdir -p external-config/skills
+
+<span class="comment"># Create custom prompt example</span>
+cat > external-config/prompts/security-analysis-prompt.md << 'EOF'
+# Security-Focused Jira Analysis
+
+Analyze ticket: {{ticketId}} with emphasis on security implications.
+
+## Security Analysis Requirements
+- Identify potential security vulnerabilities
+- Assess data privacy implications  
+- Review authentication/authorization requirements
+- Check for compliance requirements (GDPR, SOX, etc.)
+
+Use available tools and provide detailed security recommendations.
+EOF
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <h4>Start the Application</h4>
+                    <div class="code-block">
+<span class="comment"># Start with Maven</span>
+mvn spring-boot:run
+
+<span class="comment"># Or run the JAR</span>
+java -jar target/jira-analysis-agent-1.0.0.jar
+
+<span class="comment"># With custom profile</span>
+mvn spring-boot:run -Dspring-boot.run.profiles=local
+                    </div>
+                </div>
+
+                <div class="setup-step">
+                    <h4>Verify Installation</h4>
+                    <div class="code-block">
+<span class="comment"># Check health</span>
+curl http://localhost:8080/api/v1/monitoring/health
+
+<span class="comment"># Check plugin statistics</span>
+curl http://localhost:8080/api/v1/monitoring/plugin-stats
+
+<span class="comment"># Test analysis (replace PROJ-123 with real ticket)</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/PROJ-123
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Usage Section -->
+        <section id="usage" class="section">
+            <h2>🚀 Usage Guide</h2>
+
+            <h3>📝 Basic Ticket Analysis</h3>
+            <div class="code-block">
+<span class="comment"># Analyze a Jira ticket</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/PROJ-123 \
+  -H "Content-Type: application/json" | jq '.'
+            </div>
+
+            <h3>🔧 Custom Prompt Analysis</h3>
+            <div class="code-block">
+<span class="comment"># Use custom security analysis prompt</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/PROJ-123/
+security \
+  -H "Content-Type: application/json" | jq '.'
+            </div>
+
+            <h3>📊 Input Requirements</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Parameter</th>
+                        <th>Type</th>
+                        <th>Required</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>ticketId</code></td>
+                        <td>String</td>
+                        <td><span class="badge required">Required</span></td>
+                        <td>Jira ticket ID or key (e.g., PROJ-123)</td>
+                    </tr>
+                    <tr>
+                        <td><code>promptName</code></td>
+                        <td>String</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Custom prompt to use (defaults to analysis-prompt)</td>
+                    </tr>
+                    <tr>
+                        <td><code>context</code></td>
+                        <td>Object</td>
+                        <td><span class="badge optional">Optional</span></td>
+                        <td>Additional context for template processing</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>📤 Output Structure</h3>
+            <div class="code-block">
+{
+  <span class="string">"ticket_id"</span>: <span class="string">"PROJ-123"</span>,
+  <span class="string">"summary"</span>: <span class="string">"Implement user authentication system"</span>,
+  <span class="string">"requirements_analysis"</span>: {
+    <span class="string">"functional_requirements"</span>: [
+      <span class="string">"User login/logout functionality"</span>,
+      <span class="string">"Password reset capability"</span>,
+      <span class="string">"Session management"</span>
+    ],
+    <span class="string">"non_functional_requirements"</span>: [
+      <span class="string">"Security compliance (OAuth 2.0)"</span>,
+      <span class="string">"Performance: < 2s login time"</span>
+    ],
+    <span class="string">"acceptance_criteria"</span>: [
+      <span class="string">"Users can login with email/password"</span>,
+      <span class="string">"Failed login attempts are logged"</span>
+    ],
+    <span class="string">"dependencies"</span>: [
+      <span class="string">"Database schema updates"</span>,
+      <span class="string">"Integration with identity provider"</span>
+    ]
+  },
+  <span class="string">"technical_analysis"</span>: {
+    <span class="string">"complexity_score"</span>: 7,
+    <span class="string">"technical_challenges"</span>: [
+      <span class="string">"Security implementation complexity"</span>,
+      <span class="string">"Integration with existing systems"</span>
+    ],
+    <span class="string">"recommended_approach"</span>: <span class="string">"Implement OAuth 2.0 with Spring Security"</span>,
+    <span class="string">"architecture_considerations"</span>: [
+      <span class="string">"Stateless JWT tokens"</span>,
+      <span class="string">"Redis for session storage"</span>
+    ]
+  },
+  <span class="string">"risk_assessment"</span>: {
+    <span class="string">"identified_risks"</span>: [
+      {
+        <span class="string">"description"</span>: <span class="string">"Security vulnerabilities"</span>,
+        <span class="string">"impact"</span>: <span class="string">"HIGH"</span>,
+        <span class="string">"probability"</span>: <span class="string">"MEDIUM"</span>,
+        <span class="string">"mitigation_strategy"</span>: <span class="string">"Security code review and penetration testing"</span>
+      }
+    ],
+    <span class="string">"overall_risk_level"</span>: <span class="string">"MEDIUM"</span>
+  },
+  <span class="string">"effort_estimation"</span>: {
+    <span class="string">"development_days"</span>: 8,
+    <span class="string">"testing_days"</span>: 3,
+    <span class="string">"documentation_days"</span>: 2,
+    <span class="string">"total_days"</span>: 13,
+    <span class="string">"confidence_level"</span>: <span class="string">"HIGH"</span>
+  },
+  <span class="string">"implementation_strategy"</span>: {
+    <span class="string">"phases"</span>: [
+      {
+        <span class="string">"name"</span>: <span class="string">"Phase 1: Core Authentication"</span>,
+        <span class="string">"description"</span>: <span class="string">"Implement basic login/logout"</span>,
+        <span class="string">"estimated
+_days"</span>: 5,
+        <span class="string">"deliverables"</span>: [<span class="string">"Login API"</span>, <span class="string">"JWT implementation"</span>]
+      }
+    ],
+    <span class="string">"key_milestones"</span>: [
+      <span class="string">"Authentication API complete"</span>,
+      <span class="string">"Security testing passed"</span>
+    ],
+    <span class="string">"success_criteria"</span>: [
+      <span class="string">"All acceptance criteria met"</span>,
+      <span class="string">"Security audit passed"</span>
+    ]
+  },
+  <span class="string">"analysis_metadata"</span>: {
+    <span class="string">"analysis_timestamp"</span>: <span class="string">"2024-06-09T10:30:00"</span>,
+    <span class="string">"model_used"</span>: <span class="string">"llama3.1:8b"</span>,
+    <span class="string">"processing_time_ms"</span>: 2500,
+    <span class="string">"prompt_name"</span>: <span class="string">"analysis-prompt"</span>,
+    <span class="string">"prompt_source"</span>: <span class="string">"INTERNAL_RESOURCE"</span>
+  }
+}
+            </div>
+        </section>
+
+        <!-- API Reference -->
+        <section id="api" class="section">
+            <h2>📡 API Reference</h2>
+
+            <h3>🔍 Analysis Endpoints</h3>
+            
+            <div class="api-endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/analysis/tickets/{ticketId}</span>
+            </div>
+            <p><strong>Description:</strong> Analyze a Jira ticket using the default analysis prompt.</p>
+            <p><strong>Parameters:</strong></p>
+            <ul>
+                <li><code>ticketId</code> (path) - Jira ticket ID or key</li>
+            </ul>
+
+            <div class="api-endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/analysis/tickets/{ticketId}/security</span>
+            </div>
+            <p><strong>Description:</strong> Perform security-focused analysis of a Jira ticket.</p>
+
+            <div class="api-endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/analysis/tickets/{ticketId}/custom</span>
+            </div>
+            <p><strong>Description:</strong> Analyze ticket with custom prompt and context.</p>
+            <div class="code-block">
+{
+  <span class="string">"promptName"</span>: <span class="string">"custom-analysis-prompt"</span>,
+  <span class="string">"context"</span>: {
+    <span class="string">"projectType"</span>: <span class="string">"microservice"</span>,
+    <span class="string">"team"</span>: <span class="string">"backend"</span>
+  }
+}
+            </div>
+
+            <h3>📊 Monitoring Endpoints</h3>
+
+            <div class="api-endpoint">
+                <span class="method get">GET</span>
+                <span>/api/v1/monitoring/health</span>
+            </div>
+            <p><strong>Description:</strong> Check agent health status.</p>
+
+            <div class="api-endpoint">
+                <span class="method get">GET</span>
+                <span>/api/v1/monitoring/plugin-stats</span>
+            </div>
+            <p><strong>Description:</strong> Get plugin cache statistics.</p>
+
+            <div class="api-endpoint">
+                <span class="method get">GET</span>
+                <span>/actuator/health</span>
+            </div>
+            <p><strong>Description:</strong> Spring Boot actuator health endpoint.</p>
+
+            <div class="api-endpoint">
+                <span class="method get">GET</span>
+                <span>/actuator/metrics</span>
+            </div>
+            <p><strong>Description:</strong> Application metrics and performance data.</p>
+
+            <h3>🔧 Plugin Management</h3>
+
+            <div class="api-endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/plugins/reload/{pluginName}</span>
+            </div>
+            <p><strong>Description:</strong> Manually reload a specific plugin.</p>
+
+            <div class="api-endpoint">
+                <span class="method post">POST</span>
+                <span>/api/v1/plugins/reload-all</span>
+            </div>
+            <p><strong>Description:</strong> Reload all plugins.</p>
+
+            <div class="api-endpoint">
+                <span class="method get">GET</span>
+                <span>/api/v1/plugins/available</span>
+            </div>
+            <p><strong>Description:</strong> List all available plugins.</p>
+        </section>
+
+        <!-- Plugin System -->
+        <section id="plugins" class="section">
+            <h2>🔌 Plugin System</h2>
+
+            <div class="success-box">
+                <strong>Hot Reload Capability:</strong> Update prompts and configurations without restarting the application!
+            </div>
+
+            
+<h3>📁 Plugin Directory Structure</h3>
+            <div class="code-block">
+external-config/
+├── prompts/
+│   ├── analysis-prompt.md          <span class="comment"># Override default analysis</span>
+│   ├── security-analysis-prompt.md <span class="comment"># Security-focused analysis</span>
+│   ├── performance-prompt.md       <span class="comment"># Performance analysis</span>
+│   └── compliance-prompt.md        <span class="comment"># Compliance analysis</span>
+├── agents/
+│   ├── senior-developer.md         <span class="comment"># Senior dev persona</span>
+│   ├── security-expert.md          <span class="comment"># Security expert persona</span>
+│   └── architect.md                <span class="comment"># Architecture expert</span>
+└── skills/
+    ├── code-review.md              <span class="comment"># Code review workflow</span>
+    ├── risk-assessment.md          <span class="comment"># Risk assessment process</span>
+    └── effort-estimation.md        <span class="comment"># Estimation methodology</span>
+            </div>
+
+            <h3>✍️ Creating Custom Prompts</h3>
+            <div class="code-block">
+<span class="comment"># Example: external-config/prompts/performance-analysis-prompt.md</span>
+
+# Performance-Focused Jira Analysis
+
+Analyze ticket: {{ticketId}} with emphasis on performance implications.
+
+## Performance Analysis Requirements
+- Identify potential performance bottlenecks
+- Assess scalability requirements
+- Review caching strategies
+- Analyze database query implications
+- Consider load testing requirements
+
+## Context
+Project Type: {{context.projectType}}
+Expected Load: {{context.expectedLoad}}
+Current Performance Baseline: {{context.baseline}}
+
+## Tools Available
+Use the retrieve_jira_ticket and create_ticket_folder tools.
+
+## Output Format
+Provide detailed performance analysis in the standard TicketAnalysis JSON format.
+Focus on the technical_analysis section with performance-specific insights.
+            </div>
+
+            <h3>🔄 Plugin Loading Strategy</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Strategy</th>
+                        <th>Behavior</th>
+                        <th>Use Case</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>EXTERNAL_FIRST</strong></td>
+                        <td>Try external files first, fallback to internal</td>
+                        <td>Production with custom prompts</td>
+                    </tr>
+                    <tr>
+                        <td><strong>INTERNAL_FIRST</strong></td>
+                        <td>Use internal resources, override with external</td>
+                        <td>Development and testing</td>
+                    </tr>
+                    <tr>
+                        <td><strong>EXTERNAL_ONLY</strong></td>
+                        <td>Only use external files</td>
+                        <td>Fully customized deployments</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>⚡ Performance Optimization</h3>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h4>🚀 Caffeine Cache</h4>
+                    <p>High-performance caching with automatic refresh and eviction policies.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>👁️ File Watching</h4>
+                    <p>Real-time file change detection for instant plugin updates.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>🔄 Async Processing</h4>
+                    <p>Non-blocking file operations and background plugin loading.</p>
+                </div>
+                <div class="feature-card">
+                    <h4>📊 Cache Statistics</h4>
+                    <p>Comprehensive metrics for monitoring cache performance.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Monitoring -->
+        <section id="monitoring" class="section">
+            <h2>📊 Monitoring & Observability</h2>
+
+            
+<h3>🔍 Health Checks</h3>
+            <div class="code-block">
+<span class="comment"># Application health</span>
+curl http://localhost:8080/api/v1/monitoring/health
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"status"</span>: <span class="string">"UP"</span>,
+  <span class="string">"timestamp"</span>: 1717920600000,
+  <span class="string">"service"</span>: <span class="string">"jira-analysis-agent"</span>
+}
+            </div>
+
+            <h3>📈 Performance Metrics</h3>
+            <div class="code-block">
+<span class="comment"># Plugin cache statistics</span>
+curl http://localhost:8080/api/v1/monitoring/plugin-stats
+
+<span class="comment"># Response</span>
+{
+  <span class="string">"hitRate"</span>: 0.95,
+  <span class="string">"missRate"</span>: 0.05,
+  <span class="string">"loadCount"</span>: 1250,
+  <span class="string">"evictionCount"</span>: 12,
+  <span class="string">"estimatedSize"</span>: 45
+}
+            </div>
+
+            <h3>🎯 Key Metrics to Monitor</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Metric</th>
+                        <th>Description</th>
+                        <th>Threshold</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Cache Hit Rate</strong></td>
+                        <td>Percentage of plugin requests served from cache</td>
+                        <td>> 90%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Analysis Duration</strong></td>
+                        <td>Time taken to complete ticket analysis</td>
+                        <td>< 30 seconds</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Error Rate</strong></td>
+                        <td>Percentage of failed analysis requests</td>
+                        <td>< 1%</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Memory Usage</strong></td>
+                        <td>JVM heap memory utilization</td>
+                        <td>< 80%</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3>🚨 Alerting</h3>
+            <div class="warning-box">
+                <strong>Recommended Alerts:</strong>
+                <ul>
+                    <li>Cache hit rate drops below 85%</li>
+                    <li>Analysis duration exceeds 60 seconds</li>
+                    <li>Error rate exceeds 5%</li>
+                    <li>Ollama service becomes unavailable</li>
+                    <li>Jira API rate limits exceeded</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Examples -->
+        <section id="examples" class="section">
+            <h2>💡 Usage Examples</h2>
+
+            <h3>🎯 Example 1: Basic Analysis</h3>
+            <div class="code-block">
+<span class="comment"># Analyze a feature request ticket</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/FEAT-456 \
+  -H "Content-Type: application/json" \
+  | jq '.requirements_analysis.functional_requirements'
+
+<span class="comment"># Output: List of functional requirements</span>
+[
+  "User registration with email verification",
+  "Profile management interface", 
+  "Password reset functionality"
+]
+            </div>
+
+            <h3>🔒 Example 2: Security Analysis</h3>
+            <div class="code-block">
+<span class="comment"># Security-focused analysis</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/SEC-789/security \
+  -H "Content-Type: application/json" \
+  | jq '.risk_assessment.identified_risks[] | select(.category == "SECURITY")'
+
+<span class="comment"># Output: Security-specific risks</span>
+{
+  "description": "Potential SQL injection vulnerability",
+  "category": "SECURITY",
+  "impact": "HIGH",
+  "probability": "MEDIUM",
+  "mitigation_strategy": "Use parameterized queries and input validation"
+}
+            </div>
+
+            <h3>⚡ Example 3: Performance Analysis</h3>
+            <div class="code-block">
+<span class="comment"># Create custom performance prompt</span>
+cat > external-config/prompts/performance-prompt.md << 'EOF'
+# Performance Analysis for {{ticketId}}
+
+Focus on performance implications:
+- Database query optimization
+- Caching strategies  
+
+- Scalability concerns
+- Load testing requirements
+
+Expected load: {{context.expectedLoad}}
+Current baseline: {{context.baseline}}
+EOF
+
+<span class="comment"># Use custom prompt with context</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/PERF-101/custom \
+  -H "Content-Type: application/json" \
+  -d '{
+    "promptName": "performance-prompt",
+    "context": {
+      "expectedLoad": "10000 concurrent users",
+      "baseline": "500ms response time"
+    }
+  }'
+            </div>
+
+            <h3>🔄 Example 4: Hot Reload Demo</h3>
+            <div class="code-block">
+<span class="comment"># 1. Create new prompt</span>
+echo "# Quick Analysis for {{ticketId}}" > external-config/prompts/quick-prompt.md
+echo "Provide a brief 3-sentence analysis." >> external-config/prompts/quick-prompt.md
+
+<span class="comment"># 2. Use immediately (no restart needed!)</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/TEST-123/custom \
+  -d '{"promptName": "quick-prompt"}'
+
+<span class="comment"># 3. Update prompt</span>
+echo "# Updated Quick Analysis for {{ticketId}}" > external-config/prompts/quick-prompt.md
+echo "Provide analysis with focus on risks and effort." >> external-config/prompts/quick-prompt.md
+
+<span class="comment"># 4. Use updated version (automatically reloaded!)</span>
+curl -X POST http://localhost:8080/api/v1/analysis/tickets/TEST-123/custom \
+  -d '{"promptName": "quick-prompt"}'
+            </div>
+
+            <h3>📊 Example 5: Monitoring Integration</h3>
+            <div class="code-block">
+<span class="comment"># Monitor cache performance</span>
+watch -n 5 'curl -s http://localhost:8080/api/v1/monitoring/plugin-stats | jq ".hitRate"'
+
+<span class="comment"># Check application metrics</span>
+curl http://localhost:8080/actuator/metrics/jira.analysis.duration | jq '.measurements'
+
+<span class="comment"># Health check for monitoring systems</span>
+curl -f http://localhost:8080/actuator/health || echo "Service Down"
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <div class="section" style="text-align: center; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+            <h2>🚀 Ready to Get Started?</h2>
+            <p>Follow the setup guide above and start analyzing your Jira tickets with AI!</p>
+            <p><strong>Questions?</strong> Check the monitoring endpoints for system health and performance metrics.</p>
+            <br>
+            <p><em>Built with ❤️ using Spring AI 1.0, Ollama, and modern Java practices</em></p>
+        </div>
+    </div>
+</body>
+</html>
