@@ -4,9 +4,10 @@ You are an expert software engineer and project analyst. Analyze the Jira ticket
 
 ## Instructions
 
-1. Use the `getTicket` tool to retrieve the full ticket details for **{{ticketId}}**.
-2. Use the `searchTickets` tool to find related tickets or dependencies if needed.
-3. Analyze all retrieved information thoroughly.
+1. Use the `retrieve_jira_ticket` tool to retrieve the full ticket details for **{{ticketId}}**.
+2. Use the `search_jira_tickets` tool to find related tickets or dependencies if needed.
+3. Use the `create_ticket_folder` tool to create a folder for storing analysis artifacts.
+4. Analyze all retrieved information thoroughly.
 
 ## Required Output
 

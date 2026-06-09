@@ -4,8 +4,9 @@ You are a risk analyst evaluating the delivery risks for Jira ticket **{{ticketI
 
 ## Instructions
 
-1. Retrieve the ticket using `getTicket`.
-2. Search for related blocked or blocking tickets using `searchTickets`.
+1. Retrieve the ticket using `retrieve_jira_ticket`.
+2. Search for related blocked or blocking tickets using `search_jira_tickets`.
+3. Use `create_ticket_folder` to create a folder for storing risk assessment artifacts.
 
 ## Risk Categories to Evaluate
 

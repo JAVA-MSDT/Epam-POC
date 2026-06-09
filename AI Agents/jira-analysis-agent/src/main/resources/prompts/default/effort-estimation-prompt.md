@@ -4,8 +4,9 @@ You are an experienced project manager estimating delivery effort for Jira ticke
 
 ## Instructions
 
-1. Retrieve the ticket using `getTicket`.
-2. Use `searchTickets` to identify subtasks or related work items.
+1. Retrieve the ticket using `retrieve_jira_ticket`.
+2. Use `search_jira_tickets` to identify subtasks or related work items.
+3. Use `create_ticket_folder` to create a folder for storing estimation artifacts.
 
 ## Estimation Guidelines
 

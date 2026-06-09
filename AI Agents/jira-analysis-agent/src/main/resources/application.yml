@@ -3,7 +3,7 @@ spring:
     name: jira-analysis-agent
   ai:
     ollama:
-      base-url: http://localhost:11434
+      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
       chat:
         model: llama3.1:8b
         options:
@@ -17,12 +17,18 @@ spring:
 server:
   port: 8080
 
+jira:
+  base-url: ${JIRA_BASE_URL:}
+  username: ${JIRA_USERNAME:}
+  api-token: ${JIRA_API_TOKEN:}
+
 agent:
+  output-directory: ${AGENT_OUTPUT_DIR:./analysis-output}
   plugins:
-    external-config-path: ./external-config
+    external-config-path: ${AGENT_EXTERNAL_CONFIG:./external-config}
     strategy: EXTERNAL_FIRST
     hot-reload:
-      enabled: true
+      enabled: ${AGENT_HOT_RELOAD:true}
 
 management:
   endpoints:
