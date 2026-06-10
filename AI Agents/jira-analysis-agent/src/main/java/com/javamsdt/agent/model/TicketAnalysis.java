@@ -24,7 +24,8 @@ public record TicketAnalysis(
             @JsonProperty("acceptance_criteria") List<String> acceptanceCriteria,
             @JsonProperty("dependencies") List<String> dependencies,
             @JsonProperty("assumptions") List<String> assumptions
-    ) {}
+    ) {
+    }
 
     public record TechnicalAnalysis(
             @JsonProperty("complexity_score") int complexityScore,
@@ -33,7 +34,8 @@ public record TicketAnalysis(
             @JsonProperty("architecture_considerations") List<String> architectureConsiderations,
             @JsonProperty("technology_stack") List<String> technologyStack,
             @JsonProperty("performance_considerations") List<String> performanceConsiderations
-    ) {}
+    ) {
+    }
 
     public record RiskAssessment(
             @JsonProperty("identified_risks") List<Risk> identifiedRisks,
@@ -47,7 +49,8 @@ public record TicketAnalysis(
                 @JsonProperty("probability") String probability,
                 @JsonProperty("mitigation_strategy") String mitigationStrategy,
                 @JsonProperty("contingency_plan") String contingencyPlan
-        ) {}
+        ) {
+        }
     }
 
     public record EffortEstimation(
@@ -59,7 +62,8 @@ public record TicketAnalysis(
             @JsonProperty("confidence_level") String confidenceLevel,
             @JsonProperty("estimation_method") String estimationMethod,
             @JsonProperty("team_size_assumption") int teamSizeAssumption
-    ) {}
+    ) {
+    }
 
     public record ImplementationStrategy(
             @JsonProperty("phases") List<Phase> phases,
@@ -74,14 +78,16 @@ public record TicketAnalysis(
                 @JsonProperty("deliverables") List<String> deliverables,
                 @JsonProperty("dependencies") List<String> dependencies,
                 @JsonProperty("risks") List<String> risks
-        ) {}
+        ) {
+        }
 
         public record Milestone(
                 @JsonProperty("name") String name,
                 @JsonProperty("description") String description,
                 @JsonProperty("target_date") String targetDate,
                 @JsonProperty("success_criteria") List<String> successCriteria
-        ) {}
+        ) {
+        }
     }
 
     public record AnalysisMetadata(
@@ -92,5 +98,6 @@ public record TicketAnalysis(
             @JsonProperty("prompt_name") String promptName,
             @JsonProperty("prompt_source") String promptSource,
             @JsonProperty("prompt_last_modified") LocalDateTime promptLastModified
-    ) {}
+    ) {
+    }
 }

@@ -1,11 +1,15 @@
 # Jira Analysis Agent
 
-A production-ready AI agent that automatically analyzes Jira tickets using Spring AI and a local Ollama LLM. Submit a ticket ID and the agent retrieves the ticket from Jira, applies a pluggable prompt template, and returns a fully structured JSON analysis covering requirements, technical complexity, risk assessment, effort estimation, and a phased implementation strategy.
+A production-ready AI agent that automatically analyzes Jira tickets using Spring AI and a local Ollama LLM. Submit a
+ticket ID and the agent retrieves the ticket from Jira, applies a pluggable prompt template, and returns a fully
+structured JSON analysis covering requirements, technical complexity, risk assessment, effort estimation, and a phased
+implementation strategy.
 
 ## Features
 
 - **Full REST API** — analysis, security, custom-prompt, and plugin-management endpoints out of the box
-- **Real Jira integration** — `WebClient`-based Jira REST API calls with graceful stub fallback when credentials are not configured
+- **Real Jira integration** — `WebClient`-based Jira REST API calls with graceful stub fallback when credentials are not
+  configured
 - **Pluggable prompt system** — swap or override prompt templates at runtime without redeployment
 - **Hot reload** — file watcher detects changes to external prompt files and invalidates the cache within seconds
 - **Multiple loading strategies** — `EXTERNAL_FIRST`, `INTERNAL_FIRST`, or `EXTERNAL_ONLY` prompt resolution
@@ -16,17 +20,17 @@ A production-ready AI agent that automatically analyzes Jira tickets using Sprin
 
 ## Tech Stack
 
-| Layer         | Technology                                    |
-|---------------|-----------------------------------------------|
-| Language      | Java 21                                       |
-| Framework     | Spring Boot 3.5.0                             |
-| AI            | Spring AI 1.0.0 + Ollama (`llama3.1:8b`)      |
-| HTTP Client   | Spring WebFlux WebClient (Jira integration)   |
-| Caching       | Caffeine 3.2.0                                |
-| File Watching | directory-watcher 0.18.0                      |
-| Observability | Micrometer Tracing, Brave, Zipkin             |
+| Layer         | Technology                                       |
+|---------------|--------------------------------------------------|
+| Language      | Java 21                                          |
+| Framework     | Spring Boot 3.5.0                                |
+| AI            | Spring AI 1.0.0 + Ollama (`llama3.1:8b`)         |
+| HTTP Client   | Spring WebFlux WebClient (Jira integration)      |
+| Caching       | Caffeine 3.2.0                                   |
+| File Watching | directory-watcher 0.18.0                         |
+| Observability | Micrometer Tracing, Brave, Zipkin                |
 | Testing       | JUnit 5, Spring Boot Test, Testcontainers 1.20.4 |
-| Build         | Maven 3.9+, Spring Boot Buildpacks (JVM 21)   |
+| Build         | Maven 3.9+, Spring Boot Buildpacks (JVM 21)      |
 
 ## Project Structure
 
@@ -84,12 +88,12 @@ jira-analysis-agent/
 
 ### Prerequisites
 
-| Requirement | Details |
-|---|---|
-| Java | 21+ |
-| Maven | 3.9+ |
-| Ollama | Running at `http://localhost:11434` |
-| llama3.1:8b | `ollama pull llama3.1:8b` |
+| Requirement  | Details                                                                                                                  |
+|--------------|--------------------------------------------------------------------------------------------------------------------------|
+| Java         | 21+                                                                                                                      |
+| Maven        | 3.9+                                                                                                                     |
+| Ollama       | Running at `http://localhost:11434`                                                                                      |
+| llama3.1:8b  | `ollama pull llama3.1:8b`                                                                                                |
 | Jira account | API token from `id.atlassian.com/manage-profile/security/api-tokens` (optional — agent works without it using stub data) |
 
 ### 1. Install Ollama and pull the model
@@ -105,7 +109,8 @@ ollama pull llama3.1:8b
 
 ### 2. Configure Jira credentials (optional)
 
-Without credentials the agent starts and analyzes using stub ticket data. To connect to a real Jira instance set the following environment variables before starting:
+Without credentials the agent starts and analyzes using stub ticket data. To connect to a real Jira instance set the
+following environment variables before starting:
 
 ```bash
 export JIRA_BASE_URL=https://your-company.atlassian.net
@@ -114,6 +119,7 @@ export JIRA_API_TOKEN=your-api-token
 ```
 
 On Windows:
+
 ```cmd
 set JIRA_BASE_URL=https://your-company.atlassian.net
 set JIRA_USERNAME=your@email.com
@@ -142,6 +148,7 @@ curl http://localhost:8080/api/v1/monitoring/health
 ```
 
 Expected:
+
 ```json
 {
   "status": "UP",
@@ -167,19 +174,19 @@ docker run -p 8080:8080 \
 
 All properties support environment variable overrides (shown in brackets).
 
-| Property | Env var | Default | Description |
-|---|---|---|---|
-| `spring.ai.ollama.base-url` | `OLLAMA_BASE_URL` | `http://localhost:11434` | Ollama server URL |
-| `spring.ai.ollama.chat.model` | — | `llama3.1:8b` | Model used for analysis |
-| `spring.ai.ollama.chat.options.temperature` | — | `0.2` | Lower = more deterministic output |
-| `spring.ai.ollama.chat.options.num-ctx` | — | `8192` | Context window in tokens |
-| `jira.base-url` | `JIRA_BASE_URL` | _(empty)_ | Jira instance URL |
-| `jira.username` | `JIRA_USERNAME` | _(empty)_ | Jira username or email |
-| `jira.api-token` | `JIRA_API_TOKEN` | _(empty)_ | Jira API token |
-| `agent.output-directory` | `AGENT_OUTPUT_DIR` | `./analysis-output` | Directory for ticket analysis artifacts |
-| `agent.plugins.external-config-path` | `AGENT_EXTERNAL_CONFIG` | `./external-config` | Directory for prompt overrides |
-| `agent.plugins.strategy` | — | `EXTERNAL_FIRST` | `EXTERNAL_FIRST` / `INTERNAL_FIRST` / `EXTERNAL_ONLY` |
-| `agent.plugins.hot-reload.enabled` | `AGENT_HOT_RELOAD` | `true` | Live prompt reload on file change |
+| Property                                    | Env var                 | Default                  | Description                                           |
+|---------------------------------------------|-------------------------|--------------------------|-------------------------------------------------------|
+| `spring.ai.ollama.base-url`                 | `OLLAMA_BASE_URL`       | `http://localhost:11434` | Ollama server URL                                     |
+| `spring.ai.ollama.chat.model`               | —                       | `llama3.1:8b`            | Model used for analysis                               |
+| `spring.ai.ollama.chat.options.temperature` | —                       | `0.2`                    | Lower = more deterministic output                     |
+| `spring.ai.ollama.chat.options.num-ctx`     | —                       | `8192`                   | Context window in tokens                              |
+| `jira.base-url`                             | `JIRA_BASE_URL`         | _(empty)_                | Jira instance URL                                     |
+| `jira.username`                             | `JIRA_USERNAME`         | _(empty)_                | Jira username or email                                |
+| `jira.api-token`                            | `JIRA_API_TOKEN`        | _(empty)_                | Jira API token                                        |
+| `agent.output-directory`                    | `AGENT_OUTPUT_DIR`      | `./analysis-output`      | Directory for ticket analysis artifacts               |
+| `agent.plugins.external-config-path`        | `AGENT_EXTERNAL_CONFIG` | `./external-config`      | Directory for prompt overrides                        |
+| `agent.plugins.strategy`                    | —                       | `EXTERNAL_FIRST`         | `EXTERNAL_FIRST` / `INTERNAL_FIRST` / `EXTERNAL_ONLY` |
+| `agent.plugins.hot-reload.enabled`          | `AGENT_HOT_RELOAD`      | `true`                   | Live prompt reload on file change                     |
 
 ### application-local.yml (recommended for development)
 
@@ -223,7 +230,8 @@ curl -X POST http://localhost:8080/api/v1/analysis/tickets/PROJ-123
 POST /api/v1/analysis/tickets/{ticketId}/security
 ```
 
-Analyzes the ticket using the `security-analysis-prompt`, focused on OWASP vulnerabilities, data privacy, compliance, and authentication risks.
+Analyzes the ticket using the `security-analysis-prompt`, focused on OWASP vulnerabilities, data privacy, compliance,
+and authentication risks.
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/analysis/tickets/PROJ-123/security
@@ -262,7 +270,8 @@ curl -X POST http://localhost:8080/api/v1/analysis/tickets/PROJ-123/custom \
 GET /api/v1/analysis/tickets/{ticketId}/cached?promptName=analysis-prompt
 ```
 
-Returns cached result if available, otherwise triggers a new analysis. Results are cached for 10 minutes (Spring `@Cacheable`).
+Returns cached result if available, otherwise triggers a new analysis. Results are cached for 10 minutes (Spring
+`@Cacheable`).
 
 ```bash
 curl "http://localhost:8080/api/v1/analysis/tickets/PROJ-123/cached?promptName=analysis-prompt"
@@ -291,7 +300,8 @@ curl http://localhost:8080/api/v1/plugins/available
 POST /api/v1/plugins/reload/{pluginName}
 ```
 
-Invalidates and reloads a specific plugin. Useful after manually editing an external prompt file when hot-reload is disabled.
+Invalidates and reloads a specific plugin. Useful after manually editing an external prompt file when hot-reload is
+disabled.
 
 ```bash
 curl -X POST http://localhost:8080/api/v1/plugins/reload/analysis-prompt
@@ -315,13 +325,13 @@ curl -X POST http://localhost:8080/api/v1/plugins/reload-all
 
 ### Monitoring Endpoints
 
-| Method | Path | Description |
-|---|---|---|
-| `GET` | `/api/v1/monitoring/health` | Agent health — checks plugin manager is responsive |
-| `GET` | `/api/v1/monitoring/plugin-stats` | Caffeine cache hit rate, load count, eviction count |
-| `GET` | `/actuator/health` | Spring Boot full health including disk, ping |
-| `GET` | `/actuator/metrics` | All Micrometer metrics |
-| `GET` | `/actuator/prometheus` | Prometheus scrape endpoint |
+| Method | Path                              | Description                                         |
+|--------|-----------------------------------|-----------------------------------------------------|
+| `GET`  | `/api/v1/monitoring/health`       | Agent health — checks plugin manager is responsive  |
+| `GET`  | `/api/v1/monitoring/plugin-stats` | Caffeine cache hit rate, load count, eviction count |
+| `GET`  | `/actuator/health`                | Spring Boot full health including disk, ping        |
+| `GET`  | `/actuator/metrics`               | All Micrometer metrics                              |
+| `GET`  | `/actuator/prometheus`            | Prometheus scrape endpoint                          |
 
 ```bash
 curl http://localhost:8080/api/v1/monitoring/plugin-stats
@@ -451,19 +461,21 @@ curl -f http://localhost:8080/actuator/health || echo "Service is DOWN"
 
 ## Built-in Prompt Templates
 
-Five prompt templates ship with the agent. All accept the `{{ticketId}}` placeholder and any additional `{{key}}` variables from the context map.
+Five prompt templates ship with the agent. All accept the `{{ticketId}}` placeholder and any additional `{{key}}`
+variables from the context map.
 
-| Prompt name | Endpoint shortcut | Focus |
-|---|---|---|
-| `analysis-prompt` | `POST /tickets/{id}` | Full comprehensive analysis (default) |
-| `security-analysis-prompt` | `POST /tickets/{id}/security` | OWASP, data privacy, compliance, auth |
-| `code-review-prompt` | custom | Correctness, security, performance, maintainability, architecture |
-| `risk-assessment-prompt` | custom | TECHNICAL / BUSINESS / TIMELINE / RESOURCE risks with score 1–10 |
-| `effort-estimation-prompt` | custom | Dev / test / doc / review day breakdown with confidence level |
+| Prompt name                | Endpoint shortcut             | Focus                                                             |
+|----------------------------|-------------------------------|-------------------------------------------------------------------|
+| `analysis-prompt`          | `POST /tickets/{id}`          | Full comprehensive analysis (default)                             |
+| `security-analysis-prompt` | `POST /tickets/{id}/security` | OWASP, data privacy, compliance, auth                             |
+| `code-review-prompt`       | custom                        | Correctness, security, performance, maintainability, architecture |
+| `risk-assessment-prompt`   | custom                        | TECHNICAL / BUSINESS / TIMELINE / RESOURCE risks with score 1–10  |
+| `effort-estimation-prompt` | custom                        | Dev / test / doc / review day breakdown with confidence level     |
 
 ### Writing a custom prompt
 
-Place a `.md` file in `external-config/prompts/` and reference it by name (without the extension) in the `/custom` endpoint or plugin reload API.
+Place a `.md` file in `external-config/prompts/` and reference it by name (without the extension) in the `/custom`
+endpoint or plugin reload API.
 
 Rules for custom prompts:
 
@@ -495,19 +507,37 @@ All analysis endpoints return `application/json` matching the `TicketAnalysis` s
   "ticket_id": "PROJ-123",
   "summary": "Implement user authentication",
   "requirements_analysis": {
-    "functional_requirements": ["..."],
-    "non_functional_requirements": ["..."],
-    "acceptance_criteria": ["..."],
-    "dependencies": ["..."],
-    "assumptions": ["..."]
+    "functional_requirements": [
+      "..."
+    ],
+    "non_functional_requirements": [
+      "..."
+    ],
+    "acceptance_criteria": [
+      "..."
+    ],
+    "dependencies": [
+      "..."
+    ],
+    "assumptions": [
+      "..."
+    ]
   },
   "technical_analysis": {
     "complexity_score": 7,
-    "technical_challenges": ["..."],
+    "technical_challenges": [
+      "..."
+    ],
     "recommended_approach": "...",
-    "architecture_considerations": ["..."],
-    "technology_stack": ["..."],
-    "performance_considerations": ["..."]
+    "architecture_considerations": [
+      "..."
+    ],
+    "technology_stack": [
+      "..."
+    ],
+    "performance_considerations": [
+      "..."
+    ]
   },
   "risk_assessment": {
     "identified_risks": [
@@ -539,9 +569,15 @@ All analysis endpoints return `application/json` matching the `TicketAnalysis` s
         "name": "Phase 1",
         "description": "...",
         "estimated_days": 3,
-        "deliverables": ["..."],
-        "dependencies": ["..."],
-        "risks": ["..."]
+        "deliverables": [
+          "..."
+        ],
+        "dependencies": [
+          "..."
+        ],
+        "risks": [
+          "..."
+        ]
       }
     ],
     "key_milestones": [
@@ -549,10 +585,14 @@ All analysis endpoints return `application/json` matching the `TicketAnalysis` s
         "name": "...",
         "description": "...",
         "target_date": "...",
-        "success_criteria": ["..."]
+        "success_criteria": [
+          "..."
+        ]
       }
     ],
-    "success_criteria": ["..."],
+    "success_criteria": [
+      "..."
+    ],
     "rollback_strategy": "..."
   },
   "analysis_metadata": {

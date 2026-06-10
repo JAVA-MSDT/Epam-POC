@@ -30,6 +30,9 @@ public class OptimizedJiraAnalysisService {
     private static final String JSON_ONLY_REMINDER =
             "\n\nIMPORTANT: Output ONLY valid JSON. Start with { and end with }. No text before or after.";
 
+    // Keeps the description focused — full ticket descriptions can exceed 10K chars
+    private static final int MAX_DESCRIPTION_CHARS = 4000;
+
     private final ChatClient chatClient;
     private final JiraRetrievalTool jiraRetrievalTool;
     private final FileSystemTool fileSystemTool;
@@ -78,7 +81,6 @@ public class OptimizedJiraAnalysisService {
             String ticketData = extractEssentialTicketData(jiraData.ticketJson());
             String linkedData = extractEssentialLinkedData(jiraData.linkedIssuesJson());
 
-            logger.info("[LLM] Compact ticket data ({} chars):\n{}", ticketData.length(), ticketData);
             logger.info("[LLM] Compact linked issues data ({} chars)", linkedData.length());
 
             String promptContent = promptPlugin.content()
@@ -150,7 +152,12 @@ public class OptimizedJiraAnalysisService {
             ObjectNode compact = objectMapper.createObjectNode();
             compact.put("key", root.path("key").asText(""));
             compact.put("summary", fields.path("summary").asText(""));
-            compact.put("description", fields.path("description").asText(""));
+            String description = fields.path("description").asText("");
+            if (description.length() > MAX_DESCRIPTION_CHARS) {
+                logger.info("[EXTRACT] Description truncated from {} to {} chars", description.length(), MAX_DESCRIPTION_CHARS);
+                description = description.substring(0, MAX_DESCRIPTION_CHARS) + "\n... [content truncated]";
+            }
+            compact.put("description", description);
             compact.put("issuetype", fields.path("issuetype").path("name").asText(""));
             compact.put("status", fields.path("status").path("name").asText(""));
             compact.put("priority", fields.path("priority").path("name").asText(""));
@@ -237,7 +244,6 @@ public class OptimizedJiraAnalysisService {
                 .content();
         logger.info("[LLM] Response received in {}ms ({} chars)", System.currentTimeMillis() - t,
                 raw != null ? raw.length() : 0);
-        logger.info("[LLM] Raw response:\n{}", raw);
         return parseJsonResponse(raw, ticketId);
     }
 
@@ -301,5 +307,6 @@ public class OptimizedJiraAnalysisService {
         return promptPluginManager.getCacheStatistics();
     }
 
-    private record JiraData(String ticketJson, String linkedIssuesJson) {}
+    private record JiraData(String ticketJson, String linkedIssuesJson) {
+    }
 }

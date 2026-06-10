@@ -19,7 +19,7 @@ public class JiraConfig {
             String credentials = jiraProperties.getUsername() + ":" + jiraProperties.getApiToken();
             String encoded = Base64.getEncoder().encodeToString(credentials.getBytes());
             builder.baseUrl(jiraProperties.getBaseUrl())
-                   .defaultHeader("Authorization", "Basic " + encoded);
+                    .defaultHeader("Authorization", "Basic " + encoded);
         }
 
         return builder.build();

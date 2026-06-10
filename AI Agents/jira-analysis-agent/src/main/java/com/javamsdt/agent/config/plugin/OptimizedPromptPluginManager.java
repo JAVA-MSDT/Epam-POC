@@ -15,7 +15,9 @@ import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -33,9 +35,8 @@ public class OptimizedPromptPluginManager implements PluginManager<PromptPlugin>
 
     private final LoadingCache<String, PromptPlugin> pluginCache;
     private final Cache<String, LocalDateTime> lastModifiedCache;
-
-    private DirectoryWatcher directoryWatcher;
     private final Set<String> watchedDirectories = ConcurrentHashMap.newKeySet();
+    private DirectoryWatcher directoryWatcher;
 
     public OptimizedPromptPluginManager(
             @Value("${agent.plugins.external-config-path:./external-config}") String externalConfigPath,

@@ -24,7 +24,7 @@ public class JiraRetrievalTool {
     }
 
     @Tool(name = "retrieve_jira_ticket",
-          description = "Retrieve a Jira ticket by its ID or key and return its full details as JSON")
+            description = "Retrieve a Jira ticket by its ID or key and return its full details as JSON")
     public String retrieveJiraTicket(String ticketId) {
         if (!jiraProperties.isConfigured()) {
             logger.warn("Jira not configured — returning stub data for ticket: {}", ticketId);
@@ -45,7 +45,6 @@ public class JiraRetrievalTool {
             }
 
             logger.info("[STEP 1] Successfully fetched ticket: {} ({} chars)", ticketId, responseBody.length());
-            logger.info("[STEP 1] Raw Jira response:\n{}", responseBody);
             return responseBody;
 
         } catch (WebClientResponseException e) {
@@ -59,7 +58,7 @@ public class JiraRetrievalTool {
     }
 
     @Tool(name = "search_jira_tickets",
-          description = "Search Jira tickets using a JQL query and return matching results as JSON array")
+            description = "Search Jira tickets using a JQL query and return matching results as JSON array")
     public String searchJiraTickets(String jql) {
         if (!jiraProperties.isConfigured()) {
             logger.warn("Jira not configured — returning empty results for JQL: {}", jql);

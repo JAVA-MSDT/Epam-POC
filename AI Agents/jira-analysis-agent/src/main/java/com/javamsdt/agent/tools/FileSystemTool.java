@@ -44,7 +44,7 @@ public class FileSystemTool {
     }
 
     @Tool(name = "create_ticket_folder",
-          description = "Create a dedicated folder for a Jira ticket to store analysis results and artifacts. Returns the absolute path of the created folder.")
+            description = "Create a dedicated folder for a Jira ticket to store analysis results and artifacts. Returns the absolute path of the created folder.")
     public String createTicketFolder(String ticketId) {
         try {
             Path folder = Paths.get(outputDirectory, ticketId);
