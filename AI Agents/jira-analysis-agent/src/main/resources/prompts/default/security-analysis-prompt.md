@@ -1,41 +1,86 @@
-# Security-Focused Jira Analysis
+Perform a security analysis of the Jira ticket below and output the JSON response.
 
-You are a senior security engineer analyzing the security implications of Jira ticket **{{ticketId}}**.
+TICKET:
+{{ticketData}}
 
-## Instructions
+LINKED ISSUES:
+{{linkedIssuesData}}
 
-1. Retrieve the ticket using `retrieve_jira_ticket`.
-2. Use `search_jira_tickets` to find related security or compliance tickets.
-3. Use `create_ticket_folder` to create a folder for storing security analysis artifacts.
-4. Analyze all retrieved information with a security-first perspective.
+Evaluate: OWASP Top 10 vulnerabilities, PII/data privacy, auth & authorization, compliance (GDPR/PCI-DSS), dependency risks, secrets management.
 
-## Security Analysis Requirements
+Output ONLY the following JSON. No prose. No markdown. No code fences. Start with { and end with }.
 
-Evaluate and report on the following areas:
-
-- **Vulnerability Assessment**: Identify potential OWASP Top 10 vulnerabilities, injection risks, XSS, CSRF, and insecure deserialization.
-- **Data Privacy**: Assess handling of PII, sensitive data exposure, encryption at rest and in transit.
-- **Authentication & Authorization**: Review access controls, privilege escalation risks, and session management.
-- **Compliance**: Check for requirements under GDPR, SOX, PCI-DSS, HIPAA, or other applicable regulations.
-- **Dependency Risks**: Flag use of outdated or vulnerable third-party libraries.
-- **Secrets Management**: Ensure no hardcoded credentials, API keys, or tokens are introduced.
-
-## Risk Categories
-
-Use the following categories for security risks:
-
-| Category    | Description                                          |
-|-------------|------------------------------------------------------|
-| TECHNICAL   | Implementation vulnerabilities, insecure code        |
-| BUSINESS    | Compliance violations, regulatory exposure           |
-| TIMELINE    | Security review gates that may delay delivery        |
-| RESOURCE    | Need for security expertise or penetration testing   |
-
-## Output
-
-Return a complete `TicketAnalysis` JSON with security findings mapped to:
-- `risk_assessment.identified_risks`: each risk with `category = "SECURITY"` or relevant category
-- `technical_analysis`: security-specific architectural and implementation recommendations
-- `implementation_strategy`: include a security review phase and penetration testing milestone
-
-Assign an overall risk level reflecting the security posture and a risk score from 1 (negligible) to 10 (critical).
+{
+  "ticket_id": "<ticket key from TICKET data>",
+  "summary": "<one-sentence security-focused summary>",
+  "requirements_analysis": {
+    "functional_requirements": ["<item>"],
+    "non_functional_requirements": ["<item>"],
+    "acceptance_criteria": ["<item>"],
+    "dependencies": ["<item>"],
+    "assumptions": ["<item>"]
+  },
+  "technical_analysis": {
+    "complexity_score": 5,
+    "technical_challenges": ["<security challenge>"],
+    "recommended_approach": "<security-first approach>",
+    "architecture_considerations": ["<item>"],
+    "technology_stack": ["<item>"],
+    "performance_considerations": ["<item>"]
+  },
+  "risk_assessment": {
+    "identified_risks": [
+      {
+        "description": "<OWASP/security vulnerability>",
+        "category": "SECURITY",
+        "impact": "HIGH",
+        "probability": "MEDIUM",
+        "mitigation_strategy": "<strategy>",
+        "contingency_plan": "<plan>"
+      }
+    ],
+    "overall_risk_level": "HIGH",
+    "risk_score": 7
+  },
+  "effort_estimation": {
+    "development_days": 3,
+    "testing_days": 2,
+    "documentation_days": 1,
+    "review_days": 1,
+    "total_days": 7,
+    "confidence_level": "MEDIUM",
+    "estimation_method": "Story Points",
+    "team_size_assumption": 2
+  },
+  "implementation_strategy": {
+    "phases": [
+      {
+        "name": "Security Review",
+        "description": "<description>",
+        "estimated_days": 2,
+        "deliverables": ["<item>"],
+        "dependencies": ["<item>"],
+        "risks": ["<item>"]
+      }
+    ],
+    "key_milestones": [
+      {
+        "name": "Penetration Test",
+        "description": "<description>",
+        "target_date": "<date>",
+        "success_criteria": ["<item>"]
+      }
+    ],
+    "success_criteria": ["<item>"],
+    "rollback_strategy": "<strategy>"
+  },
+  "analysis_metadata": {
+    "analysis_timestamp": "2024-01-01T00:00:00",
+    "model_used": "llama3.1:8b",
+    "analysis_version": "1.0.0",
+    "processing_time_ms": 0,
+    "prompt_name": "security-analysis-prompt",
+    "prompt_source": "INTERNAL_RESOURCE",
+    "prompt_last_modified": "2024-01-01T00:00:00"
+  }
+}

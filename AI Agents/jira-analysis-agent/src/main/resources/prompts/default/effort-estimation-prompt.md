@@ -1,21 +1,94 @@
-# Effort Estimation Prompt
+Estimate effort for the Jira ticket below and output the JSON response.
 
-You are an experienced project manager estimating delivery effort for Jira ticket **{{ticketId}}**.
+TICKET:
+{{ticketData}}
 
-## Instructions
+LINKED ISSUES:
+{{linkedIssuesData}}
 
-1. Retrieve the ticket using `retrieve_jira_ticket`.
-2. Use `search_jira_tickets` to identify subtasks or related work items.
-3. Use `create_ticket_folder` to create a folder for storing estimation artifacts.
+Break down effort into: development, testing, documentation, review days. State confidence level and estimation method.
 
-## Estimation Guidelines
+Output ONLY the following JSON. No prose. No markdown. No code fences. Start with { and end with }.
 
-Break down effort into:
-- **Development days**: coding and integration
-- **Testing days**: unit, integration, and acceptance testing
-- **Documentation days**: technical docs, runbooks, API specs
-- **Review days**: code review, QA sign-off, stakeholder demos
-
-State your **confidence level** (LOW / MEDIUM / HIGH) and the **estimation method** used (e.g., story points, t-shirt sizing, function point analysis).
-
-Base the `team_size_assumption` on the ticket scope and return a complete `EffortEstimation` within a `TicketAnalysis` response.
+{
+  "ticket_id": "<ticket key from TICKET data>",
+  "summary": "<one-sentence summary>",
+  "requirements_analysis": {
+    "functional_requirements": ["<item>"],
+    "non_functional_requirements": ["<item>"],
+    "acceptance_criteria": ["<item>"],
+    "dependencies": ["<item>"],
+    "assumptions": ["<item>"]
+  },
+  "technical_analysis": {
+    "complexity_score": 5,
+    "technical_challenges": ["<item>"],
+    "recommended_approach": "<approach>",
+    "architecture_considerations": ["<item>"],
+    "technology_stack": ["<item>"],
+    "performance_considerations": ["<item>"]
+  },
+  "risk_assessment": {
+    "identified_risks": [
+      {
+        "description": "<estimation uncertainty>",
+        "category": "TIMELINE",
+        "impact": "MEDIUM",
+        "probability": "LOW",
+        "mitigation_strategy": "<strategy>",
+        "contingency_plan": "<plan>"
+      }
+    ],
+    "overall_risk_level": "LOW",
+    "risk_score": 3
+  },
+  "effort_estimation": {
+    "development_days": 3,
+    "testing_days": 1,
+    "documentation_days": 1,
+    "review_days": 1,
+    "total_days": 6,
+    "confidence_level": "MEDIUM",
+    "estimation_method": "Story Points",
+    "team_size_assumption": 2
+  },
+  "implementation_strategy": {
+    "phases": [
+      {
+        "name": "Phase 1 — Development",
+        "description": "<description>",
+        "estimated_days": 3,
+        "deliverables": ["<item>"],
+        "dependencies": ["<item>"],
+        "risks": ["<item>"]
+      },
+      {
+        "name": "Phase 2 — Testing and Review",
+        "description": "<description>",
+        "estimated_days": 3,
+        "deliverables": ["<item>"],
+        "dependencies": ["Phase 1 complete"],
+        "risks": ["<item>"]
+      }
+    ],
+    "key_milestones": [
+      {
+        "name": "Development Complete",
+        "description": "<description>",
+        "target_date": "<date>",
+        "success_criteria": ["<item>"]
+      }
+    ],
+    "success_criteria": ["<item>"],
+    "rollback_strategy": "<strategy>"
+  },
+  "analysis_metadata": {
+    "analysis_timestamp": "2024-01-01T00:00:00",
+    "model_used": "llama3.1:8b",
+    "analysis_version": "1.0.0",
+    "processing_time_ms": 0,
+    "prompt_name": "effort-estimation-prompt",
+    "prompt_source": "INTERNAL_RESOURCE",
+    "prompt_last_modified": "2024-01-01T00:00:00"
+  }
+}

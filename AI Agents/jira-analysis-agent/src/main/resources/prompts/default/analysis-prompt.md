@@ -1,22 +1,84 @@
-# Jira Ticket Analysis Prompt
+Analyze the Jira ticket below and output the JSON response.
 
-You are an expert software engineer and project analyst. Analyze the Jira ticket **{{ticketId}}** and produce a comprehensive structured analysis.
+TICKET:
+{{ticketData}}
 
-## Instructions
+LINKED ISSUES:
+{{linkedIssuesData}}
 
-1. Use the `retrieve_jira_ticket` tool to retrieve the full ticket details for **{{ticketId}}**.
-2. Use the `search_jira_tickets` tool to find related tickets or dependencies if needed.
-3. Use the `create_ticket_folder` tool to create a folder for storing analysis artifacts.
-4. Analyze all retrieved information thoroughly.
+Output ONLY the following JSON. No prose. No markdown. No code fences. Start with { and end with }.
 
-## Required Output
-
-Return a `TicketAnalysis` JSON object with the following sections:
-
-- **requirements_analysis**: functional/non-functional requirements, acceptance criteria, dependencies, assumptions
-- **technical_analysis**: complexity score (1-10), challenges, recommended approach, architecture considerations
-- **risk_assessment**: identified risks with category, impact, probability, and mitigation strategies
-- **effort_estimation**: days broken down by development, testing, documentation, and review
-- **implementation_strategy**: phased plan with milestones, success criteria, and rollback strategy
-
-Be precise, data-driven, and actionable in your analysis.
+{
+  "ticket_id": "<ticket key from TICKET data>",
+  "summary": "<one-sentence summary of the ticket>",
+  "requirements_analysis": {
+    "functional_requirements": ["<item>"],
+    "non_functional_requirements": ["<item>"],
+    "acceptance_criteria": ["<item>"],
+    "dependencies": ["<item>"],
+    "assumptions": ["<item>"]
+  },
+  "technical_analysis": {
+    "complexity_score": 5,
+    "technical_challenges": ["<item>"],
+    "recommended_approach": "<approach>",
+    "architecture_considerations": ["<item>"],
+    "technology_stack": ["<item>"],
+    "performance_considerations": ["<item>"]
+  },
+  "risk_assessment": {
+    "identified_risks": [
+      {
+        "description": "<description>",
+        "category": "TECHNICAL",
+        "impact": "MEDIUM",
+        "probability": "MEDIUM",
+        "mitigation_strategy": "<strategy>",
+        "contingency_plan": "<plan>"
+      }
+    ],
+    "overall_risk_level": "MEDIUM",
+    "risk_score": 5
+  },
+  "effort_estimation": {
+    "development_days": 3,
+    "testing_days": 1,
+    "documentation_days": 1,
+    "review_days": 1,
+    "total_days": 6,
+    "confidence_level": "MEDIUM",
+    "estimation_method": "Story Points",
+    "team_size_assumption": 2
+  },
+  "implementation_strategy": {
+    "phases": [
+      {
+        "name": "Phase 1",
+        "description": "<description>",
+        "estimated_days": 3,
+        "deliverables": ["<item>"],
+        "dependencies": ["<item>"],
+        "risks": ["<item>"]
+      }
+    ],
+    "key_milestones": [
+      {
+        "name": "<name>",
+        "description": "<description>",
+        "target_date": "<date>",
+        "success_criteria": ["<item>"]
+      }
+    ],
+    "success_criteria": ["<item>"],
+    "rollback_strategy": "<strategy>"
+  },
+  "analysis_metadata": {
+    "analysis_timestamp": "2024-01-01T00:00:00",
+    "model_used": "llama3.1:8b",
+    "analysis_version": "1.0.0",
+    "processing_time_ms": 0,
+    "prompt_name": "analysis-prompt",
+    "prompt_source": "INTERNAL_RESOURCE",
+    "prompt_last_modified": "2024-01-01T00:00:00"
+  }
+}

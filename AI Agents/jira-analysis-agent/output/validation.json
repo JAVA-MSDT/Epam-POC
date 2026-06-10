@@ -1,0 +1,218 @@
+[
+  {
+    "ticket_id": "EPMGDPL-2733",
+    "summary": "[Week 1] Java General Task 1 - AI Fundamentals: Learning and Environment Setup",
+    "requirements_analysis": {
+      "functional_requirements": [
+        "An engineer can explain the core components of a modern AI platform.",
+        "The environment is configured.",
+        "Personal repository is configured and shared in comments.",
+        "Ready to begin the PoC concept definition."
+      ],
+      "non_functional_requirements": [],
+      "acceptance_criteria": [
+        "An engineer can explain the core components of a modern AI platform.",
+        "The environment is configured.",
+        "Personal repository is configured and shared in comments.",
+        "Ready to begin the PoC concept definition."
+      ],
+      "dependencies": [],
+      "assumptions": []
+    },
+    "technical_analysis": {
+      "complexity_score": 5,
+      "technical_challenges": [
+        "Implementing AI fundamentals",
+        "Setting up environment using resources from any cloud provider or local setup"
+      ],
+      "recommended_approach": "Useful practical guides: https://learn.epam.com/catalog/detailsPage?id=b57d6b89-dd18-4326-bd3d-942b79ec4603",
+      "architecture_considerations": [
+        "RAG Architecture",
+        "Vector Databases",
+        "Model Configuration & Parameters"
+      ],
+      "technology_stack": [
+        "Java",
+        "AI Fundamentals",
+        "Environment Setup"
+      ],
+      "performance_considerations": []
+    },
+    "risk_assessment": {
+      "identified_risks": [
+        {
+          "description": "Implementing AI fundamentals and setting up environment using resources from any cloud provider or local setup",
+          "category": "TECHNICAL",
+          "impact": "MEDIUM",
+          "probability": "MEDIUM",
+          "mitigation_strategy": "Useful practical guides: https://learn.epam.com/catalog/detailsPage?id=b57d6b89-dd18-4326-bd3d-942b79ec4603",
+          "contingency_plan": ""
+        }
+      ],
+      "overall_risk_level": "MEDIUM",
+      "risk_score": 5
+    },
+    "effort_estimation": {
+      "development_days": 3,
+      "testing_days": 1,
+      "documentation_days": 1,
+      "review_days": 1,
+      "total_days": 6,
+      "confidence_level": "MEDIUM",
+      "estimation_method": "Story Points",
+      "team_size_assumption": 2
+    },
+    "implementation_strategy": {
+      "phases": [
+        {
+          "name": "Phase 1",
+          "description": "Implement AI fundamentals and set up environment using resources from any cloud provider or local setup",
+          "estimated_days": 3,
+          "deliverables": [
+            "An engineer can explain the core components of a modern AI platform.",
+            "The environment is configured.",
+            "Personal repository is configured and shared in comments."
+          ],
+          "dependencies": [],
+          "risks": [
+            "Implementing AI fundamentals and setting up environment using resources from any cloud provider or local setup"
+          ]
+        }
+      ],
+      "key_milestones": [
+        {
+          "name": "Complete initial onboarding",
+          "description": "Review core AI concepts, prepare development environment, and execute foundational hands-on labs",
+          "target_date": "",
+          "success_criteria": [
+            "An engineer can explain the core components of a modern AI platform.",
+            "The environment is configured."
+          ]
+        }
+      ],
+      "success_criteria": [
+        "An engineer can explain the core components of a modern AI platform.",
+        "The environment is configured.",
+        "Personal repository is configured and shared in comments."
+      ],
+      "rollback_strategy": ""
+    },
+    "analysis_metadata": {
+      "analysis_timestamp": "",
+      "model_used": "",
+      "analysis_version": "",
+      "processing_time_ms": 0,
+      "prompt_name": "",
+      "prompt_source": "",
+      "prompt_last_modified": ""
+    }
+  },
+  {
+    "ticket_id": "EPMGDPL-2733",
+    "summary": "[Week 1] Java General Task 1 - AI Fundamentals: Learning and Environment Setup",
+    "requirements_analysis": {
+      "functional_requirements": [
+        "An engineer can explain the core components of a modern AI platform.",
+        "The environment is configured.",
+        "Personal repository is configured and shared in comments.",
+        "Ready to begin the PoC concept definition."
+      ],
+      "non_functional_requirements": [],
+      "acceptance_criteria": [
+        "An engineer can explain the core components of a modern AI platform.",
+        "The environment is configured.",
+        "Personal repository is configured and shared in comments.",
+        "Ready to begin the PoC concept definition."
+      ],
+      "dependencies": [],
+      "assumptions": []
+    },
+    "technical_analysis": {
+      "complexity_score": 5,
+      "technical_challenges": [
+        "Implementing AI fundamentals",
+        "Setting up environment using resources from any cloud provider or local setup"
+      ],
+      "recommended_approach": "Useful practical guides: https://learn.epam.com/catalog/detailsPage?id=b57d6b89-dd18-4326-bd3d-942b79ec4603",
+      "architecture_considerations": [
+        "RAG Architecture",
+        "Vector Databases",
+        "Model Configuration & Parameters"
+      ],
+      "technology_stack": [
+        "Java",
+        "AI Fundamentals",
+        "Environment Setup"
+      ],
+      "performance_considerations": []
+    },
+    "risk_assessment": {
+      "identified_risks": [
+        {
+          "description": "Implementing AI fundamentals and setting up environment using resources from any cloud provider or local setup",
+          "category": "TECHNICAL",
+          "impact": "MEDIUM",
+          "probability": "MEDIUM",
+          "mitigation_strategy": "Useful practical guides: https://learn.epam.com/catalog/detailsPage?id=b57d6b89-dd18-4326-bd3d-942b79ec4603",
+          "contingency_plan": ""
+        }
+      ],
+      "overall_risk_level": "MEDIUM",
+      "risk_score": 5
+    },
+    "effort_estimation": {
+      "development_days": 3,
+      "testing_days": 1,
+      "documentation_days": 1,
+      "review_days": 1,
+      "total_days": 6,
+      "confidence_level": "MEDIUM",
+      "estimation_method": "Story Points",
+      "team_size_assumption": 2
+    },
+    "implementation_strategy": {
+      "phases": [
+        {
+          "name": "Phase 1",
+          "description": "Implement AI fundamentals and set up environment using resources from any cloud provider or local setup",
+          "estimated_days": 3,
+          "deliverables": [
+            "An engineer can explain the core components of a modern AI platform.",
+            "The environment is configured.",
+            "Personal repository is configured and shared in comments."
+          ],
+          "dependencies": [],
+          "risks": [
+            "Implementing AI fundamentals and setting up environment using resources from any cloud provider or local setup"
+          ]
+        }
+      ],
+      "key_milestones": [
+        {
+          "name": "Complete initial onboarding",
+          "description": "Review core AI concepts, prepare development environment, and execute foundational hands-on labs",
+          "target_date": "",
+          "success_criteria": [
+            "An engineer can explain the core components of a modern AI platform.",
+            "The environment is configured."
+          ]
+        }
+      ],
+      "success_criteria": [
+        "An engineer can explain the core components of a modern AI platform.",
+        "The environment is configured.",
+        "Personal repository is configured and shared in comments."
+      ],
+      "rollback_strategy": ""
+    },
+    "analysis_metadata": {
+      "analysis_timestamp": "2026-06-10T13:07:29.9721649",
+      "model_used": "llama3.1:8b",
+      "analysis_version": "1.0.0",
+      "processing_time_ms": 296806,
+      "prompt_name": "analysis-prompt",
+      "prompt_source": "INTERNAL_RESOURCE",
+      "prompt_last_modified": "2026-06-10T13:02:23.6681281"
+    }
+  }
+]
