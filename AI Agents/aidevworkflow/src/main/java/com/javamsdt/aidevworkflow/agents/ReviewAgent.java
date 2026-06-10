@@ -11,10 +11,10 @@ import java.util.Scanner;
 
 /**
  * Step 5 — Review & Clarification.
- *
+ * <p>
  * Reads:  ctx.deepDive, ctx.visualReport, ctx.htmlReportPath, ctx.reportFolderPath
  * Writes: ctx.reviewNotes, updates ctx.htmlReportPath (if report is regenerated)
- *
+ * <p>
  * Opens the HTML report in the default browser so the developer can review it.
  * Enters an iteration loop: the developer can request changes to the report or
  * approve it to proceed. Each iteration re-prompts the LLM with the feedback,

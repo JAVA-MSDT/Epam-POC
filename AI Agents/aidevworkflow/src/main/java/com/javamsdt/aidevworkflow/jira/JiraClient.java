@@ -11,11 +11,11 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Fetches Jira ticket data via the Jira REST API v3.
- *
+ * <p>
  * Required environment variables:
- *   JIRA_BASE_URL   — e.g. https://your-org.atlassian.net
- *   JIRA_USER_EMAIL — the account email used for basic auth
- *   JIRA_API_TOKEN  — API token generated at id.atlassian.com
+ * JIRA_BASE_URL   — e.g. https://your-org.atlassian.net
+ * JIRA_USER_EMAIL — the account email used for basic auth
+ * JIRA_API_TOKEN  — API token generated at id.atlassian.com
  */
 public class JiraClient {
 
@@ -43,6 +43,14 @@ public class JiraClient {
         String email = requireEnv("JIRA_USER_EMAIL");
         String token = requireEnv("JIRA_API_TOKEN");
         return new JiraClient(baseUrl, email, token);
+    }
+
+    private static String requireEnv(String name) {
+        String value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("Environment variable " + name + " is not set.");
+        }
+        return value;
     }
 
     /**
@@ -145,13 +153,5 @@ public class JiraClient {
 
     private String stringOrEmpty(Object obj) {
         return obj != null ? obj.toString() : "";
-    }
-
-    private static String requireEnv(String name) {
-        String value = System.getenv(name);
-        if (value == null || value.isBlank()) {
-            throw new IllegalStateException("Environment variable " + name + " is not set.");
-        }
-        return value;
     }
 }

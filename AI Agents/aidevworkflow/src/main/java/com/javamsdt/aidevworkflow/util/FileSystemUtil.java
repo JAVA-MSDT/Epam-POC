@@ -9,14 +9,15 @@ import java.util.List;
 
 public final class FileSystemUtil {
 
-    private FileSystemUtil() {}
+    private FileSystemUtil() {
+    }
 
     /**
      * Creates a report folder under the given base directory, named after the ticket ID.
      * Returns the absolute path of the created folder.
-     *
+     * <p>
      * Example: createReportFolder("/tmp/reports", "PROJ-123")
-     *          → "/tmp/reports/PROJ-123"
+     * → "/tmp/reports/PROJ-123"
      */
     public static String createReportFolder(String baseDir, String ticketId) {
         String safeName = ticketId.replaceAll("[^a-zA-Z0-9_\\-]", "_");
@@ -59,7 +60,7 @@ public final class FileSystemUtil {
      * Recursively collects all source files under rootPath matching the given extensions.
      * Returns a list of [relative/path/to/File.java]\n[file content] blocks,
      * suitable for injecting into an LLM prompt.
-     *
+     * <p>
      * Example: readSourceFiles("/my/project/src", List.of(".java", ".xml"))
      */
     public static String readSourceFiles(String rootPath, List<String> extensions, int maxFiles) {
@@ -78,7 +79,8 @@ public final class FileSystemUtil {
                             String content = Files.readString(file, StandardCharsets.UTF_8);
                             String relative = root.relativize(file).toString().replace('\\', '/');
                             blocks.add("### " + relative + "\n```\n" + content + "\n```");
-                        } catch (IOException ignored) {}
+                        } catch (IOException ignored) {
+                        }
                     }
                     return FileVisitResult.CONTINUE;
                 }

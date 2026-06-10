@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>AI-Enhanced Workflow: Efficient Orchestration & Design</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -12,17 +12,20 @@
             margin: 0;
             padding: 0;
         }
+
         header {
             background: #1a1a1a;
             padding: 24px 0 16px 0;
             text-align: center;
             border-bottom: 2px solid #444;
         }
+
         header h1 {
             margin: 0;
             font-size: 2.2em;
             color: #ffb347;
         }
+
         nav {
             width: 260px;
             background: #181818;
@@ -33,35 +36,43 @@
             border-right: 2px solid #444;
             padding-top: 40px;
         }
+
         nav ul {
             list-style: none;
             padding: 0 0 0 20px;
         }
+
         nav ul li {
             margin: 18px 0;
         }
+
         nav ul li a {
             color: #ffb347;
             text-decoration: none;
             font-size: 1.1em;
             transition: color 0.2s;
         }
+
         nav ul li a:hover {
             color: #fff;
         }
+
         main {
             margin-left: 280px;
             padding: 32px 40px 40px 40px;
             max-width: 1100px;
         }
+
         h2 {
             color: #ffb347;
             border-bottom: 1px solid #444;
             padding-bottom: 6px;
         }
+
         h3 {
             color: #ffd580;
         }
+
         .step {
             background: #2d2d2d;
             border-left: 5px solid #ffb347;
@@ -69,6 +80,7 @@
             padding: 18px 22px;
             border-radius: 8px;
         }
+
         .code-block {
             background: #181818;
             color: #b5e853;
@@ -79,29 +91,36 @@
             overflow-x: auto;
             margin: 12px 0;
         }
+
         a {
             color: #ffd580;
         }
+
         .table-container {
             overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 18px 0;
         }
+
         th, td {
             border: 1px solid #444;
             padding: 10px;
             text-align: left;
         }
+
         th {
             background: #333;
             color: #ffb347;
         }
+
         tr:nth-child(even) {
             background: #262626;
         }
+
         .note {
             background: #333;
 
@@ -111,11 +130,13 @@
             margin: 14px 0;
             font-size: 1em;
         }
+
         .diagram {
             display: flex;
             justify-content: center;
             margin: 32px 0;
         }
+
         .legend {
             margin: 12px 0 24px 0;
             padding: 10px 16px;
@@ -123,10 +144,12 @@
             border-radius: 6px;
             color: #b5e853;
         }
+
         .human {
             color: #ff80ab;
             font-weight: bold;
         }
+
         @media (max-width: 900px) {
             nav {
                 position: static;
@@ -136,6 +159,7 @@
                 border-bottom: 2px solid #444;
                 padding-top: 0;
             }
+
             main {
                 margin-left: 0;
                 padding: 24px 10px;
@@ -144,315 +168,338 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>AI-Enhanced Workflow: Efficient Orchestration & Design</h1>
-        <p>Cost-Effective Multi-Agent Patterns, Human-in-the-Loop, and Java Integration</p>
-    </header>
-    <nav>
-        <ul>
-            <li><a href="#workflow">1. Workflow Analysis & Optimization</a></li>
-            <li><a href="#diagram">2. Optimized System Diagram</a></li>
-            <li><a href="#orchestrator">3. Efficient Java Orchestrator Pattern</a></li>
-            <li><a href="#implementation">4. Implementation Steps</a></li>
-            <li><a href="#resources">5. Further Resources</a></li>
-        </ul>
-    </nav>
-    <main>
-        <section id="workflow">
-            <h2>1. Workflow Analysis & Optimization</h2>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th>Step</th>
-                        <th>Can be Combined?</th>
-                        <th>Pipeline?</th>
-                        <th>Separate?</th>
-                        <th>Human-in-the-Loop?</th>
-                        <th>Notes</th>
-                    </tr>
-                    <tr>
-                        <td>1. Ticket Analysis</td>
-                        <td rowspan="2" style="background:#333;">Yes (with 2)</td>
-                        <td>Yes</td>
-                        <td>No</td>
-                        <td class="human">Optional</td>
-                        <td>Human can confirm ticket understanding before setup.</td>
-                    </tr>
-                    <tr>
-                        <td>2. Project Setup</td>
-                        <td>Yes</td>
-                        <td>No</td>
-                        <td class="human">Recommended</td>
-                        <td>Human approves project structure before proceeding.</td>
-                    </tr>
-                    <tr>
-                        <td>3. AI-Powered Deep Dive</td>
-                        <td>No</td>
-                        <td>Yes (with 4)</td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>Feeds directly into Visual Analysis Report.</td>
-                    </tr>
-                    <tr>
-                        <td>4. Visual Analysis Report</td>
-                        <td>No</td>
-                        <td>Yes (with 3)</td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>Automated, can be batched with 3.</td>
-                    </tr>
-                    <tr>
-                        <td>5. Review & Clarification</td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>Yes</td>
-                        <td class="human">Yes</td>
-                        <td>Human reviews clarifications, can provide feedback.</td>
-                    </tr>
-                    <tr>
-                        <td>6. Implementation</td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>Yes</td>
-                        <td>No</td>
-                        <td>Automated code generation or suggestions.</td>
-                    </tr>
-                    <tr>
-                        <td>7. Quality Assurance</td>
-                        <td>No</td>
-                        <td>Yes (with 6)</td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>Can be pipelined with Implementation for efficiency.</td>
-                    </tr>
-                    <tr>
-                        <td>8. Deployment & Review</td>
-                        <td>No</td>
-                        <td>No</td>
-                        <td>Yes</td>
-                        <td class="human">Recommended</td>
-                        <td>Human confirms before/after deployment.</td>
-                    </tr>
-                </table>
-            </div>
-            <div class="note">
-                <b>Optimization Suggestions:</b>
-                <ul>
-                    <li><b>Combine Steps 1 & 2:</b> Ticket Analysis and Project Setup can be a single LLM call, with
- human confirmation before proceeding.</li>
-                    <li><b>Pipeline Steps 3 & 4:</b> Deep Dive and Visual Report can be batched for efficiency.</li>
-                    <li><b>Pipeline Steps 6 & 7:</b> Implementation and QA can be combined, with QA validating the generated code.</li>
-                    <li><b>Human-in-the-Loop:</b> Insert confirmation points after Step 2 (project setup), Step 5 (review), and Step 8 (deployment).</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="diagram">
-            <h2>2. Optimized System Diagram</h2>
-            <div class="diagram">
-                <!-- SVG for optimized workflow -->
-                <svg width="950" height="420" viewBox="0 0 950 420">
-                    <!-- Orchestrator -->
-                    <rect x="410" y="20" width="130" height="50" rx="12" fill="#ffb347" stroke="#fff" stroke-width="2"/>
-                    <text x="475" y="50" text-anchor="middle" fill="#232323" font-size="18" font-weight="bold">Orchestrator</text>
-                    <!-- Combined Agent 1+2 -->
-                    <rect x="60" y="100" width="200" height="50" rx="10" fill="#6ec6ff"/>
-                    <text x="160" y="130" text-anchor="middle" fill="#232323" font-size="15">1+2. Ticket Analysis &<tspan x="160" dy="18">Project Setup</tspan></text>
-                    <!-- Human confirmation after 1+2 -->
-                    <circle cx="270" cy="125" r="18" fill="#ff80ab" stroke="#fff" stroke-width="2"/>
-                    <text x="270" y="130" text-anchor="middle" fill="#232323" font-size="18" font-weight="bold">👤</text>
-                    <!-- Pipeline 3+4 -->
-                    <rect x="60" y="200" width="200" height="50" rx="10" fill="#ba68c8"/>
-                    <text x="160" y="230" text-anchor="middle" fill="#232323" font-size="15">3+4. Deep Dive &<tspan x="160" dy="18">Visual Report</tspan></text>
-                    <!-- Step 5 with human -->
-                    <rect x="60" y="300" width="200" height="50" rx="10" fill="#aed581"/>
-                    <text x="160" y="330" text-anchor="middle" fill="#232323" font-size="15">5. Review & Clarification</text>
-                    <circle cx="270" cy="325" r="18" fill="#ff80ab" stroke="#fff" stroke-width="2"/>
-                    <text x="270" y="330" text-anchor="middle" fill="#232323" font-size="18" font-weight="bold">👤</text>
-                    <!-- Pipeline 6+7 -->
-                    <rect x="690" y="100" width="200" height="50" rx="10" fill="#4dd0e1"/>
-                    <text x="790" y="130" text-anchor="middle" fill="#232323" font-size="15">6+7. Implementation &<tspan x="790" dy="18">QA</tspan></text>
-                    <!-- Step 8 with human -->
-                    <rect x="690" y="200" width="200" height="50" rx="10" fill="#f06292"/>
-                    <text x="790" y="230" text-anchor="middle" fill="#232323" font-size="15">8. Deployment & Review</text>
-                    <circle cx="900" cy="225" r="18" fill="#ff80ab" stroke="#fff" stroke-width="2"/>
-                    <text x="900" y="230" text-anchor="middle" fill="#232323" font-size="18" font-weight="bold">👤</text>
-                    <!-- Arrows -->
-                    <line x1="475" y1="70" x2="160" y2="100" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <line x1="270" y1="143" x2="160" y2="200" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <line x1="160" y1="250" x2="160" y2="300" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <line x1="270" y1="343" x2="790" y2="150" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <line x1="790" y1="150" x2="790" y2="200" stroke="#fff" stroke-width="2" marker-end="url(#arrowhead)"/>
-                    <!-- Human to orchestrator feedback -->
-                    <line x1="270" y1="143" x2
-="475" y2="70" stroke="#ff80ab" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowhead)"/>
-                    <line x1="270" y1="343" x2="475" y2="70" stroke="#ff80ab" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowhead)"/>
-                    <line x1="900" y1="243" x2="475" y2="70" stroke="#ff80ab" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#arrowhead)"/>
-                    <!-- External Systems -->
-                    <rect x="10" y="380" width="120" height="30" rx="8" fill="#fffde7" stroke="#ffd54f" stroke-width="2"/>
-                    <text x="70" y="400" text-anchor="middle" fill="#232323" font-size="14">Jira</text>
-                    <rect x="820" y="380" width="120" height="30" rx="8" fill="#e3f2fd" stroke="#81d4fa" stroke-width="2"/>
-                    <text x="880" y="400" text-anchor="middle" fill="#232323" font-size="14">GitHub</text>
-                    <!-- Lines to agents -->
-                    <line x1="70" y1="380" x2="160" y2="350" stroke="#ffd54f" stroke-width="2"/>
-                    <line x1="880" y1="380" x2="790" y2="250" stroke="#81d4fa" stroke-width="2"/>
-                    <!-- Arrowhead marker -->
-                    <defs>
-                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                            <polygon points="0 0, 10 3.5, 0 7" fill="#fff"/>
-                        </marker>
-                    </defs>
-                </svg>
-            </div>
-            <div class="note">
-                <b>Legend:</b> 👤 = Human confirmation/feedback. Dashed lines = human-in-the-loop feedback to orchestrator.
-            </div>
-        </section>
-
-        <section id="orchestrator">
-            <h2>3. Efficient Java Orchestrator Pattern</h2>
-            <div class="step">
-                <h3>Key Strategies</h3>
-                <ul>
-                    <li><b>Batch and pipeline steps</b> where possible to minimize LLM calls.</li>
-                    <li><b>Centralize context</b> in the orchestrator and pass only relevant info to each agent.</li>
-                    <li><b>Insert human-in-the-loop checkpoints</b> for critical confirmations.</li>
-                    <li><b>Cache results</b> for repeated or deterministic tasks.</li>
-                </ul>
-            </div>
-            <div class="step">
-                <h3>Sample Orchestrator Code (Pseudocode)</h3>
-                <div class="code-block">
-// Shared context for the workflow
-class WorkflowContext {
-    String ticketText;
-    String ticketSummary;
-    String projectSetup;
-    String deepDive;
-    String visualReport;
-    String reviewNotes;
-    String implementation;
-    String qaReport;
-    String deploymentStatus;
-    // ... other fields as needed
-}
-
-class Orchestrator {
-    WorkflowContext ctx = new WorkflowContext();
-
-    void runWorkflow() {
-        // Step 1+2: Combined LLM call
-        var result = agents.ticketAndSetup(ctx.ticketText);
-        ctx.ticketSummary = result.summary;
-        ctx.projectSetup = result.setup;
-        if (!humanConfirm("Ticket & Setup", ctx)) return;
-
-        // Step 3+4: Pipeline LLM call
-        var analysis = agents.deepDiveAndVisual(ctx.ticketSummary, ctx.projectSetup);
-        ctx.deepDive = analysis.deepDive;
-        ctx.visualReport = analysis.visualReport;
-
-        // Step 5: Review & Clarification (human-in-the-loop)
-        ctx.reviewNotes = agents.review(ctx.deepDive, ctx.visualReport);
-        if (!humanConfirm("Review & Clarification", ctx)) return;
-
-        // Step 6+7: Implementation & QA
-        var implQa = agents.implementationAndQA(ctx.reviewNotes);
-        ctx.implementation = implQa.code;
-        ctx.qaReport = implQa.qa;
-
-        // Step 8: Deployment & Review (human-in-the-loop)
-        ctx.deploymentStatus = agents.deployment(ctx.implementation, ctx.qaReport);
-        humanConfirm("Deployment & Review", ctx);
-
-        // ... log, cache, and monitor as needed
-    }
-
-    boolean humanConfirm(String step, WorkflowContext ctx) {
-        // Present summary to human, get approval
-        // Return true if approved, false to halt workflow
-        // (Implementation: UI, email, Slack, etc.)
-        return true;
-    }
-}
-                </div>
-                <ul>
-                    <li><b>Only 5 LLM calls</b> for the whole workflow (instead of 8+), with human checkpoints for quality and cost control.</li>
-                    <li>All context is managed centrally and passed as needed.</li>
-               
- </ul>
-            </div>
-        </section>
-
-        <section id="implementation">
-            <h2>4. Implementation Steps</h2>
-            <div class="step">
-                <h3>1. Define Combined/Pipelined Agents in Markdown</h3>
-                <div class="code-block">
-# Agent: Ticket Analysis & Project Setup
-
-## Purpose
-Analyze ticket and generate project setup plan.
-
-## Instructions
-- Summarize the ticket.
-- Propose a project structure.
-- List any unclear requirements.
-
-## Input
-- Ticket text
-
-## Output
-- Summary
-- Project setup plan
-- Clarification questions
-                </div>
-                <div class="code-block">
-# Agent: Deep Dive & Visual Report
-
-## Purpose
-Analyze requirements and generate a visual report.
-
-## Instructions
-- Perform a deep dive on requirements.
-- Generate a visual (diagram/chart) summary.
-
-## Input
-- Ticket summary
-- Project setup plan
-
-## Output
-- Deep dive analysis
-- Visual report (as markdown or image link)
-                </div>
-            </div>
-            <div class="step">
-                <h3>2. Implement Efficient Java Orchestrator</h3>
-                <ul>
-                    <li>Follow the orchestrator pattern above.</li>
-                    <li>Insert human confirmation steps using your preferred UI or notification system.</li>
-                </ul>
-            </div>
-            <div class="step">
-                <h3>3. Monitor, Cache, and Optimize</h3>
-                <ul>
-                    <li>Log all LLM calls and human confirmations.</li>
-                    <li>Cache results for repeated tickets or similar workflows.</li>
-                    <li>Monitor token usage and optimize prompts for brevity.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="resources">
-            <h2>5. Further Resources</h2>
+<header>
+    <h1>AI-Enhanced Workflow: Efficient Orchestration & Design</h1>
+    <p>Cost-Effective Multi-Agent Patterns, Human-in-the-Loop, and Java Integration</p>
+</header>
+<nav>
+    <ul>
+        <li><a href="#workflow">1. Workflow Analysis & Optimization</a></li>
+        <li><a href="#diagram">2. Optimized System Diagram</a></li>
+        <li><a href="#orchestrator">3. Efficient Java Orchestrator Pattern</a></li>
+        <li><a href="#implementation">4. Implementation Steps</a></li>
+        <li><a href="#resources">5. Further Resources</a></li>
+    </ul>
+</nav>
+<main>
+    <section id="workflow">
+        <h2>1. Workflow Analysis & Optimization</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Step</th>
+                    <th>Can be Combined?</th>
+                    <th>Pipeline?</th>
+                    <th>Separate?</th>
+                    <th>Human-in-the-Loop?</th>
+                    <th>Notes</th>
+                </tr>
+                <tr>
+                    <td>1. Ticket Analysis</td>
+                    <td rowspan="2" style="background:#333;">Yes (with 2)</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td class="human">Optional</td>
+                    <td>Human can confirm ticket understanding before setup.</td>
+                </tr>
+                <tr>
+                    <td>2. Project Setup</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td class="human">Recommended</td>
+                    <td>Human approves project structure before proceeding.</td>
+                </tr>
+                <tr>
+                    <td>3. AI-Powered Deep Dive</td>
+                    <td>No</td>
+                    <td>Yes (with 4)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Feeds directly into Visual Analysis Report.</td>
+                </tr>
+                <tr>
+                    <td>4. Visual Analysis Report</td>
+                    <td>No</td>
+                    <td>Yes (with 3)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Automated, can be batched with 3.</td>
+                </tr>
+                <tr>
+                    <td>5. Review & Clarification</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td class="human">Yes</td>
+                    <td>Human reviews clarifications, can provide feedback.</td>
+                </tr>
+                <tr>
+                    <td>6. Implementation</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td>No</td>
+                    <td>Automated code generation or suggestions.</td>
+                </tr>
+                <tr>
+                    <td>7. Quality Assurance</td>
+                    <td>No</td>
+                    <td>Yes (with 6)</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Can be pipelined with Implementation for efficiency.</td>
+                </tr>
+                <tr>
+                    <td>8. Deployment & Review</td>
+                    <td>No</td>
+                    <td>No</td>
+                    <td>Yes</td>
+                    <td class="human">Recommended</td>
+                    <td>Human confirms before/after deployment.</td>
+                </tr>
+            </table>
+        </div>
+        <div class="note">
+            <b>Optimization Suggestions:</b>
             <ul>
-                <li><a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents Documentation</a></li>
-                <li><a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API (for LLM integration)</a></li>
-                <li><a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a></li>
-                <li><a href="https://en.wikipedia.org/wiki/Multi-agent_system" target="_blank">Multi-Agent Systems (Wikipedia)</a></li>
-                <li><a href="https://microservices.io/patterns/data/saga.html" target="_blank">Orchestration vs. Choreography</a></li>
+                <li><b>Combine Steps 1 & 2:</b> Ticket Analysis and Project Setup can be a single LLM call, with
+                    human confirmation before proceeding.
+                </li>
+                <li><b>Pipeline Steps 3 & 4:</b> Deep Dive and Visual Report can be batched for efficiency.</li>
+                <li><b>Pipeline Steps 6 & 7:</b> Implementation and QA can be combined, with QA validating the generated
+                    code.
+                </li>
+                <li><b>Human-in-the-Loop:</b> Insert confirmation points after Step 2 (project setup), Step 5 (review),
+                    and Step 8 (deployment).
+                </li>
             </ul>
-        </section>
-    </main>
+        </div>
+    </section>
+
+    <section id="diagram">
+        <h2>2. Optimized System Diagram</h2>
+        <div class="diagram">
+            <!-- SVG for optimized workflow -->
+            <svg height="420" viewBox="0 0 950 420" width="950">
+                <!-- Orchestrator -->
+                <rect fill="#ffb347" height="50" rx="12" stroke="#fff" stroke-width="2" width="130" x="410" y="20"/>
+                <text fill="#232323" font-size="18" font-weight="bold" text-anchor="middle" x="475" y="50">
+                    Orchestrator
+                </text>
+                <!-- Combined Agent 1+2 -->
+                <rect fill="#6ec6ff" height="50" rx="10" width="200" x="60" y="100"/>
+                <text fill="#232323" font-size="15" text-anchor="middle" x="160" y="130">1+2. Ticket Analysis &
+                    <tspan dy="18" x="160">Project Setup</tspan>
+                </text>
+                <!-- Human confirmation after 1+2 -->
+                <circle cx="270" cy="125" fill="#ff80ab" r="18" stroke="#fff" stroke-width="2"/>
+                <text fill="#232323" font-size="18" font-weight="bold" text-anchor="middle" x="270" y="130">👤</text>
+                <!-- Pipeline 3+4 -->
+                <rect fill="#ba68c8" height="50" rx="10" width="200" x="60" y="200"/>
+                <text fill="#232323" font-size="15" text-anchor="middle" x="160" y="230">3+4. Deep Dive &
+                    <tspan dy="18" x="160">Visual Report</tspan>
+                </text>
+                <!-- Step 5 with human -->
+                <rect fill="#aed581" height="50" rx="10" width="200" x="60" y="300"/>
+                <text fill="#232323" font-size="15" text-anchor="middle" x="160" y="330">5. Review & Clarification
+                </text>
+                <circle cx="270" cy="325" fill="#ff80ab" r="18" stroke="#fff" stroke-width="2"/>
+                <text fill="#232323" font-size="18" font-weight="bold" text-anchor="middle" x="270" y="330">👤</text>
+                <!-- Pipeline 6+7 -->
+                <rect fill="#4dd0e1" height="50" rx="10" width="200" x="690" y="100"/>
+                <text fill="#232323" font-size="15" text-anchor="middle" x="790" y="130">6+7. Implementation &
+                    <tspan dy="18" x="790">QA</tspan>
+                </text>
+                <!-- Step 8 with human -->
+                <rect fill="#f06292" height="50" rx="10" width="200" x="690" y="200"/>
+                <text fill="#232323" font-size="15" text-anchor="middle" x="790" y="230">8. Deployment & Review</text>
+                <circle cx="900" cy="225" fill="#ff80ab" r="18" stroke="#fff" stroke-width="2"/>
+                <text fill="#232323" font-size="18" font-weight="bold" text-anchor="middle" x="900" y="230">👤</text>
+                <!-- Arrows -->
+                <line marker-end="url(#arrowhead)" stroke="#fff" stroke-width="2" x1="475" x2="160" y1="70" y2="100"/>
+                <line marker-end="url(#arrowhead)" stroke="#fff" stroke-width="2" x1="270" x2="160" y1="143" y2="200"/>
+                <line marker-end="url(#arrowhead)" stroke="#fff" stroke-width="2" x1="160" x2="160" y1="250" y2="300"/>
+                <line marker-end="url(#arrowhead)" stroke="#fff" stroke-width="2" x1="270" x2="790" y1="343" y2="150"/>
+                <line marker-end="url(#arrowhead)" stroke="#fff" stroke-width="2" x1="790" x2="790" y1="150" y2="200"/>
+                <!-- Human to orchestrator feedback -->
+                <line marker-end="url(#arrowhead)" stroke="#ff80ab" stroke-dasharray="6,4" stroke-width="2" x1="270" x2
+                        ="475" y1="143"
+                      y2="70"/>
+                <line marker-end="url(#arrowhead)" stroke="#ff80ab" stroke-dasharray="6,4" stroke-width="2" x1="270" x2="475" y1="343"
+                      y2="70"/>
+                <line marker-end="url(#arrowhead)" stroke="#ff80ab" stroke-dasharray="6,4" stroke-width="2" x1="900" x2="475" y1="243"
+                      y2="70"/>
+                <!-- External Systems -->
+                <rect fill="#fffde7" height="30" rx="8" stroke="#ffd54f" stroke-width="2" width="120" x="10" y="380"/>
+                <text fill="#232323" font-size="14" text-anchor="middle" x="70" y="400">Jira</text>
+                <rect fill="#e3f2fd" height="30" rx="8" stroke="#81d4fa" stroke-width="2" width="120" x="820" y="380"/>
+                <text fill="#232323" font-size="14" text-anchor="middle" x="880" y="400">GitHub</text>
+                <!-- Lines to agents -->
+                <line stroke="#ffd54f" stroke-width="2" x1="70" x2="160" y1="380" y2="350"/>
+                <line stroke="#81d4fa" stroke-width="2" x1="880" x2="790" y1="380" y2="250"/>
+                <!-- Arrowhead marker -->
+                <defs>
+                    <marker id="arrowhead" markerHeight="7" markerWidth="10" orient="auto" refX="10" refY="3.5">
+                        <polygon fill="#fff" points="0 0, 10 3.5, 0 7"/>
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+        <div class="note">
+            <b>Legend:</b> 👤 = Human confirmation/feedback. Dashed lines = human-in-the-loop feedback to orchestrator.
+        </div>
+    </section>
+
+    <section id="orchestrator">
+        <h2>3. Efficient Java Orchestrator Pattern</h2>
+        <div class="step">
+            <h3>Key Strategies</h3>
+            <ul>
+                <li><b>Batch and pipeline steps</b> where possible to minimize LLM calls.</li>
+                <li><b>Centralize context</b> in the orchestrator and pass only relevant info to each agent.</li>
+                <li><b>Insert human-in-the-loop checkpoints</b> for critical confirmations.</li>
+                <li><b>Cache results</b> for repeated or deterministic tasks.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <h3>Sample Orchestrator Code (Pseudocode)</h3>
+            <div class="code-block">
+                // Shared context for the workflow
+                class WorkflowContext {
+                String ticketText;
+                String ticketSummary;
+                String projectSetup;
+                String deepDive;
+                String visualReport;
+                String reviewNotes;
+                String implementation;
+                String qaReport;
+                String deploymentStatus;
+                // ... other fields as needed
+                }
+
+                class Orchestrator {
+                WorkflowContext ctx = new WorkflowContext();
+
+                void runWorkflow() {
+                // Step 1+2: Combined LLM call
+                var result = agents.ticketAndSetup(ctx.ticketText);
+                ctx.ticketSummary = result.summary;
+                ctx.projectSetup = result.setup;
+                if (!humanConfirm("Ticket & Setup", ctx)) return;
+
+                // Step 3+4: Pipeline LLM call
+                var analysis = agents.deepDiveAndVisual(ctx.ticketSummary, ctx.projectSetup);
+                ctx.deepDive = analysis.deepDive;
+                ctx.visualReport = analysis.visualReport;
+
+                // Step 5: Review & Clarification (human-in-the-loop)
+                ctx.reviewNotes = agents.review(ctx.deepDive, ctx.visualReport);
+                if (!humanConfirm("Review & Clarification", ctx)) return;
+
+                // Step 6+7: Implementation & QA
+                var implQa = agents.implementationAndQA(ctx.reviewNotes);
+                ctx.implementation = implQa.code;
+                ctx.qaReport = implQa.qa;
+
+                // Step 8: Deployment & Review (human-in-the-loop)
+                ctx.deploymentStatus = agents.deployment(ctx.implementation, ctx.qaReport);
+                humanConfirm("Deployment & Review", ctx);
+
+                // ... log, cache, and monitor as needed
+                }
+
+                boolean humanConfirm(String step, WorkflowContext ctx) {
+                // Present summary to human, get approval
+                // Return true if approved, false to halt workflow
+                // (Implementation: UI, email, Slack, etc.)
+                return true;
+                }
+                }
+            </div>
+            <ul>
+                <li><b>Only 5 LLM calls</b> for the whole workflow (instead of 8+), with human checkpoints for quality
+                    and cost control.
+                </li>
+                <li>All context is managed centrally and passed as needed.</li>
+
+            </ul>
+        </div>
+    </section>
+
+    <section id="implementation">
+        <h2>4. Implementation Steps</h2>
+        <div class="step">
+            <h3>1. Define Combined/Pipelined Agents in Markdown</h3>
+            <div class="code-block">
+                # Agent: Ticket Analysis & Project Setup
+
+                ## Purpose
+                Analyze ticket and generate project setup plan.
+
+                ## Instructions
+                - Summarize the ticket.
+                - Propose a project structure.
+                - List any unclear requirements.
+
+                ## Input
+                - Ticket text
+
+                ## Output
+                - Summary
+                - Project setup plan
+                - Clarification questions
+            </div>
+            <div class="code-block">
+                # Agent: Deep Dive & Visual Report
+
+                ## Purpose
+                Analyze requirements and generate a visual report.
+
+                ## Instructions
+                - Perform a deep dive on requirements.
+                - Generate a visual (diagram/chart) summary.
+
+                ## Input
+                - Ticket summary
+                - Project setup plan
+
+                ## Output
+                - Deep dive analysis
+                - Visual report (as markdown or image link)
+            </div>
+        </div>
+        <div class="step">
+            <h3>2. Implement Efficient Java Orchestrator</h3>
+            <ul>
+                <li>Follow the orchestrator pattern above.</li>
+                <li>Insert human confirmation steps using your preferred UI or notification system.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <h3>3. Monitor, Cache, and Optimize</h3>
+            <ul>
+                <li>Log all LLM calls and human confirmations.</li>
+                <li>Cache results for repeated tickets or similar workflows.</li>
+                <li>Monitor token usage and optimize prompts for brevity.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="resources">
+        <h2>5. Further Resources</h2>
+        <ul>
+            <li><a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents Documentation</a>
+            </li>
+            <li><a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API (for LLM
+                integration)</a></li>
+            <li><a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Multi-agent_system" target="_blank">Multi-Agent Systems
+                (Wikipedia)</a></li>
+            <li><a href="https://microservices.io/patterns/data/saga.html" target="_blank">Orchestration vs.
+                Choreography</a></li>
+        </ul>
+    </section>
+</main>
 </body>
 </html>

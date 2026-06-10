@@ -58,7 +58,7 @@ public class WorkflowOrchestrator {
     }
 
     public WorkflowOrchestrator(LlmClient llmClient, WorkflowContext ctx, boolean autoApprove,
-                                 JiraClient jiraClient, GitClient gitClient, GitHubClient gitHubClient) {
+                                JiraClient jiraClient, GitClient gitClient, GitHubClient gitHubClient) {
         this.llmClient = llmClient;
         this.ctx = ctx;
         this.autoApprove = autoApprove;
@@ -78,6 +78,23 @@ public class WorkflowOrchestrator {
 
     // ══════════════════════════════════════════════════════════════
     // Full modular workflow — 8 LLM calls
+    // ══════════════════════════════════════════════════════════════
+
+    /**
+     * Creates a new orchestrator pre-loaded with a context restored from a JSON file.
+     * Use this to resume a workflow that was halted at a gate in a previous session.
+     *
+     * @param filePath  path to a JSON file previously written by {@link #saveContext}
+     * @param llmClient the LLM client to use for subsequent agent calls
+     * @return a new orchestrator with the restored context; git/GitHub clients are not restored
+     */
+    public static WorkflowOrchestrator loadContext(String filePath, LlmClient llmClient) {
+        WorkflowContext ctx = WorkflowContextSerializer.load(filePath);
+        return new WorkflowOrchestrator(llmClient, ctx);
+    }
+
+    // ══════════════════════════════════════════════════════════════
+    // Optimized workflow — 5 LLM calls
     // ══════════════════════════════════════════════════════════════
 
     /**
@@ -130,7 +147,7 @@ public class WorkflowOrchestrator {
     }
 
     // ══════════════════════════════════════════════════════════════
-    // Optimized workflow — 5 LLM calls
+    // Combined-prompt batch helpers (used only by runWorkflowOptimized)
     // ══════════════════════════════════════════════════════════════
 
     /**
@@ -177,10 +194,6 @@ public class WorkflowOrchestrator {
         log("Workflow complete.");
     }
 
-    // ══════════════════════════════════════════════════════════════
-    // Combined-prompt batch helpers (used only by runWorkflowOptimized)
-    // ══════════════════════════════════════════════════════════════
-
     private void runBatchTicketAndSetup() {
         String ticketPrompt = MarkdownLoader.load("agents/ticket_analysis.md")
                 .replace("{{ticket}}", ctx.getTicketText());
@@ -226,6 +239,10 @@ public class WorkflowOrchestrator {
         ctx.setVisualReport(extractSection(response, "VISUAL_REPORT"));
     }
 
+    // ══════════════════════════════════════════════════════════════
+    // Re-run helpers
+    // ══════════════════════════════════════════════════════════════
+
     private void runBatchImplementationAndQA() {
         String implPrompt = MarkdownLoader.load("agents/implementation.md")
                 .replace("{{review_notes}}", ctx.getReviewNotes());
@@ -248,10 +265,6 @@ public class WorkflowOrchestrator {
         ctx.setQaReport(extractSection(response, "QA_REPORT"));
     }
 
-    // ══════════════════════════════════════════════════════════════
-    // Re-run helpers
-    // ══════════════════════════════════════════════════════════════
-
     /**
      * Clears the cached codebase snapshot and re-runs Steps 3+4 (Deep Dive + Visual Report).
      * <p>
@@ -272,6 +285,10 @@ public class WorkflowOrchestrator {
         log("Analysis re-run complete.");
     }
 
+    // ══════════════════════════════════════════════════════════════
+    // Utilities
+    // ══════════════════════════════════════════════════════════════
+
     /**
      * Runs the optional RefactoringAgent between Steps 7 and 8.
      * <p>
@@ -286,10 +303,6 @@ public class WorkflowOrchestrator {
         refactoringAgent.execute(ctx);
         log("[Refactoring] Done. refactoringPlan set; " + ctx.getWrittenFiles().size() + " total files tracked.");
     }
-
-    // ══════════════════════════════════════════════════════════════
-    // Utilities
-    // ══════════════════════════════════════════════════════════════
 
     /**
      * Extracts the content under a "## HEADER" section from an LLM response.
@@ -337,19 +350,6 @@ public class WorkflowOrchestrator {
      */
     public void saveContext() {
         WorkflowContextSerializer.saveToReportFolder(ctx);
-    }
-
-    /**
-     * Creates a new orchestrator pre-loaded with a context restored from a JSON file.
-     * Use this to resume a workflow that was halted at a gate in a previous session.
-     *
-     * @param filePath path to a JSON file previously written by {@link #saveContext}
-     * @param llmClient the LLM client to use for subsequent agent calls
-     * @return a new orchestrator with the restored context; git/GitHub clients are not restored
-     */
-    public static WorkflowOrchestrator loadContext(String filePath, LlmClient llmClient) {
-        WorkflowContext ctx = WorkflowContextSerializer.load(filePath);
-        return new WorkflowOrchestrator(llmClient, ctx);
     }
 
     private void log(String message) {

@@ -2,11 +2,15 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>MaskMe — Prompts</title>
     <style>
         /* ── Reset & base ── */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
             --primary: #4361ee;
@@ -48,7 +52,12 @@
         }
 
         /* ── Accordion ── */
-        .accordion { margin-bottom: 1rem; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+        .accordion {
+            margin-bottom: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            overflow: hidden;
+        }
 
         .accordion-header {
             display: flex;
@@ -63,7 +72,9 @@
             transition: background .15s;
         }
 
-        .accordion-header:hover { background: #e8eaed; }
+        .accordion-header:hover {
+            background: #e8eaed;
+        }
 
         .accordion-header .chevron {
             font-size: .75rem;
@@ -71,7 +82,9 @@
             color: var(--text-secondary);
         }
 
-        .accordion-header.open .chevron { transform: rotate(180deg); }
+        .accordion-header.open .chevron {
+            transform: rotate(180deg);
+        }
 
         .accordion-body {
             display: none;
@@ -80,7 +93,9 @@
             background: var(--card-bg);
         }
 
-        .accordion-body.open { display: block; }
+        .accordion-body.open {
+            display: block;
+        }
 
         .prompt-meta {
             font-size: .8rem;
@@ -88,7 +103,9 @@
             margin-bottom: .75rem;
         }
 
-        .prompt-wrapper { position: relative; }
+        .prompt-wrapper {
+            position: relative;
+        }
 
         .prompt-textarea {
             width: 100%;
@@ -127,8 +144,13 @@
             gap: .3rem;
         }
 
-        .copy-btn:hover { background: var(--primary-dark); }
-        .copy-btn.copied { background: var(--success); }
+        .copy-btn:hover {
+            background: var(--primary-dark);
+        }
+
+        .copy-btn.copied {
+            background: var(--success);
+        }
 
         footer {
             text-align: center;
@@ -137,8 +159,14 @@
             color: var(--text-secondary);
         }
 
-        footer a { color: var(--primary); text-decoration: none; }
-        footer a:hover { text-decoration: underline; }
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 <body>
@@ -147,7 +175,8 @@
 
     <div class="hero">
         <h1>💬 AI Prompts</h1>
-        <p>Ready-to-use prompts for AI-assisted development workflows. Click copy and paste directly into your AI assistant.</p>
+        <p>Ready-to-use prompts for AI-assisted development workflows. Click copy and paste directly into your AI
+            assistant.</p>
     </div>
 
     <!-- 1. Requirements Generation -->
@@ -157,7 +186,9 @@
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt to perform a deep analysis of requirements before implementation — covers edge cases, risks, and incremental steps.</div>
+            <div class="prompt-meta">Use this prompt to perform a deep analysis of requirements before implementation —
+                covers edge cases, risks, and incremental steps.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>I have the following requirements:
 
@@ -233,7 +264,9 @@ By following this step-by-step approach, you should be able to finalize the HTML
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt when the AI is struggling with latency or completeness when generating large HTML outputs — guides it to build incrementally.</div>
+            <div class="prompt-meta">Use this prompt when the AI is struggling with latency or completeness when
+                generating large HTML outputs — guides it to build incrementally.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>To address the latency in finalizing the HTML, I recommend breaking down the task into clear, manageable steps:
 
@@ -256,7 +289,9 @@ By following this step-by-step approach, you should be able to finalize the HTML
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt to generate comprehensive JUnit 5 test cases with nested classes, Given-When-Then pattern, AssertJ assertions, and Mockito mocks.</div>
+            <div class="prompt-meta">Use this prompt to generate comprehensive JUnit 5 test cases with nested classes,
+                Given-When-Then pattern, AssertJ assertions, and Mockito mocks.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>Now it's time to cover the implemented changes with comprehensive test cases. Follow this pattern:
 
@@ -310,7 +345,9 @@ class CreateOperations {
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt to get a structured code review covering quality, security, performance, and maintainability.</div>
+            <div class="prompt-meta">Use this prompt to get a structured code review covering quality, security,
+                performance, and maintainability.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>Please perform a thorough code review of the following code. Structure your review as follows:
 
@@ -361,7 +398,9 @@ For each finding, provide:
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt to generate a well-structured conventional commit message from a description of your changes.</div>
+            <div class="prompt-meta">Use this prompt to generate a well-structured conventional commit message from a
+                description of your changes.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>Generate a conventional commit message for the following changes:
 
@@ -393,7 +432,9 @@ Types: feat | fix | refactor | test | docs | chore | perf | style
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt to have the AI check the implementation and add the necessary documentation comments to a method or function.</div>
+            <div class="prompt-meta">Use this prompt to have the AI check the implementation and add the necessary
+                documentation comments to a method or function.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>Please review the following method/function implementation and add the necessary documentation comments.
 
@@ -428,7 +469,9 @@ Types: feat | fix | refactor | test | docs | chore | perf | style
             <span class="chevron">▼</span>
         </div>
         <div class="accordion-body">
-            <div class="prompt-meta">Use this prompt to get a safe, incremental refactoring plan for existing code without breaking functionality.</div>
+            <div class="prompt-meta">Use this prompt to get a safe, incremental refactoring plan for existing code
+                without breaking functionality.
+            </div>
             <div class="prompt-wrapper">
                 <textarea class="prompt-textarea" readonly>I need to refactor the following code. Please provide a safe, incremental refactoring plan.
 
@@ -461,24 +504,24 @@ Constraints:
 </footer>
 
 <script>
-function toggleAccordion(header) {
-    const body = header.nextElementSibling;
-    const isOpen = body.classList.contains('open');
-    header.classList.toggle('open', !isOpen);
-    body.classList.toggle('open', !isOpen);
-}
+    function toggleAccordion(header) {
+        const body = header.nextElementSibling;
+        const isOpen = body.classList.contains('open');
+        header.classList.toggle('open', !isOpen);
+        body.classList.toggle('open', !isOpen);
+    }
 
-function copyPrompt(btn) {
-    const textarea = btn.previousElementSibling;
-    navigator.clipboard.writeText(textarea.value).then(() => {
-        btn.textContent = '✅ Copied!';
-        btn.classList.add('copied');
-        setTimeout(() => {
-            btn.innerHTML = '📋 Copy';
-            btn.classList.remove('copied');
-        }, 2000);
-    });
-}
+    function copyPrompt(btn) {
+        const textarea = btn.previousElementSibling;
+        navigator.clipboard.writeText(textarea.value).then(() => {
+            btn.textContent = '✅ Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = '📋 Copy';
+                btn.classList.remove('copied');
+            }, 2000);
+        });
+    }
 </script>
 
 </body>

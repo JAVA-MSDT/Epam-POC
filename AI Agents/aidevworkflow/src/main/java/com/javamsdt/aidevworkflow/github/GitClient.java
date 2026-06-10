@@ -9,7 +9,7 @@ import java.util.List;
 
 /**
  * Thin wrapper around the local git CLI for commit, branch, and push operations.
- *
+ * <p>
  * Requires git to be installed and available on PATH.
  * All operations run inside the provided projectRootPath.
  */
@@ -63,12 +63,16 @@ public class GitClient {
         run("git", "push", "--set-upstream", remote, branchName);
     }
 
-    /** Returns the current branch name. */
+    /**
+     * Returns the current branch name.
+     */
     public String currentBranch() {
         return runCapture("git", "rev-parse", "--abbrev-ref", "HEAD").trim();
     }
 
-    /** Returns the remote URL for the given remote name. */
+    /**
+     * Returns the remote URL for the given remote name.
+     */
     public String remoteUrl(String remote) {
         return runCapture("git", "remote", "get-url", remote).trim();
     }

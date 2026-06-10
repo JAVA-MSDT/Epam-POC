@@ -3,7 +3,7 @@
 ## Purpose
 
 Perform a thorough technical analysis by comparing the ticket requirements against the
-existing codebase. Surface architectural gaps, edge cases, and implementation strategies are 
+existing codebase. Surface architectural gaps, edge cases, and implementation strategies are
 grounded in what is already in the project.
 
 ## Instructions

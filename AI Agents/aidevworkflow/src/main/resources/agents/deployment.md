@@ -46,14 +46,18 @@ List each logical commit group. Every generated file must appear in exactly one 
 The system will stage only the listed files and commit them with the given message.
 
 #### Commit 1
+
 Message: `feat(scope): short imperative summary`
 Files:
+
 - relative/path/to/File1.java
 - relative/path/to/File2.java
 
 #### Commit 2
+
 Message: `test(scope): add unit tests for ...`
 Files:
+
 - relative/path/to/File1Test.java
 
 [Repeat for each logical group — do NOT merge unrelated files into one commit]

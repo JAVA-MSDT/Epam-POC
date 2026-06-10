@@ -7,10 +7,10 @@ import com.javamsdt.aidevworkflow.util.MarkdownLoader;
 
 /**
  * Step 2 — Project Setup.
- *
+ * <p>
  * Reads:  ctx.ticketSummary, ctx.jiraTicketId, ctx.projectRootPath
  * Writes: ctx.projectSetup, ctx.reportFolderPath
- *
+ * <p>
  * In addition to generating the setup plan, this agent creates a local report
  * folder on disk (under projectRootPath/reports/<ticketId>) and stores its path
  * in ctx.reportFolderPath for use by later agents (VisualReportAgent etc.).

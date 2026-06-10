@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
 
 /**
  * Optional step — Refactoring (runs between Steps 7 and 8).
- *
+ * <p>
  * Reads:  ctx.implementation, ctx.qaReport, ctx.codebaseSnapshot (or scans if null)
  * Writes: ctx.refactoringPlan, ctx.writtenFiles (appends refactored files)
- *
+ * <p>
  * Not part of the core 8-step pipeline; invoke via
  * {@link com.javamsdt.aidevworkflow.orchestrator.WorkflowOrchestrator#runRefactoring()}.
  */
@@ -23,8 +23,8 @@ public class RefactoringAgent {
 
     private static final Pattern FILE_BLOCK_PATTERN = Pattern.compile(
             "```(?:java|kotlin|python|typescript|javascript|go|cs|xml|yaml|yml|properties|sh)?\\s*\\n"
-            + "//\\s*FILE:\\s*([^\\n]+)\\n"
-            + "(.*?)\\n```",
+                    + "//\\s*FILE:\\s*([^\\n]+)\\n"
+                    + "(.*?)\\n```",
             Pattern.DOTALL
     );
 

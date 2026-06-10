@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>AI Agents Learning Path & Workflow Guide</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -12,17 +12,20 @@
             margin: 0;
             padding: 0;
         }
+
         header {
             background: #1a1a1a;
             padding: 24px 0 16px 0;
             text-align: center;
             border-bottom: 2px solid #444;
         }
+
         header h1 {
             margin: 0;
             font-size: 2.2em;
             color: #ffb347;
         }
+
         nav {
             width: 260px;
             background: #181818;
@@ -33,36 +36,43 @@
             border-right: 2px solid #444;
             padding-top: 40px;
         }
+
         nav ul {
             list-style: none;
             padding: 0 0 0 20px;
         }
+
         nav ul li {
             margin: 18px 0;
         }
+
         nav ul li a {
             color: #ffb347;
             text-decoration: none;
             font-size: 1.1em;
             transition: color 0.2s;
         }
+
         nav ul li a:hover {
             color: #fff;
         }
-        main
- {
+
+        main {
             margin-left: 280px;
             padding: 32px 40px 40px 40px;
             max-width: 900px;
         }
+
         h2 {
             color: #ffb347;
             border-bottom: 1px solid #444;
             padding-bottom: 6px;
         }
+
         h3 {
             color: #ffd580;
         }
+
         .step {
             background: #2d2d2d;
             border-left: 5px solid #ffb347;
@@ -70,6 +80,7 @@
             padding: 18px 22px;
             border-radius: 8px;
         }
+
         .code-block {
             background: #181818;
             color: #b5e853;
@@ -80,29 +91,36 @@
             overflow-x: auto;
             margin: 12px 0;
         }
+
         a {
             color: #ffd580;
         }
+
         .table-container {
             overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 18px 0;
         }
+
         th, td {
             border: 1px solid #444;
             padding: 10px;
             text-align: left;
         }
+
         th {
             background: #333;
             color: #ffb347;
         }
+
         tr:nth-child(even) {
             background: #262626;
         }
+
         .note {
             background: #333;
             color: #ffd580;
@@ -111,6 +129,7 @@
             margin: 14px 0;
             font-size: 1em;
         }
+
         @media (max-width: 900px) {
             nav {
                 position: static;
@@ -120,6 +139,7 @@
                 border-bottom: 2px solid #444;
                 padding-top: 0;
             }
+
             main {
                 margin-left: 0;
                 padding: 24px 10px;
@@ -128,299 +148,326 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>AI Agents Learning Path & 8-Step Workflow Guide</h1>
-        <p>From Beginner to Advanced: Markdown Agents, Java Integration, and Claude Deep Dive</p>
-    </header>
-    <nav>
+<header>
+    <h1>AI Agents Learning Path & 8-Step Workflow Guide</h1>
+    <p>From Beginner to Advanced: Markdown Agents, Java Integration, and Claude Deep Dive</p>
+</header>
+<nav>
+    <ul>
+        <li><a href="#intro">Introduction</a></li>
+        <li><a href="#agents-basics">1. AI Agents: The Basics</a></li>
+        <li><a href="#learning-path">2. Learning Path: Beginner to Advanced</a></li>
+        <li><a href="#claude-agents">3. Deep Dive: Claude, Java & Markdown Agents</a></li>
+        <li><a href="#workflow">4. The 8-Step AI-Enhanced Workflow</a></li>
+        <li><a href="#step-by-step">5. Step-by-Step Java Implementation</a></li>
+        <li><a href="#resources">6. Further Resources</a></li>
+    </ul>
+</nav>
+<main>
+    <section id="intro">
+        <h2>Introduction</h2>
+        <p>
+            This guide is your all-in-one resource to understand, design, and implement AI agents using <b>markdown
+            orchestration</b> and <b>Java</b>, with a special focus on the <b>Claude</b> platform. You’ll also learn how
+            to build a practical, AI-powered 8-step development workflow.
+        </p>
+    </section>
+
+    <section id="agents-basics">
+        <h2>1. AI Agents: The Basics</h2>
+        <h3>What is an AI Agent?</h3>
         <ul>
-            <li><a href="#intro">Introduction</a></li>
-            <li><a href="#agents-basics">1. AI Agents: The Basics</a></li>
-            <li><a href="#learning-path">2. Learning Path: Beginner to Advanced</a></li>
-            <li><a href="#claude-agents">3. Deep Dive: Claude, Java & Markdown Agents</a></li>
-            <li><a href="#workflow">4. The 8-Step AI-Enhanced Workflow</a></li>
-            <li><a href="#step-by-step">5. Step-by-Step Java Implementation</a></li>
-            <li><a href="#resources">6. Further Resources</a></li>
+            <li><b>Definition:</b> An AI agent is a software entity that perceives its environment, reasons about it,
+                and acts autonomously to achieve goals.
+            </li>
+            <li><b>Key Features:</b> Perception, Reasoning, Action, Autonomy.</li>
+            <li><b>Types:</b> Reactive, Deliberative, Collaborative, Hybrid.</li>
         </ul>
-    </nav>
-    <main>
-        <section id="intro">
-            <h2>Introduction</h2>
-            <p>
-                This guide is your all-in-one resource to understand, design, and implement AI agents using <b>markdown orchestration</b> and <b>Java</b>, with a special focus on the <b>Claude</b> platform. You’ll also learn how to build a practical, AI-powered 8-step development workflow.
-            </p>
-        </section>
+        <div class="note">
+            <b>Are AI agents language-specific?</b><br>
+            No! The concept is
+            universal. You can implement agents in Java, Python, or even orchestrate them using markdown files,
+            depending on the platform.
+        </div>
+        <h3>How Do Agents Work?</h3>
+        <ul>
+            <li>Some use <b>rules</b> (if-then logic).</li>
+            <li>Modern agents often use <b>machine learning</b> or <b>large language models (LLMs)</b> like Claude or
+                GPT.
+            </li>
+            <li>Agents can be orchestrated via code (Java, Python) or via <b>markdown instructions</b>
+                (platform-specific).
+            </li>
+        </ul>
+    </section>
 
-        <section id="agents-basics">
-            <h2>1. AI Agents: The Basics</h2>
-            <h3>What is an AI Agent?</h3>
+    <section id="learning-path">
+        <h2>2. Learning Path: Beginner to Advanced</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Level</th>
+                    <th>Focus</th>
+                    <th>Resources</th>
+                </tr>
+                <tr>
+                    <td>Beginner</td>
+                    <td>
+                        <ul>
+                            <li>What is an AI agent?</li>
+                            <li>Basic agent concepts</li>
+                            <li>Intro to LLMs</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="https://en.wikipedia.org/wiki/Intelligent_agent" target="_blank">Wikipedia: Intelligent
+                            Agent</a><br>
+                        <a href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank">Wikipedia: LLM</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Intermediate</td>
+                    <td>
+                        <ul>
+                            <li>How agents are implemented in code (Java)</li>
+                            <li>How markdown can orchestrate agents</li>
+                            <li>Connecting code to LLM APIs</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API</a><br>
+                        <a href="https://docs.anthropic.com/claude/docs/quickstart" target="_blank">Claude API
+                            Quickstart</a>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Advanced</td>
+                    <td>
+                        <ul>
+                            <li>Designing multi-agent workflows</li>
+                            <li>Customizing markdown agent instructions</li>
+                            <li>Building orchestrators in Java</li>
+                        </ul>
+                    </td>
+                    <td>
+                        <a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a><br>
+                        <a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents
+                            Documentation</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="claude-agents">
+        <h2>3. Deep Dive: Claude, Java & Markdown Agents</h2>
+        <h3>Claude’s Agent System</h3>
+        <ul>
+            <li>Claude allows you to define agents using <b>markdown files</b> that describe the agent’s purpose,
+                instructions, and workflow.
+            </li>
+            <li>These markdown files are <b>not language-specific</b> and can be edited by anyone familiar with the
+                workflow.
+            </li>
+            <li>The Claude platform reads these markdowns and uses them as prompts or instructions for the LLM.</li>
+        </ul>
+        <div class="code-block">
+            # Agent: Ticket Analysis
+
+            ## Purpose
+            Summarize and analyze incoming tickets for key requirements and ambiguities.
+
+            ## Instructions
+            - Read the ticket details provided.
+            - Extract main requirements.
+            - Identify unclear or missing information.
+            - Suggest clarifying questions.
+
+            ## Input
+            - Ticket text
+
+            ## Output
+            - Summary
+            - List of requirements
+            - List of clarifying questions
+        </div>
+        <h3>How Java Integrates with Claude Agents</h3>
+        <ul>
+            <li>Java code acts as the <b>orchestrator</b>: it loads the markdown agent files, fills in variables, and
+                sends them to Claude’s API.
+            </li>
+            <li>The response from Claude is parsed and used in your workflow.</li>
+            <li>This hybrid approach lets you keep business logic in Java and agent instructions in markdown.</li>
+        </ul>
+        <div class="note">
+            <b>Tip:</b> Explore the <b>agent</b> folder in your Claude project to see real examples of markdown agent
+            definitions.
+        </div>
+    </section>
+
+    <section id="workflow">
+        <h2>4. The 8-Step AI-Enhanced Workflow</h2>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Step</th>
+                    <th>Agent Role</th>
+                    <th>Example AI Task</th>
+                </tr>
+                <tr>
+                    <td>1. Ticket Analysis</td>
+                    <td>Intake Agent</td>
+                    <td>Parse and summarize tickets using LLM</td>
+                </tr>
+                <tr>
+                    <td>2. Project Setup</td>
+                    <td>Setup Agent</td>
+                    <td>Generate project skeleton/codebase</td>
+                </tr>
+                <tr>
+                    <td>3. AI-Powered
+                        Deep Dive
+                    </td>
+                    <td>Analysis Agent</td>
+                    <td>Analyze requirements, suggest solutions</td>
+                </tr>
+                <tr>
+                    <td>4. Visual Analysis Report</td>
+                    <td>Reporting Agent</td>
+                    <td>Create charts/diagrams from data</td>
+                </tr>
+                <tr>
+                    <td>5. Review & Clarification</td>
+                    <td>Review Agent</td>
+                    <td>Check for ambiguities, ask questions</td>
+                </tr>
+                <tr>
+                    <td>6. Implementation</td>
+                    <td>Coding Agent</td>
+                    <td>Generate code snippets, unit tests</td>
+                </tr>
+                <tr>
+                    <td>7. Quality Assurance</td>
+                    <td>QA Agent</td>
+                    <td>Run static analysis, suggest improvements</td>
+                </tr>
+                <tr>
+                    <td>8. Deployment & Review</td>
+                    <td>Deployment Agent</td>
+                    <td>Automate deployment scripts, review logs</td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <section id="step-by-step">
+        <h2>5. Step-by-Step Guide: Implementing the Workflow in Java</h2>
+        <div class="step">
+            <h3>Step 1: Set Up Your Java Project</h3>
             <ul>
-                <li><b>Definition:</b> An AI agent is a software entity that perceives its environment, reasons about it, and acts autonomously to achieve goals.</li>
-                <li><b>Key Features:</b> Perception, Reasoning, Action, Autonomy.</li>
-                <li><b>Types:</b> Reactive, Deliberative, Collaborative, Hybrid.</li>
+                <li>Install <b>IntelliJ IDEA</b> and create a new Java project.</li>
+                <li>Add dependencies for HTTP requests (e.g., <b>OkHttp</b> or <b>Apache HttpClient</b>).</li>
+                <li>Organize your project with a package for each agent (e.g., <code>agents.ticket</code>, <code>agents.setup</code>).
+                </li>
             </ul>
-            <div class="note">
-                <b>Are AI agents language-specific?</b><br>
-                No! The concept is
- universal. You can implement agents in Java, Python, or even orchestrate them using markdown files, depending on the platform.
-            </div>
-            <h3>How Do Agents Work?</h3>
+        </div>
+        <div class="step">
+            <h3>Step 2: Load and Use Markdown Agent Files</h3>
             <ul>
-                <li>Some use <b>rules</b> (if-then logic).</li>
-                <li>Modern agents often use <b>machine learning</b> or <b>large language models (LLMs)</b> like Claude or GPT.</li>
-                <li>Agents can be orchestrated via code (Java, Python) or via <b>markdown instructions</b> (platform-specific).</li>
-            </ul>
-        </section>
-
-        <section id="learning-path">
-            <h2>2. Learning Path: Beginner to Advanced</h2>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th>Level</th>
-                        <th>Focus</th>
-                        <th>Resources</th>
-                    </tr>
-                    <tr>
-                        <td>Beginner</td>
-                        <td>
-                            <ul>
-                                <li>What is an AI agent?</li>
-                                <li>Basic agent concepts</li>
-                                <li>Intro to LLMs</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <a href="https://en.wikipedia.org/wiki/Intelligent_agent" target="_blank">Wikipedia: Intelligent Agent</a><br>
-                            <a href="https://en.wikipedia.org/wiki/Large_language_model" target="_blank">Wikipedia: LLM</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Intermediate</td>
-                        <td>
-                            <ul>
-                                <li>How agents are implemented in code (Java)</li>
-                                <li>How markdown can orchestrate agents</li>
-                                <li>Connecting code to LLM APIs</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API</a><br>
-                            <a href="https://docs.anthropic.com/claude/docs/quickstart" target="_blank">Claude API Quickstart</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>Advanced</td>
-                        <td>
-                            <ul>
-                                <li>Designing multi-agent workflows</li>
-                                <li>Customizing markdown agent instructions</li>
-                                <li>Building orchestrators in Java</li>
-                            </ul>
-                        </td>
-                        <td>
-                            <a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a><br>
-                            <a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents Documentation</a>
-                        </td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-
-        <section id="claude-agents">
-            <h2>3. Deep Dive: Claude, Java & Markdown Agents</h2>
-            <h3>Claude’s Agent System</h3>
-            <ul>
-                <li>Claude allows you to define agents using <b>markdown files</b> that describe the agent’s purpose, instructions, and workflow.</li>
-                <li>These markdown files are <b>not language-specific</b> and can be edited by anyone familiar with the workflow.</li>
-                <li>The Claude platform reads these markdowns and uses them as prompts or instructions for the LLM.</li>
+                <li>Place your markdown agent files in a resource folder (e.g., <code>src/main/resources/agents/</code>).
+                </li>
+                <li>Write a Java utility to read and fill in variables in these markdown files.</li>
             </ul>
             <div class="code-block">
-# Agent: Ticket Analysis
-
-## Purpose
-Summarize and analyze incoming tickets for key requirements and ambiguities.
-
-## Instructions
-- Read the ticket details provided.
-- Extract main requirements.
-- Identify unclear or missing information.
-- Suggest clarifying questions.
-
-## Input
-- Ticket text
-
-## Output
-- Summary
-- List of requirements
-- List of clarifying questions
+                // Example: Load markdown agent file
+                String agentMarkdown = Files.readString(Paths.get("src/main/resources/agents/ticket_analysis.md"));
+                String prompt = agentMarkdown.replace("{{ticket_text}}", ticketText);
             </div>
-            <h3>How Java Integrates with Claude Agents</h3>
+        </div>
+        <div class="step">
+            <h3>Step 3: Connect to Claude API</h3>
             <ul>
-                <li>Java code acts as the <b>orchestrator</b>: it loads the markdown agent files, fills in variables, and sends them to Claude’s API.</li>
-                <li>The response from Claude is parsed and used in your workflow.</li>
-                <li>This hybrid approach lets you keep business logic in Java and agent instructions in markdown.</li>
+                <li>Sign up for Claude API and get your API key.</li>
+                <li>Use Java HTTP client to send the prompt to Claude and receive the response.</li>
             </ul>
-            <div class="note">
-                <b>Tip:</b> Explore the <b>agent</b> folder in your Claude project to see real examples of markdown agent definitions.
+            <div class="code-block">
+                // Example: Send prompt to Claude API (pseudo-code)
+                HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://api.anthropic.com/v1/complete"))
+                .header("Authorization", "Bearer YOUR_API_KEY")
+                .POST(HttpRequest.BodyPublishers.ofString("{ \"prompt\": \"" + prompt + "\" }"))
+                .build();
             </div>
-        </section>
-
-        <section id="workflow">
-            <h2>4. The 8-Step AI-Enhanced Workflow</h2>
-            <div class="table-container">
-                <table>
-                    <tr>
-                        <th>Step</th>
-                        <th>Agent Role</th>
-                        <th>Example AI Task</th>
-                    </tr>
-                    <tr>
-                        <td>1. Ticket Analysis</td>
-                        <td>Intake Agent</td>
-                        <td>Parse and summarize tickets using LLM</td>
-                    </tr>
-                    <tr>
-                        <td>2. Project Setup</td>
-                        <td>Setup Agent</td>
-                        <td>Generate project skeleton/codebase</td>
-                    </tr>
-                    <tr>
-                        <td>3. AI-Powered
- Deep Dive</td>
-                        <td>Analysis Agent</td>
-                        <td>Analyze requirements, suggest solutions</td>
-                    </tr>
-                    <tr>
-                        <td>4. Visual Analysis Report</td>
-                        <td>Reporting Agent</td>
-                        <td>Create charts/diagrams from data</td>
-                    </tr>
-                    <tr>
-                        <td>5. Review & Clarification</td>
-                        <td>Review Agent</td>
-                        <td>Check for ambiguities, ask questions</td>
-                    </tr>
-                    <tr>
-                        <td>6. Implementation</td>
-                        <td>Coding Agent</td>
-                        <td>Generate code snippets, unit tests</td>
-                    </tr>
-                    <tr>
-                        <td>7. Quality Assurance</td>
-                        <td>QA Agent</td>
-                        <td>Run static analysis, suggest improvements</td>
-                    </tr>
-                    <tr>
-                        <td>8. Deployment & Review</td>
-                        <td>Deployment Agent</td>
-                        <td>Automate deployment scripts, review logs</td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-
-        <section id="step-by-step">
-            <h2>5. Step-by-Step Guide: Implementing the Workflow in Java</h2>
-            <div class="step">
-                <h3>Step 1: Set Up Your Java Project</h3>
-                <ul>
-                    <li>Install <b>IntelliJ IDEA</b> and create a new Java project.</li>
-                    <li>Add dependencies for HTTP requests (e.g., <b>OkHttp</b> or <b>Apache HttpClient</b>).</li>
-                    <li>Organize your project with a package for each agent (e.g., <code>agents.ticket</code>, <code>agents.setup</code>).</li>
-                </ul>
-            </div>
-            <div class="step">
-                <h3>Step 2: Load and Use Markdown Agent Files</h3>
-                <ul>
-                    <li>Place your markdown agent files in a resource folder (e.g., <code>src/main/resources/agents/</code>).</li>
-                    <li>Write a Java utility to read and fill in variables in these markdown files.</li>
-                </ul>
-                <div class="code-block">
-// Example: Load markdown agent file
-String agentMarkdown = Files.readString(Paths.get("src/main/resources/agents/ticket_analysis.md"));
-String prompt = agentMarkdown.replace("{{ticket_text}}", ticketText);
-                </div>
-            </div>
-            <div class="step">
-                <h3>Step 3: Connect to Claude API</h3>
-                <ul>
-                    <li>Sign up for Claude API and get your API key.</li>
-                    <li>Use Java HTTP client to send the prompt to Claude and receive the response.</li>
-                </ul>
-                <div class="code-block">
-// Example: Send prompt to Claude API (pseudo-code)
-HttpRequest request = HttpRequest.newBuilder()
-    .uri(URI.create("https://api.anthropic.com/v1/complete"))
-    .header("Authorization", "Bearer YOUR_API_KEY")
-    .POST(HttpRequest.BodyPublishers.ofString("{ \"prompt\": \"" + prompt + "\" }"))
-    .build();
-                </div>
-            </div>
-            <div class="step">
-                <h3>Step 4: Implement Each Agent as a Java Class</h3>
-                <ul>
-                    <li>Create a class for each agent (e.g., <code>TicketAnalysisAgent</code>).</li>
-                    <li>Each class loads its markdown, sends it to Claude, and processes the response.</li>
-                </ul>
-                <div class="code-block">
-public class TicketAnalysisAgent {
-    public TicketAnalysisResult analyze(String ticketText) {
-        String prompt = loadAndFillMarkdown("ticket_analysis.md", ticketText);
-        String response = sendToClaude(prompt);
-        return parseTicketAnalysis(response);
-    }
-}
-                </div>
-            </div>
-            <div class="step">
-                <h3>Step 5: Orchestrate the Workflow</h3>
-                <ul>
-                    <li>Create a main orchestrator class that calls each agent in sequence, passing results from one to the next.</li>
-                </ul>
-                <div class="code-block">
-public class AIWorkflowOrchestrator {
-    public static void main(String[] args) {
-        TicketAnalysisAgent ticketAgent = new TicketAnalysisAgent();
-        ProjectSetupAgent setupAgent = new ProjectSetupAgent();
-        // ... other agents
-
-        TicketAnalysisResult ticket = ticketAgent.analyze("ticket details");
-        Project project = setupAgent.setup(ticket);
-        // ... continue workflow
-    }
-}
-                </div>
-            </div>
-            <div class
-="step">
-                <h3>Step 6: Test and Iterate</h3>
-                <ul>
-                    <li>Test each agent individually and as part of the full workflow.</li>
-                    <li>Refine your markdown agent instructions for better results.</li>
-                    <li>Log and handle errors gracefully.</li>
-                </ul>
-            </div>
-            <div class="step">
-                <h3>Step 7: Expand and Customize</h3>
-                <ul>
-                    <li>Add more agents or steps as needed.</li>
-                    <li>Customize markdown files for different projects or workflows.</li>
-                    <li>Consider adding a simple UI or CLI for easier use.</li>
-                </ul>
-            </div>
-        </section>
-
-        <section id="resources">
-            <h2>6. Further Resources</h2>
+        </div>
+        <div class="step">
+            <h3>Step 4: Implement Each Agent as a Java Class</h3>
             <ul>
-                <li><a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents Documentation</a></li>
-                <li><a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API (for LLM integration)</a></li>
-                <li><a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a></li>
-                <li><a href="https://en.wikipedia.org/wiki/Intelligent_agent" target="_blank">Wikipedia: Intelligent Agent</a></li>
-                <li><a href="https://www.jetbrains.com/idea/" target="_blank">IntelliJ IDEA</a></li>
+                <li>Create a class for each agent (e.g., <code>TicketAnalysisAgent</code>).</li>
+                <li>Each class loads its markdown, sends it to Claude, and processes the response.</li>
             </ul>
-        </section>
-    </main>
+            <div class="code-block">
+                public class TicketAnalysisAgent {
+                public TicketAnalysisResult analyze(String ticketText) {
+                String prompt = loadAndFillMarkdown("ticket_analysis.md", ticketText);
+                String response = sendToClaude(prompt);
+                return parseTicketAnalysis(response);
+                }
+                }
+            </div>
+        </div>
+        <div class="step">
+            <h3>Step 5: Orchestrate the Workflow</h3>
+            <ul>
+                <li>Create a main orchestrator class that calls each agent in sequence, passing results from one to the
+                    next.
+                </li>
+            </ul>
+            <div class="code-block">
+                public class AIWorkflowOrchestrator {
+                public static void main(String[] args) {
+                TicketAnalysisAgent ticketAgent = new TicketAnalysisAgent();
+                ProjectSetupAgent setupAgent = new ProjectSetupAgent();
+                // ... other agents
+
+                TicketAnalysisResult ticket = ticketAgent.analyze("ticket details");
+                Project project = setupAgent.setup(ticket);
+                // ... continue workflow
+                }
+                }
+            </div>
+        </div>
+        <div class
+                     ="step">
+            <h3>Step 6: Test and Iterate</h3>
+            <ul>
+                <li>Test each agent individually and as part of the full workflow.</li>
+                <li>Refine your markdown agent instructions for better results.</li>
+                <li>Log and handle errors gracefully.</li>
+            </ul>
+        </div>
+        <div class="step">
+            <h3>Step 7: Expand and Customize</h3>
+            <ul>
+                <li>Add more agents or steps as needed.</li>
+                <li>Customize markdown files for different projects or workflows.</li>
+                <li>Consider adding a simple UI or CLI for easier use.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section id="resources">
+        <h2>6. Further Resources</h2>
+        <ul>
+            <li><a href="https://docs.anthropic.com/claude/docs/agents" target="_blank">Claude Agents Documentation</a>
+            </li>
+            <li><a href="https://github.com/TheoKanning/openai-java" target="_blank">OpenAI Java API (for LLM
+                integration)</a></li>
+            <li><a href="https://jade.tilab.com/" target="_blank">JADE: Java Agent DEvelopment Framework</a></li>
+            <li><a href="https://en.wikipedia.org/wiki/Intelligent_agent" target="_blank">Wikipedia: Intelligent
+                Agent</a></li>
+            <li><a href="https://www.jetbrains.com/idea/" target="_blank">IntelliJ IDEA</a></li>
+        </ul>
+    </section>
+</main>
 </body>
 </html>

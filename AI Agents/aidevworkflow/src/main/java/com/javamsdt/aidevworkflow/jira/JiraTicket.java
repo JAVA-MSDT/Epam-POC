@@ -16,7 +16,9 @@ public record JiraTicket(
         String comments
 ) {
 
-    /** Formats the ticket as a structured block for use in an LLM prompt. */
+    /**
+     * Formats the ticket as a structured block for use in an LLM prompt.
+     */
     public String toPromptText() {
         return """
                 Ticket ID:   %s
@@ -27,10 +29,10 @@ public record JiraTicket(
                 Assignee:    %s
                 Reporter:    %s
                 Labels:      %s
-
+                
                 Description:
                 %s
-
+                
                 Existing Comments:
                 %s
                 """.formatted(issueKey, summary, issueType, status, priority,

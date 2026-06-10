@@ -7,10 +7,10 @@ import com.javamsdt.aidevworkflow.util.MarkdownLoader;
 
 /**
  * Step 4 — Visual Analysis Report.
- *
+ * <p>
  * Reads:  ctx.deepDive, ctx.reportFolderPath
  * Writes: ctx.visualReport (HTML body content), ctx.htmlReportPath (file on disk)
- *
+ * <p>
  * The LLM generates the HTML body content for the report. This agent then writes
  * it to a full HTML file in the report folder created by ProjectSetupAgent.
  */

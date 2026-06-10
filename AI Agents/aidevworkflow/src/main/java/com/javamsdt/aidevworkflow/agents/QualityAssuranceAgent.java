@@ -9,10 +9,10 @@ import java.util.List;
 
 /**
  * Step 7 — Quality Assurance.
- *
+ * <p>
  * Reads:  ctx.implementation, ctx.projectRootPath
  * Writes: ctx.qaReport
- *
+ * <p>
  * When projectRootPath is set, this agent reads the actual code files written to disk
  * by ImplementationAgent and includes them in the QA prompt, so the LLM reviews the
  * real committed code rather than the plan text.
@@ -44,14 +44,18 @@ public class QualityAssuranceAgent {
         markAllReviewed(ctx);
     }
 
-    /** Seeds fileQaStatus with PENDING for any writtenFile not already tracked. */
+    /**
+     * Seeds fileQaStatus with PENDING for any writtenFile not already tracked.
+     */
     private void initFileQaStatus(WorkflowContext ctx) {
         for (String path : ctx.getWrittenFiles()) {
             ctx.getFileQaStatus().putIfAbsent(path, "PENDING");
         }
     }
 
-    /** Advances all PENDING/REVIEWED entries to REVIEWED after QA completes. */
+    /**
+     * Advances all PENDING/REVIEWED entries to REVIEWED after QA completes.
+     */
     private void markAllReviewed(WorkflowContext ctx) {
         ctx.getFileQaStatus().replaceAll((path, status) ->
                 "PASS".equals(status) ? "PASS" : "REVIEWED"

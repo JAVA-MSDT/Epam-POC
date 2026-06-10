@@ -1,43 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Project Generation Prompt: AI-Enhanced Modular Java Workflow</title>
-  <style>
-    body { font-family: Arial, sans-serif; background: #f8f8f8; color: #222; margin: 0; padding: 0 0 40px 0;}
-    .container { max-width: 900px; margin: 40px auto; background: #fff; padding: 32px 36px 36px 36px; border-radius: 10px; box-shadow: 0 2px 16px #0001;}
-    h1, h2, h3 { color: #1a73e8; }
-    pre, code { background: #f4f4f4; border-radius: 5px; padding: 2px 6px; }
-    pre { padding: 12px; overflow-x: auto; }
-    ul, ol { margin-bottom: 18px; }
-    .section { margin-bottom: 36px; }
-    .code-title { font-size: 1em; color: #888; margin-bottom: 0; }
-    hr { border: none; border-top: 1px solid #eee; margin: 32px 0; }
-  </style>
+    <meta charset="UTF-8">
+    <title>Project Generation Prompt: AI-Enhanced Modular Java Workflow</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f8f8f8;
+            color: #222;
+            margin: 0;
+            padding: 0 0 40px 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            background: #fff;
+            padding: 32px 36px 36px 36px;
+            border-radius: 10px;
+            box-shadow: 0 2px 16px #0001;
+        }
+
+        h1, h2, h3 {
+            color: #1a73e8;
+        }
+
+        pre, code {
+            background: #f4f4f4;
+            border-radius: 5px;
+            padding: 2px 6px;
+        }
+
+        pre {
+            padding: 12px;
+            overflow-x: auto;
+        }
+
+        ul, ol {
+            margin-bottom: 18px;
+        }
+
+        .section {
+            margin-bottom: 36px;
+        }
+
+        .code-title {
+            font-size: 1em;
+            color: #888;
+            margin-bottom: 0;
+        }
+
+        hr {
+            border: none;
+            border-top: 1px solid #eee;
+            margin: 32px 0;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
+<div class="container">
     <h1>Project Generation Prompt: AI-Enhanced Modular Java Workflow</h1>
     <p>
-      Please use the following instructions to generate a ready-to-use, modular Maven Java project for an AI-powered 8-step development workflow.
-      The project must be clean, extensible, and ready for future integration with Spring Boot and pluggable LLMs.
+        Please use the following instructions to generate a ready-to-use, modular Maven Java project for an AI-powered
+        8-step development workflow.
+        The project must be clean, extensible, and ready for future integration with Spring Boot and pluggable LLMs.
     </p>
     <hr>
 
     <div class="section">
-      <h2>Project Overview</h2>
-      <ul>
-        <li><b>Project Name:</b> aidevworkflow</li>
-        <li><b>Language:</b> Java</li>
-        <li><b>Build Tool:</b> Maven</li>
-        <li><b>Root Package:</b> com.javamsdt.aidevworkflow</li>
-        <li><b>Design:</b> Modular, extensible, maintainable, Spring-ready, LLM-pluggable</li>
-      </ul>
+        <h2>Project Overview</h2>
+        <ul>
+            <li><b>Project Name:</b> aidevworkflow</li>
+            <li><b>Language:</b> Java</li>
+            <li><b>Build Tool:</b> Maven</li>
+            <li><b>Root Package:</b> com.javamsdt.aidevworkflow</li>
+            <li><b>Design:</b> Modular, extensible, maintainable, Spring-ready, LLM-pluggable</li>
+        </ul>
     </div>
 
     <div class="section">
-      <h2>Project Structure</h2>
-      <pre><code>aidevworkflow/
+        <h2>Project Structure</h2>
+        <pre><code>aidevworkflow/
 ├── pom.xml
 ├── src/
 │   ├── main/
@@ -85,79 +128,85 @@
     </div>
 
     <div class="section">
-      <h2>Implementation Details</h2>
-      <ol>
-        <li>
-          <b>Each agent</b> (e.g., <code>TicketAnalysisAgent</code>):
-          <ul>
-            <li>Loads its prompt from the corresponding markdown file in <code>resources/agents/</code>.</li>
-            <li>Uses an LLM client interface to process input and return output.</li>
-            <li>Is stateless for easy testing and scaling.</li>
-          </ul>
-        </li>
-        <li>
-          <b>Orchestrator (<code>WorkflowOrchestrator</code>)</b>:
-          <ul>
-            <li>Coordinates agent execution, manages a shared context, and supports human-in-the-loop checkpoints.</li>
-            <li>Should be easy to refactor into a Spring <code>@Service</code> or <code>@Component</code>.</li>
-          </ul>
-        </li>
-        <li>
-          <b>Context (<code>WorkflowContext</code>)</b>:
-          <ul>
-            <li>Holds all shared data/state for a workflow run.</li>
-            <li>Is passed between agents.</li>
-          </ul>
-        </li>
-        <li>
-          <b>LLM Abstraction</b>:
-          <ul>
-            <li><code>LlmClient</code> is an interface for LLM operations.</li>
-            <li>Implementations: <code>ClaudeApiClient</code>, <code>OpenAiApiClient</code>, etc.</li>
-            <li>The orchestrator and agents depend on <code>LlmClient</code>, not a specific LLM.</li>
-            <li>It should be easy to add new LLMs (e.g., Gemini) by implementing this interface.</li>
-          </ul>
-        </li>
-        <li>
-          <b>Markdown Loader Utility</b>:
-          <ul>
-            <li><code>MarkdownLoader</code> loads and fills markdown templates from resources.</li>
-          </ul>
-        </li>
-        <li>
-          <b>Testing</b>:
-          <ul>
-            <li>Place unit tests under <code>src/test/java/com/javamsdt/aidevworkflow/</code>.</li>
-          </ul>
-        </li>
-        <li>
-          <b>Spring-Ready</b>:
-          <ul>
-            <li>The structure and interface-driven design should make it easy to add Spring Boot later and use dependency injection.</li>
-          </ul>
-        </li>
-        <li>
-          <b>Human-in-the-Loop</b>:
-          <ul>
-            <li>Insert checkpoints in the orchestrator for human confirmation (e.g., via CLI, web UI, or notification).</li>
-            <li>Example: After project setup, before deployment.</li>
-          </ul>
-        </li>
-      </ol>
+        <h2>Implementation Details</h2>
+        <ol>
+            <li>
+                <b>Each agent</b> (e.g., <code>TicketAnalysisAgent</code>):
+                <ul>
+                    <li>Loads its prompt from the corresponding markdown file in <code>resources/agents/</code>.</li>
+                    <li>Uses an LLM client interface to process input and return output.</li>
+                    <li>Is stateless for easy testing and scaling.</li>
+                </ul>
+            </li>
+            <li>
+                <b>Orchestrator (<code>WorkflowOrchestrator</code>)</b>:
+                <ul>
+                    <li>Coordinates agent execution, manages a shared context, and supports human-in-the-loop
+                        checkpoints.
+                    </li>
+                    <li>Should be easy to refactor into a Spring <code>@Service</code> or <code>@Component</code>.</li>
+                </ul>
+            </li>
+            <li>
+                <b>Context (<code>WorkflowContext</code>)</b>:
+                <ul>
+                    <li>Holds all shared data/state for a workflow run.</li>
+                    <li>Is passed between agents.</li>
+                </ul>
+            </li>
+            <li>
+                <b>LLM Abstraction</b>:
+                <ul>
+                    <li><code>LlmClient</code> is an interface for LLM operations.</li>
+                    <li>Implementations: <code>ClaudeApiClient</code>, <code>OpenAiApiClient</code>, etc.</li>
+                    <li>The orchestrator and agents depend on <code>LlmClient</code>, not a specific LLM.</li>
+                    <li>It should be easy to add new LLMs (e.g., Gemini) by implementing this interface.</li>
+                </ul>
+            </li>
+            <li>
+                <b>Markdown Loader Utility</b>:
+                <ul>
+                    <li><code>MarkdownLoader</code> loads and fills markdown templates from resources.</li>
+                </ul>
+            </li>
+            <li>
+                <b>Testing</b>:
+                <ul>
+                    <li>Place unit tests under <code>src/test/java/com/javamsdt/aidevworkflow/</code>.</li>
+                </ul>
+            </li>
+            <li>
+                <b>Spring-Ready</b>:
+                <ul>
+                    <li>The structure and interface-driven design should make it easy to add Spring Boot later and use
+                        dependency injection.
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <b>Human-in-the-Loop</b>:
+                <ul>
+                    <li>Insert checkpoints in the orchestrator for human confirmation (e.g., via CLI, web UI, or
+                        notification).
+                    </li>
+                    <li>Example: After project setup, before deployment.</li>
+                </ul>
+            </li>
+        </ol>
 
     </div>
 
     <div class="section">
-      <h2>Sample Code Snippets</h2>
-      <div class="code-title">LLM Client Interface</div>
-      <pre><code>package com.javamsdt.aidevworkflow.llm;
+        <h2>Sample Code Snippets</h2>
+        <div class="code-title">LLM Client Interface</div>
+        <pre><code>package com.javamsdt.aidevworkflow.llm;
 
 public interface LlmClient {
     String completePrompt(String prompt);
 }
 </code></pre>
-      <div class="code-title">Sample Agent</div>
-      <pre><code>package com.javamsdt.aidevworkflow.agents;
+        <div class="code-title">Sample Agent</div>
+        <pre><code>package com.javamsdt.aidevworkflow.agents;
 
 import com.javamsdt.aidevworkflow.llm.LlmClient;
 
@@ -174,8 +223,8 @@ public class TicketAnalysisAgent {
     }
 }
 </code></pre>
-      <div class="code-title">Sample Orchestrator</div>
-      <pre><code>package com.javamsdt.aidevworkflow.orchestrator;
+        <div class="code-title">Sample Orchestrator</div>
+        <pre><code>package com.javamsdt.aidevworkflow.orchestrator;
 
 import com.javamsdt.aidevworkflow.context.WorkflowContext;
 import com.javamsdt.aidevworkflow.agents.*;
@@ -190,23 +239,24 @@ public class WorkflowOrchestrator {
     </div>
 
     <div class="section">
-      <h2>Additional Requirements</h2>
-      <ul>
-        <li>The project must be modular, clean, and ready for extension.</li>
-        <li>All agent prompts should be in markdown files in the resources folder.</li>
-        <li>The LLM integration must be flexible and swappable.</li>
-        <li>The code should be idiomatic Java and Maven-based.</li>
-        <li>The project should be ready for further extension with Spring Boot and additional LLMs.</li>
-      </ul>
+        <h2>Additional Requirements</h2>
+        <ul>
+            <li>The project must be modular, clean, and ready for extension.</li>
+            <li>All agent prompts should be in markdown files in the resources folder.</li>
+            <li>The LLM integration must be flexible and swappable.</li>
+            <li>The code should be idiomatic Java and Maven-based.</li>
+            <li>The project should be ready for further extension with Spring Boot and additional LLMs.</li>
+        </ul>
     </div>
 
     <div class="section">
-      <h2>Final Instruction</h2>
-      <p>
-        <b>Please generate the full Maven project with all folders, files, and code templates as described above.<br>
-        If anything is unclear, ask for clarification before proceeding.</b>
-      </p>
+        <h2>Final Instruction</h2>
+        <p>
+            <b>Please generate the full Maven project with all folders, files, and code templates as described
+                above.<br>
+                If anything is unclear, ask for clarification before proceeding.</b>
+        </p>
     </div>
-  </div>
+</div>
 </body>
 </html>

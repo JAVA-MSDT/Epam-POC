@@ -9,10 +9,10 @@ import java.util.List;
 
 /**
  * Step 3 — AI-Powered Deep Dive.
- *
+ * <p>
  * Reads:  ctx.ticketSummary, ctx.projectSetup, ctx.projectRootPath (optional)
  * Writes: ctx.deepDive
- *
+ * <p>
  * When projectRootPath is set, the agent scans the project source files and includes
  * relevant code context in the prompt so the LLM can compare the existing codebase
  * against the ticket requirements and identify gaps or conflicts.

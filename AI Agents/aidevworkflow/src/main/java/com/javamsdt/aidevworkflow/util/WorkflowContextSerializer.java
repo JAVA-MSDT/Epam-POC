@@ -21,7 +21,7 @@ import java.nio.file.Paths;
  *   // resume in a later session
  *   WorkflowContext ctx = WorkflowContextSerializer.load("/tmp/reports/workflow_context.json");
  * </pre>
- *
+ * <p>
  * The JSON file is human-readable (pretty-printed). All fields of {@link WorkflowContext}
  * are persisted, including large ones like {@code codebaseSnapshot} and {@code implementation}.
  * Delete or null-out those fields before saving if token size is a concern.

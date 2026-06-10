@@ -12,10 +12,10 @@ import java.util.regex.Pattern;
 
 /**
  * Step 6 — Implementation.
- *
+ * <p>
  * Reads:  ctx.reviewNotes, ctx.projectRootPath
  * Writes: ctx.implementation (full LLM response), writes code files to disk
- *
+ * <p>
  * The LLM is asked to produce code blocks annotated with a file path comment
  * on the first line (e.g. "// FILE: src/main/java/com/example/Foo.java").
  * This agent parses those blocks and writes each file to projectRootPath on disk.
@@ -25,8 +25,8 @@ public class ImplementationAgent {
     // Matches: ```java\n// FILE: path/to/File.java\n<code>\n```
     private static final Pattern FILE_BLOCK_PATTERN = Pattern.compile(
             "```(?:java|kotlin|python|typescript|javascript|go|cs|xml|yaml|yml|properties|sh)?\\s*\\n"
-            + "//\\s*FILE:\\s*([^\\n]+)\\n"
-            + "(.*?)\\n```",
+                    + "//\\s*FILE:\\s*([^\\n]+)\\n"
+                    + "(.*?)\\n```",
             Pattern.DOTALL
     );
 
@@ -60,7 +60,9 @@ public class ImplementationAgent {
         }
     }
 
-    /** Extracts all relative paths from FILE: blocks and registers them as pending before writing starts. */
+    /**
+     * Extracts all relative paths from FILE: blocks and registers them as pending before writing starts.
+     */
     private void populatePendingFiles(WorkflowContext ctx, String response) {
         List<String> pending = new ArrayList<>();
         Matcher matcher = FILE_BLOCK_PATTERN.matcher(response);

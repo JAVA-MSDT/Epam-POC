@@ -393,7 +393,7 @@
             </div>
         </div>
 
-        <h3>🏗️ System Workflow</h3>
+        <h3>🏗️ System Workflow — Two-Phase Design</h3>
         <div class="flow-diagram">
             <div class="flow-box">
                 <strong>1. Request</strong><br>
@@ -405,15 +405,15 @@
                 Load Prompt<br>
                 <small>Cached with hot-reload</small>
             </div>
-            <div class="flow-box">
-                <strong>3. Jira Fetch</strong><br>
-                Retrieve Ticket<br>
-                <small>Via Jira REST API</small>
+            <div class="flow-box" style="border: 2px solid #48bb78;">
+                <strong>3. Phase 1 — Java</strong><br>
+                Collect Jira Data<br>
+                <small>Direct API calls, no LLM</small>
             </div>
-            <div class="flow-box">
-                <strong>4. AI Analysis</strong><br>
-                LLM Processing<br>
-                <small>Ollama + Spring AI</small>
+            <div class="flow-box" style="border: 2px solid #f6ad55;">
+                <strong>4. Phase 2 — LLM</strong><br>
+                Analyze Injected Data<br>
+                <small>No tool calls — analysis only</small>
             </div>
             <div class="flow-box">
                 <strong>5. Response</strong><br>
@@ -491,9 +491,23 @@
             <ol>
                 <li><strong>API Request</strong> → REST Controller receives analysis request</li>
                 <li><strong>Plugin Loading</strong> → Prompt loaded from cache or file system</li>
-                <li><strong>Jira Integration</strong> → Ticket data retrieved via Jira REST API</li>
-                <li><strong>AI Processing</strong> → Spring AI ChatClient processes with Ollama</li>
-                <li><strong>Tool Execution</strong> → File system operations and data storage</li>
+                <li style="color: #276749;"><strong>Phase 1 — Java Data Collection (no LLM)</strong>
+                    <ul>
+                        <li>Fetch ticket JSON directly via <code>JiraRetrievalTool.retrieveJiraTicket()</code></li>
+                        <li>Extract linked issue keys from <code>fields.issuelinks</code></li>
+                        <li>Fetch linked issues via <code>JiraRetrievalTool.searchJiraTickets(realJql)</code></li>
+                        <li>Create output folder via <code>FileSystemTool.createTicketFolder()</code></li>
+                        <li>Compact ticket data: extract essential fields, truncate description to 4000 chars</li>
+                    </ul>
+                </li>
+                <li style="color: #975a16;"><strong>Phase 2 — LLM Analysis (no tool calls)</strong>
+                    <ul>
+                        <li>Inject <code>{{ticketData}}</code> and <code>{{linkedIssuesData}}</code> into prompt</li>
+                        <li>Call <code>ChatClient.prompt().user(filledPrompt).call().content()</code></li>
+                        <li>Parse JSON response → <code>TicketAnalysis</code> record</li>
+                    </ul>
+                </li>
+                <li><strong>Metadata Enrichment</strong> → Timestamp, model, processing time added</li>
                 <li><strong>Response</strong> → Structured JSON analysis returned</li>
             </ol>
         </div>
@@ -587,6 +601,8 @@
                     chat:
                     options:
                     model: llama3.1:8b
+                    temperature: 0.2
+                    num-ctx: 32768 <span class="comment"># large context for data-injection prompts</span>
 
                     <span class="comment"># Jira Configuration</span>
                     jira:
@@ -616,6 +632,11 @@
                     export AGENT_OUTPUT_DIR=./analysis-output
                     export AGENT_EXTERNAL_CONFIG=./external-config
                     export AGENT_HOT_RELOAD=true
+
+                    <span class="comment"># Distributed tracing (disabled by default — requires running Zipkin)</span>
+                    <span class="comment"># export ZIPKIN_ENABLED=true</span>
+                    <span class="comment"># export ZIPKIN_URL=http://localhost:9411/api/v2/spans</span>
+                    <span class="comment"># export TRACING_SAMPLE_RATE=1.0</span>
                 </div>
             </div>
 
@@ -629,17 +650,21 @@
 
                     <span class="comment"># Create custom prompt example</span>
                     cat > external-config/prompts/security-analysis-prompt.md << 'EOF'
-                    # Security-Focused Jira Analysis
+                    # Security-Focused Jira Analysis for {{ticketId}}
 
-                    Analyze ticket: {{ticketId}} with emphasis on security implications.
+                    TICKET:
+                    {{ticketData}}
+
+                    LINKED ISSUES:
+                    {{linkedIssuesData}}
 
                     ## Security Analysis Requirements
-                    - Identify potential security vulnerabilities
-                    - Assess data privacy implications
+                    - Identify potential security vulnerabilities (OWASP Top 10)
+                    - Assess data privacy and PII implications
                     - Review authentication/authorization requirements
-                    - Check for compliance requirements (GDPR, SOX, etc.)
+                    - Check for compliance requirements (GDPR, PCI-DSS, SOX)
 
-                    Use available tools and provide detailed security recommendations.
+                    Output ONLY valid JSON starting with { and ending with }.
                     EOF
                 </div>
             </div>
@@ -922,12 +947,21 @@ _days"</span>: 5,
         </div>
 
         <h3>✍️ Creating Custom Prompts</h3>
+        <div class="highlight-box">
+            <strong>How data injection works:</strong> You never instruct the LLM to call tools.
+            The service fetches all Jira data in Java (Phase 1) and injects it via
+            <code>{{ticketData}}</code> and <code>{{linkedIssuesData}}</code> before the LLM call (Phase 2).
+        </div>
         <div class="code-block">
             <span class="comment"># Example: external-config/prompts/performance-analysis-prompt.md</span>
 
-            # Performance-Focused Jira Analysis
+            # Performance-Focused Jira Analysis for {{ticketId}}
 
-            Analyze ticket: {{ticketId}} with emphasis on performance implications.
+            TICKET:
+            {{ticketData}}
+
+            LINKED ISSUES:
+            {{linkedIssuesData}}
 
             ## Performance Analysis Requirements
             - Identify potential performance bottlenecks
@@ -937,15 +971,11 @@ _days"</span>: 5,
             - Consider load testing requirements
 
             ## Context
-            Project Type: {{context.projectType}}
-            Expected Load: {{context.expectedLoad}}
-            Current Performance Baseline: {{context.baseline}}
+            Project Type: {{projectType}}
+            Expected Load: {{expectedLoad}}
+            Current Performance Baseline: {{baseline}}
 
-            ## Tools Available
-            Use the retrieve_jira_ticket and create_ticket_folder tools.
-
-            ## Output Format
-            Provide detailed performance analysis in the standard TicketAnalysis JSON format.
+            Output ONLY a valid TicketAnalysis JSON. Start with { and end with }.
             Focus on the technical_analysis section with performance-specific insights.
         </div>
 
@@ -1119,15 +1149,22 @@ _days"</span>: 5,
             cat > external-config/prompts/performance-prompt.md << 'EOF'
             # Performance Analysis for {{ticketId}}
 
+            TICKET:
+            {{ticketData}}
+
+            LINKED ISSUES:
+            {{linkedIssuesData}}
+
             Focus on performance implications:
             - Database query optimization
             - Caching strategies
-
             - Scalability concerns
             - Load testing requirements
 
-            Expected load: {{context.expectedLoad}}
-            Current baseline: {{context.baseline}}
+            Expected load: {{expectedLoad}}
+            Current baseline: {{baseline}}
+
+            Output ONLY valid JSON starting with { and ending with }.
             EOF
 
             <span class="comment"># Use custom prompt with context</span>
@@ -1144,19 +1181,26 @@ _days"</span>: 5,
 
         <h3>🔄 Example 4: Hot Reload Demo</h3>
         <div class="code-block">
-            <span class="comment"># 1. Create new prompt</span>
-            echo "# Quick Analysis for {{ticketId}}" > external-config/prompts/quick-prompt.md
-            echo "Provide a brief 3-sentence analysis." >> external-config/prompts/quick-prompt.md
+            <span class="comment"># 1. Create new prompt (use {{ticketData}} — data is injected by Java, no tool calls needed)</span>
+            cat > external-config/prompts/quick-prompt.md << 'EOF'
+            # Quick Analysis for {{ticketId}}
+            TICKET: {{ticketData}}
+            Provide a 3-sentence analysis. Output valid JSON only.
+            EOF
 
             <span class="comment"># 2. Use immediately (no restart needed!)</span>
             curl -X POST http://localhost:8080/api/v1/analysis/tickets/TEST-123/custom \
             -d '{"promptName": "quick-prompt"}'
 
             <span class="comment"># 3. Update prompt</span>
-            echo "# Updated Quick Analysis for {{ticketId}}" > external-config/prompts/quick-prompt.md
-            echo "Provide analysis with focus on risks and effort." >> external-config/prompts/quick-prompt.md
+            cat > external-config/prompts/quick-prompt.md << 'EOF'
+            # Quick Analysis for {{ticketId}}
+            TICKET: {{ticketData}}
+            LINKED: {{linkedIssuesData}}
+            Focus on risks and effort. Output valid JSON only.
+            EOF
 
-            <span class="comment"># 4. Use updated version (automatically reloaded!)</span>
+            <span class="comment"># 4. Use updated version (automatically reloaded — no restart!)</span>
             curl -X POST http://localhost:8080/api/v1/analysis/tickets/TEST-123/custom \
             -d '{"promptName": "quick-prompt"}'
         </div>

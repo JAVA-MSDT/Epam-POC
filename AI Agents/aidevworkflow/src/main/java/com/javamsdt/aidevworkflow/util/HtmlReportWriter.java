@@ -7,7 +7,8 @@ package com.javamsdt.aidevworkflow.util;
  */
 public final class HtmlReportWriter {
 
-    private HtmlReportWriter() {}
+    private HtmlReportWriter() {
+    }
 
     /**
      * Wraps bodyHtml in a full HTML page and writes it to filePath.

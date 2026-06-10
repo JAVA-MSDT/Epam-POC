@@ -10,10 +10,10 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Creates GitHub pull requests and fetches PR review comments via the GitHub REST API v3.
- *
+ * <p>
  * Required environment variables:
- *   GITHUB_TOKEN — personal access token or fine-grained token with repo scope
- *   GITHUB_REPO  — owner/repo, e.g. "my-org/my-service"
+ * GITHUB_TOKEN — personal access token or fine-grained token with repo scope
+ * GITHUB_REPO  — owner/repo, e.g. "my-org/my-service"
  */
 public class GitHubClient {
 
@@ -44,12 +44,29 @@ public class GitHubClient {
     }
 
     /**
+     * Extracts the PR number from a GitHub PR URL.
+     * e.g. "https://github.com/org/repo/pull/42" → 42
+     */
+    public static int prNumberFromUrl(String prUrl) {
+        String[] parts = prUrl.split("/");
+        return Integer.parseInt(parts[parts.length - 1]);
+    }
+
+    private static String requireEnv(String name) {
+        String value = System.getenv(name);
+        if (value == null || value.isBlank()) {
+            throw new IllegalStateException("Environment variable " + name + " is not set.");
+        }
+        return value;
+    }
+
+    /**
      * Creates a pull request and returns its URL.
      *
-     * @param title      PR title
-     * @param body       PR description (markdown)
-     * @param head       source branch name
-     * @param base       target branch name (e.g. "main")
+     * @param title PR title
+     * @param body  PR description (markdown)
+     * @param head  source branch name
+     * @param base  target branch name (e.g. "main")
      */
     public String createPullRequest(String title, String body, String head, String base) {
         Map<String, Object> payload = Map.of(
@@ -92,15 +109,6 @@ public class GitHubClient {
         } catch (IOException e) {
             throw new RuntimeException("Failed to parse PR comments: " + e.getMessage(), e);
         }
-    }
-
-    /**
-     * Extracts the PR number from a GitHub PR URL.
-     * e.g. "https://github.com/org/repo/pull/42" → 42
-     */
-    public static int prNumberFromUrl(String prUrl) {
-        String[] parts = prUrl.split("/");
-        return Integer.parseInt(parts[parts.length - 1]);
     }
 
     private String get(String path) {
@@ -148,13 +156,5 @@ public class GitHubClient {
         Object value = map.get(key);
         if (value instanceof Map<?, ?> nested) return nested.getOrDefault(nestedKey, "").toString();
         return "";
-    }
-
-    private static String requireEnv(String name) {
-        String value = System.getenv(name);
-        if (value == null || value.isBlank()) {
-            throw new IllegalStateException("Environment variable " + name + " is not set.");
-        }
-        return value;
     }
 }

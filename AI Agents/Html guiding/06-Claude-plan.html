@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Claude's Examination & Implementation Plan</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <style>
         body {
             font-family: 'Segoe UI', Arial, sans-serif;
@@ -12,22 +12,26 @@
             margin: 0;
             padding: 0;
         }
+
         header {
             background: linear-gradient(135deg, #12101e 0%, #2a1f4e 100%);
             padding: 28px 0 18px 0;
             text-align: center;
             border-bottom: 3px solid #7c6ff7;
         }
+
         header h1 {
             margin: 0 0 6px 0;
             font-size: 2.1em;
             color: #a78bfa;
             letter-spacing: 1px;
         }
+
         header .subtitle {
             color: #c4b5fd;
             font-size: 1.05em;
         }
+
         header .badge {
             display: inline-block;
             background: #7c6ff7;
@@ -38,6 +42,7 @@
             margin-top: 8px;
             letter-spacing: 0.5px;
         }
+
         nav {
             width: 260px;
             background: #120f1e;
@@ -49,22 +54,27 @@
             padding-top: 40px;
             overflow-y: auto;
         }
+
         nav ul {
             list-style: none;
             padding: 0 0 0 18px;
         }
+
         nav ul li {
             margin: 14px 0;
         }
+
         nav ul li a {
             color: #a78bfa;
             text-decoration: none;
             font-size: 1em;
             transition: color 0.2s;
         }
+
         nav ul li a:hover {
             color: #fff;
         }
+
         nav .nav-group {
             color: #6b5fa0;
             font-size: 0.78em;
@@ -73,24 +83,29 @@
             padding: 10px 0 4px 0;
             font-weight: bold;
         }
+
         main {
             margin-left: 280px;
             padding: 36px 44px 60px 44px;
             max-width: 1050px;
         }
+
         h2 {
             color: #a78bfa;
             border-bottom: 1px solid #2d2550;
             padding-bottom: 7px;
             margin-top: 42px;
         }
+
         h3 {
             color: #c4b5fd;
         }
+
         h4 {
             color: #ddd6fe;
             margin-bottom: 6px;
         }
+
         /* Finding cards — one per source file */
         .finding {
             background: #211c36;
@@ -99,6 +114,7 @@
             padding: 18px 22px;
             border-radius: 8px;
         }
+
         .finding .file-tag {
             display: inline-block;
             background: #7c6ff7;
@@ -109,6 +125,7 @@
             margin-bottom: 8px;
             font-weight: bold;
         }
+
         /* Phase cards — implementation steps */
         .phase {
             background: #1a2a1e;
@@ -117,6 +134,7 @@
             padding: 18px 22px;
             border-radius: 8px;
         }
+
         .phase .phase-num {
             display: inline-block;
             background: #34d399;
@@ -130,6 +148,7 @@
             font-size: 0.95em;
             margin-right: 8px;
         }
+
         /* Decision cards */
         .decision {
             background: #261f10;
@@ -138,6 +157,7 @@
             padding: 18px 22px;
             border-radius: 8px;
         }
+
         .decision .decision-label {
             color: #f59e0b;
             font-weight: bold;
@@ -145,6 +165,7 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
+
         /* Code blocks */
         .code-block {
             background: #0f0d1a;
@@ -157,6 +178,7 @@
             margin: 12px 0;
             border: 1px solid #2d2550;
         }
+
         /* Note / tip boxes */
         .note {
             background: #1f1835;
@@ -167,6 +189,7 @@
             font-size: 0.97em;
             border: 1px solid #3b2f6b;
         }
+
         /* Key insight highlight */
         .insight {
             background: #1a2635;
@@ -176,37 +199,45 @@
             margin: 14px 0;
             color: #bae6fd;
         }
+
         /* Tables */
         .table-container {
             overflow-x: auto;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 18px 0;
         }
+
         th, td {
             border: 1px solid #2d2550;
             padding: 10px 12px;
             text-align: left;
         }
+
         th {
             background: #2a2040;
             color: #a78bfa;
         }
+
         tr:nth-child(even) {
             background: #1f1b30;
         }
+
         /* Checklist */
         .checklist {
             list-style: none;
             padding: 0;
         }
+
         .checklist li {
             padding: 7px 0 7px 28px;
             position: relative;
             border-bottom: 1px solid #2d2550;
         }
+
         .checklist li:before {
             content: '☐';
             position: absolute;
@@ -214,6 +245,7 @@
             color: #7c6ff7;
             font-size: 1.1em;
         }
+
         .checklist li .tag {
             background: #2d2550;
             color: #a78bfa;
@@ -222,6 +254,7 @@
             font-size: 0.78em;
             margin-left: 6px;
         }
+
         /* Diagram container */
         .diagram {
             display: flex;
@@ -232,12 +265,14 @@
             padding: 20px;
             border: 1px solid #2d2550;
         }
+
         /* Horizontal separator */
         .separator {
             border: none;
             border-top: 1px solid #2d2550;
             margin: 36px 0;
         }
+
         /* Responsive */
         @media (max-width: 900px) {
             nav {
@@ -248,6 +283,7 @@
                 border-bottom: 2px solid #2d2550;
                 padding-top: 0;
             }
+
             main {
                 margin-left: 0;
                 padding: 20px 14px;
@@ -256,1398 +292,1662 @@
     </style>
 </head>
 <body>
-    <header>
-        <h1>Claude's Examination &amp; Implementation Plan</h1>
-        <div class="subtitle">AI-Enhanced Modular Java Workflow — Series Analysis &amp; Build Strategy</div>
-        <div class="badge">Claude Code — Plan Document 06</div>
-    </header>
-    <nav>
-        <div class="nav-group" style="padding-left:18px;">Examination</div>
-        <ul>
-            <li><a href="#examination">Series Overview</a></li>
-            <li><a href="#file01">File 01 — Foundations</a></li>
-            <li><a href="#file02">File 02 — Architecture</a></li>
-            <li><a href="#file03">File 03 — Optimization</a></li>
-            <li><a href="#file04">File 04 — Project Setup</a></li>
-            <li><a href="#file05">File 05 — Gen Prompt</a></li>
-        </ul>
-        <div class="nav-group" style="padding-left:18px;">Key Findings</div>
-        <ul>
-            <li><a href="#key-findings">Distilled Insights</a></li>
-            <li><a href="#arch-summary">Architecture Summary</a></li>
-        </ul>
-        <div class="nav-group" style="padding-left:18px;">Implementation Plan</div>
-        <ul>
-            <li><a href="#plan">Phase-by-Phase Plan</a></li>
-            <li><a href="#decisions">Architecture Decisions</a></li>
-            <li><a href="#checklist">File Checklist</a></li>
-        </ul>
-        <div class="nav-group" style="padding-left:18px;">Design v2 Review</div>
-        <ul>
-            <li><a href="#design-v2">Agent Merge Eval</a></li>
-            <li><a href="#prompt-mapping">Prompt → Agent Map</a></li>
-            <li><a href="#design-recommendations">Recommendations</a></li>
-        </ul>
-        <div class="nav-group" style="padding-left:18px;">Q&amp;A &amp; Plan</div>
-        <ul>
-            <li><a href="#qa-caching">Q1 — LLM Caching</a></li>
-            <li><a href="#qa-progress">Q2 — Progress Tracking</a></li>
-            <li><a href="#impl-plan">Implementation Plan</a></li>
-        </ul>
-    </nav>
-    <main>
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION 1: SERIES EXAMINATION               -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="examination">
-            <h2>1. Series Examination — Files 01 through 05</h2>
+<header>
+    <h1>Claude's Examination &amp; Implementation Plan</h1>
+    <div class="subtitle">AI-Enhanced Modular Java Workflow — Series Analysis &amp; Build Strategy</div>
+    <div class="badge">Claude Code — Plan Document 06</div>
+</header>
+<nav>
+    <div class="nav-group" style="padding-left:18px;">Examination</div>
+    <ul>
+        <li><a href="#examination">Series Overview</a></li>
+        <li><a href="#file01">File 01 — Foundations</a></li>
+        <li><a href="#file02">File 02 — Architecture</a></li>
+        <li><a href="#file03">File 03 — Optimization</a></li>
+        <li><a href="#file04">File 04 — Project Setup</a></li>
+        <li><a href="#file05">File 05 — Gen Prompt</a></li>
+    </ul>
+    <div class="nav-group" style="padding-left:18px;">Key Findings</div>
+    <ul>
+        <li><a href="#key-findings">Distilled Insights</a></li>
+        <li><a href="#arch-summary">Architecture Summary</a></li>
+    </ul>
+    <div class="nav-group" style="padding-left:18px;">Implementation Plan</div>
+    <ul>
+        <li><a href="#plan">Phase-by-Phase Plan</a></li>
+        <li><a href="#decisions">Architecture Decisions</a></li>
+        <li><a href="#checklist">File Checklist</a></li>
+    </ul>
+    <div class="nav-group" style="padding-left:18px;">Design v2 Review</div>
+    <ul>
+        <li><a href="#design-v2">Agent Merge Eval</a></li>
+        <li><a href="#prompt-mapping">Prompt → Agent Map</a></li>
+        <li><a href="#design-recommendations">Recommendations</a></li>
+    </ul>
+    <div class="nav-group" style="padding-left:18px;">Q&amp;A &amp; Plan</div>
+    <ul>
+        <li><a href="#qa-caching">Q1 — LLM Caching</a></li>
+        <li><a href="#qa-progress">Q2 — Progress Tracking</a></li>
+        <li><a href="#impl-plan">Implementation Plan</a></li>
+    </ul>
+</nav>
+<main>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION 1: SERIES EXAMINATION               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="examination">
+        <h2>1. Series Examination — Files 01 through 05</h2>
+        <p>
+            Before building, Claude examined all five HTML documents in the series. Each file
+            represents an evolutionary step in the design of an <b>AI-Enhanced Modular Java Workflow</b>
+            driven by markdown-defined agents and a Java orchestrator. The table below maps each
+            file to its primary contribution.
+        </p>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>File</th>
+                    <th>Title</th>
+                    <th>Theme</th>
+                    <th>Primary Contribution</th>
+                </tr>
+                <tr>
+                    <td><b>01</b></td>
+                    <td>AI Agents Learning Path &amp; 8-Step Workflow Guide</td>
+                    <td>Dark (orange)</td>
+                    <td>Foundational concepts: agent types, learning path, 8-step workflow table, Java code basics</td>
+                </tr>
+                <tr>
+                    <td><b>02</b></td>
+                    <td>AI-Enhanced Workflow &amp; Agent System Design</td>
+                    <td>Dark (orange)</td>
+                    <td>System architecture diagrams (SVG), advanced agent concepts: stateless agents, SRP, security,
+                        observability
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>03</b></td>
+                    <td>Efficient Orchestration &amp; Design</td>
+                    <td>Dark (orange)</td>
+                    <td>Optimization analysis: combine/pipeline steps, reduce to 5 LLM calls, 3 human-in-the-loop
+                        checkpoints
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>04</b></td>
+                    <td>Modular Java Project Setup Guide</td>
+                    <td>Light (blue)</td>
+                    <td>Maven project structure, package layout, Spring-ready design, LlmClient interface, skeletons
+                    </td>
+                </tr>
+                <tr>
+                    <td><b>05</b></td>
+                    <td>Project Generation Prompt</td>
+                    <td>Light (blue)</td>
+                    <td>Complete generation prompt with full structure, implementation details, and sample code for all
+                        components
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FILE 01 FINDING                             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="file01">
+        <h2>2. File 01 — Foundations &amp; 8-Step Workflow</h2>
+        <div class="finding">
+            <div class="file-tag">File 01</div>
+            <h4>Core Concepts Introduced</h4>
+            <ul>
+                <li><b>AI Agent definition:</b> Software entity that perceives, reasons, and acts autonomously. Key
+                    traits: Perception, Reasoning, Action, Autonomy.
+                </li>
+                <li><b>Agent types:</b> Reactive, Deliberative, Collaborative, Hybrid — agents are language-agnostic.
+                </li>
+                <li><b>Markdown orchestration:</b> Claude reads <code>.md</code> files as agent instruction prompts — no
+                    language lock-in.
+                </li>
+                <li><b>Java role:</b> Orchestrator layer — loads markdown, substitutes variables, calls Claude API,
+                    parses responses.
+                </li>
+            </ul>
+            <h4>The 8-Step Workflow (as defined in File 01)</h4>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>#</th>
+                        <th>Step</th>
+                        <th>Agent Role</th>
+                        <th>AI Task</th>
+                    </tr>
+                    <tr>
+                        <td>1</td>
+                        <td>Ticket Analysis</td>
+                        <td>Intake Agent</td>
+                        <td>Parse and summarize tickets using LLM</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Project Setup</td>
+                        <td>Setup Agent</td>
+                        <td>Generate project skeleton/codebase</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>AI-Powered Deep Dive</td>
+                        <td>Analysis Agent</td>
+                        <td>Analyze requirements, suggest solutions</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>Visual Analysis Report</td>
+                        <td>Reporting Agent</td>
+                        <td>Create charts/diagrams from data</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Review &amp; Clarification</td>
+                        <td>Review Agent</td>
+                        <td>Check ambiguities, ask questions</td>
+                    </tr>
+                    <tr>
+                        <td>6</td>
+                        <td>Implementation</td>
+                        <td>Coding Agent</td>
+                        <td>Generate code snippets, unit tests</td>
+                    </tr>
+                    <tr>
+                        <td>7</td>
+                        <td>Quality Assurance</td>
+                        <td>QA Agent</td>
+                        <td>Static analysis, suggest improvements</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Deployment &amp; Review</td>
+                        <td>Deployment Agent</td>
+                        <td>Automate deployment, review logs</td>
+                    </tr>
+                </table>
+            </div>
+            <h4>Java Pattern Introduced</h4>
+            <div class="code-block">// Load markdown template, fill variables, call API
+                String agentMd = Files.readString(Paths.get("resources/agents/ticket_analysis.md"));
+                String prompt = agentMd.replace("{{ticket_text}}", ticketText);
+                // → send prompt to Claude API, parse result
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FILE 02 FINDING                             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="file02">
+        <h2>3. File 02 — System Architecture &amp; Advanced Concepts</h2>
+        <div class="finding">
+            <div class="file-tag">File 02</div>
+            <h4>Architecture Introduced</h4>
             <p>
-                Before building, Claude examined all five HTML documents in the series. Each file
-                represents an evolutionary step in the design of an <b>AI-Enhanced Modular Java Workflow</b>
-                driven by markdown-defined agents and a Java orchestrator. The table below maps each
-                file to its primary contribution.
+                File 02 introduced the first <b>SVG workflow diagram</b> showing the Orchestrator at the top,
+                dispatching to 8 agents (split left/right), with <b>Jira</b> and <b>GitHub</b> as external systems.
+                A second, simpler architecture SVG showed: Orchestrator → Agent(s) → Claude LLM API (triangle).
+            </p>
+            <h4>Advanced Agent Concepts</h4>
+            <ul>
+                <li><b>Stateless vs. Stateful:</b> Stateless agents process each request independently (recommended for
+                    scaling). Stateful agents maintain conversation/workflow history.
+                </li>
+                <li><b>Single Responsibility Principle (SRP):</b> Each agent = one workflow step. Makes agents
+                    composable and testable.
+                </li>
+                <li><b>Agent Communication:</b> Via orchestrator (recommended for control) or peer-to-peer
+                    (event-driven).
+                </li>
+                <li><b>Security:</b> Least-privilege API keys; log all actions for auditability.</li>
+                <li><b>Error Handling:</b> Retries, fallbacks, and human escalation for robustness.</li>
+                <li><b>Observability:</b> Monitor performance, collect metrics, log errors.</li>
+                <li><b>Extensibility:</b> Agents as plug-ins — add/swap without breaking the workflow.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FILE 03 FINDING                             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="file03">
+        <h2>4. File 03 — Optimization &amp; Human-in-the-Loop</h2>
+        <div class="finding">
+            <div class="file-tag">File 03</div>
+            <h4>Optimization Analysis</h4>
+            <p>
+                File 03 is the critical optimization layer. It analyzed which of the 8 steps could be
+                <b>combined</b>, <b>pipelined</b>, or must remain separate, and where humans must intervene.
+            </p>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Steps</th>
+                        <th>Strategy</th>
+                        <th>Human Checkpoint?</th>
+                        <th>Reason</th>
+                    </tr>
+                    <tr>
+                        <td>1 + 2</td>
+                        <td>Combined (one LLM call)</td>
+                        <td style="color:#ff80ab;font-weight:bold;">Yes — after</td>
+                        <td>Human approves project structure before proceeding</td>
+                    </tr>
+                    <tr>
+                        <td>3 + 4</td>
+                        <td>Pipeline (sequential)</td>
+                        <td>No</td>
+                        <td>Deep Dive feeds directly into Visual Report — automated</td>
+                    </tr>
+                    <tr>
+                        <td>5</td>
+                        <td>Separate</td>
+                        <td style="color:#ff80ab;font-weight:bold;">Yes — during</td>
+                        <td>Human reviews clarifications, provides feedback</td>
+                    </tr>
+                    <tr>
+                        <td>6 + 7</td>
+                        <td>Pipeline (sequential)</td>
+                        <td>No</td>
+                        <td>QA validates generated code — fully automated</td>
+                    </tr>
+                    <tr>
+                        <td>8</td>
+                        <td>Separate</td>
+                        <td style="color:#ff80ab;font-weight:bold;">Yes — before/after</td>
+                        <td>Human confirms deployment — critical safety gate</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="insight">
+                <b>Key efficiency gain:</b> From 8 separate LLM calls down to <b>5 optimized calls</b>
+                (1+2 combined, 3+4 piped, 6+7 piped), with 3 human gates for quality control.
+            </div>
+            <h4>Optimized Orchestrator Pseudocode (from File 03)</h4>
+            <div class="code-block">// Step 1+2: one combined LLM call
+                var result12 = agents.ticketAndSetup(ctx.ticketText);
+                if (!humanConfirm("Ticket &amp; Setup", ctx)) return;
+
+                // Step 3+4: pipeline
+                var result34 = agents.deepDiveAndVisual(ctx.ticketSummary, ctx.projectSetup);
+
+                // Step 5: separate + human gate
+                ctx.reviewNotes = agents.review(ctx.deepDive, ctx.visualReport);
+                if (!humanConfirm("Review &amp; Clarification", ctx)) return;
+
+                // Step 6+7: pipeline
+                var result67 = agents.implementationAndQA(ctx.reviewNotes);
+
+                // Step 8: separate + human gate
+                ctx.deploymentStatus = agents.deployment(ctx.implementation, ctx.qaReport);
+                humanConfirm("Deployment &amp; Review", ctx);
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FILE 04 FINDING                             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="file04">
+        <h2>5. File 04 — Maven Project Setup Guide</h2>
+        <div class="finding">
+            <div class="file-tag">File 04</div>
+            <h4>Canonical Package Structure</h4>
+            <div class="code-block">aidevworkflow/
+                ├── pom.xml
+                └── src/
+                ├── main/
+                │ ├── java/com/javamsdt/aidevworkflow/
+                │ │ ├── agents/ ← 8 agent classes
+                │ │ ├── orchestrator/ ← WorkflowOrchestrator.java
+                │ │ ├── context/ ← WorkflowContext.java
+                │ │ ├── llm/ ← LlmClient.java + implementations
+                │ │ └── util/ ← MarkdownLoader.java
+                │ └── resources/agents/ ← 8 markdown prompt files
+                └── test/java/com/javamsdt/aidevworkflow/
+            </div>
+            <h4>Spring-Ready Design Principles</h4>
+            <ul>
+                <li>Interface-driven: agents and orchestrator depend on <code>LlmClient</code>, not a concrete LLM.</li>
+                <li>Stateless agents: easy to annotate with <code>@Component</code> later.</li>
+                <li>Orchestrator structured as a plain Java class, ready to become a Spring <code>@Service</code>.</li>
+                <li>Human-in-the-loop via CLI / web UI / notification — pluggable.</li>
+            </ul>
+            <h4>LLM Abstraction Interface</h4>
+            <div class="code-block">package com.javamsdt.aidevworkflow.llm;
+
+                public interface LlmClient {
+                String completePrompt(String prompt);
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- FILE 05 FINDING                             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="file05">
+        <h2>6. File 05 — Project Generation Prompt</h2>
+        <div class="finding">
+            <div class="file-tag">File 05</div>
+            <h4>Project Metadata</h4>
+            <ul>
+                <li><b>Artifact ID:</b> <code>aidevworkflow</code></li>
+                <li><b>Root Package:</b> <code>com.javamsdt.aidevworkflow</code></li>
+                <li><b>Build Tool:</b> Maven</li>
+                <li><b>Language:</b> Java</li>
+                <li><b>Goal:</b> Modular, extensible, Spring-ready, LLM-pluggable</li>
+            </ul>
+            <h4>Sample Agent Code (canonical form from File 05)</h4>
+            <div class="code-block">public class TicketAnalysisAgent {
+                private final LlmClient llmClient;
+
+                public TicketAnalysisAgent(LlmClient llmClient) {
+                this.llmClient = llmClient;
+                }
+
+                public String analyze(String ticketText) {
+                String prompt = MarkdownLoader
+                .load("agents/ticket_analysis.md")
+                .replace("{{ticket}}", ticketText);
+                return llmClient.completePrompt(prompt);
+                }
+                }
+            </div>
+            <h4>Key Requirements Summarized</h4>
+            <ul>
+                <li>All agent prompts in markdown files under <code>resources/agents/</code>.</li>
+                <li>LLM integration must be flexible and swappable (interface pattern).</li>
+                <li>Code is idiomatic Java and Maven-based.</li>
+                <li>Ready for Spring Boot and additional LLMs (Gemini, etc.).</li>
+            </ul>
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: KEY FINDINGS                       -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="key-findings">
+        <h2>7. Distilled Key Findings</h2>
+        <p>Synthesizing all five files, the following non-obvious insights stand out:</p>
+
+        <div class="insight">
+            <b>Finding 1 — Markdown is the Agent Contract:</b> The markdown files in
+            <code>resources/agents/</code> are not documentation — they are the actual LLM prompts.
+            Every agent class has exactly one corresponding <code>.md</code> file.
+            Changing agent behavior means editing markdown, not Java.
+        </div>
+
+        <div class="insight">
+            <b>Finding 2 — 5 LLM Calls, Not 8:</b> File 03 proved that the naive 1-step=1-call
+            design wastes tokens and latency. The optimized design combines steps 1+2, pipelines
+            3→4 and 6→7, reducing to 5 LLM calls total while preserving all workflow outputs.
+        </div>
+
+        <div class="insight">
+            <b>Finding 3 — WorkflowContext is the Backbone:</b> All agents share a single
+            <code>WorkflowContext</code> object. This is the single source of truth — it carries
+            data from step 1 all the way to step 8. Agents read from and write to it; they do not
+            call each other directly.
+        </div>
+
+        <div class="insight">
+            <b>Finding 4 — Three Human Gates:</b> Human confirmation is mandatory after
+            Steps 2, 5, and 8. This is not optional — it is the safety architecture.
+            The <code>humanConfirm()</code> method returns <code>false</code> to halt the workflow.
+        </div>
+
+        <div class="insight">
+            <b>Finding 5 — Spring Migration is Free:</b> Because agents are stateless, the
+            orchestrator is a plain class, and LLM clients are injected via interface, the entire
+            project converts to Spring Boot by adding <code>@Component</code> / <code>@Service</code>
+            annotations — no structural refactoring needed.
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: ARCHITECTURE SUMMARY               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="arch-summary">
+        <h2>8. Architecture Summary Diagram</h2>
+        <div class="diagram">
+            <svg height="460" viewBox="0 0 820 460" width="820">
+                <defs>
+                    <marker id="arr" markerHeight="7" markerWidth="10" orient="auto" refX="10" refY="3.5">
+                        <polygon fill="#a78bfa" points="0 0,10 3.5,0 7"/>
+                    </marker>
+                    <marker id="arr-human" markerHeight="7" markerWidth="10" orient="auto" refX="10" refY="3.5">
+                        <polygon fill="#ff80ab" points="0 0,10 3.5,0 7"/>
+                    </marker>
+                    <marker id="arr-green" markerHeight="7" markerWidth="10" orient="auto" refX="10" refY="3.5">
+                        <polygon fill="#34d399" points="0 0,10 3.5,0 7"/>
+                    </marker>
+                </defs>
+
+                <!-- Orchestrator -->
+                <rect fill="#7c6ff7" height="52" rx="12" stroke="#a78bfa" stroke-width="2" width="200" x="310" y="20"/>
+                <text fill="#fff" font-size="14" font-weight="bold" text-anchor="middle" x="410" y="42">
+                    WorkflowOrchestrator
+                </text>
+                <text fill="#ddd6fe" font-size="11" text-anchor="middle" x="410" y="60">(Java Service)</text>
+
+                <!-- WorkflowContext -->
+                <rect fill="#2a2050" height="44" rx="10" stroke="#7c6ff7" stroke-width="1.5" width="200" x="310"
+                      y="190"/>
+                <text fill="#c4b5fd" font-size="13" font-weight="bold" text-anchor="middle" x="410" y="216">
+                    WorkflowContext
+                </text>
+
+                <!-- LlmClient -->
+                <rect fill="#1a2635" height="44" rx="10" stroke="#38bdf8" stroke-width="1.5" width="200" x="310"
+                      y="380"/>
+                <text fill="#7dd3fc" font-size="12" font-weight="bold" text-anchor="middle" x="410" y="400">LlmClient
+                    (Interface)
+                </text>
+                <text fill="#93c5fd" font-size="10" text-anchor="middle" x="410" y="416">Claude | OpenAI | Gemini</text>
+
+                <!-- Agent group: left (steps 1+2, 3+4) -->
+                <rect fill="#1e2a1a" height="48" rx="10" stroke="#34d399" stroke-width="1.5" width="190" x="40"
+                      y="100"/>
+                <text fill="#86efac" font-size="13" font-weight="bold" text-anchor="middle" x="135" y="122">Steps 1+2
+                </text>
+                <text fill="#4ade80" font-size="11" text-anchor="middle" x="135" y="139">Ticket Analysis + Setup</text>
+
+                <rect fill="#1e2a1a" height="48" rx="10" stroke="#34d399" stroke-width="1.5" width="190" x="40"
+                      y="185"/>
+                <text fill="#86efac" font-size="13" font-weight="bold" text-anchor="middle" x="135" y="207">Steps 3+4
+                </text>
+                <text fill="#4ade80" font-size="11" text-anchor="middle" x="135" y="224">Deep Dive + Visual Report
+                </text>
+
+                <rect fill="#1e2a1a" height="48" rx="10" stroke="#34d399" stroke-width="1.5" width="190" x="40"
+                      y="270"/>
+                <text fill="#86efac" font-size="13" font-weight="bold" text-anchor="middle" x="135" y="292">Step 5
+                </text>
+                <text fill="#4ade80" font-size="11" text-anchor="middle" x="135" y="309">Review &amp; Clarification
+                </text>
+
+                <!-- Agent group: right (6+7, 8) -->
+                <rect fill="#251a10" height="48" rx="10" stroke="#f59e0b" stroke-width="1.5" width="190" x="590"
+                      y="100"/>
+                <text fill="#fcd34d" font-size="13" font-weight="bold" text-anchor="middle" x="685" y="122">Steps 6+7
+                </text>
+                <text fill="#fbbf24" font-size="11" text-anchor="middle" x="685" y="139">Implementation + QA</text>
+
+                <rect fill="#251a10" height="48" rx="10" stroke="#f59e0b" stroke-width="1.5" width="190" x="590"
+                      y="185"/>
+                <text fill="#fcd34d" font-size="13" font-weight="bold" text-anchor="middle" x="685" y="207">Step 8
+                </text>
+                <text fill="#fbbf24" font-size="11" text-anchor="middle" x="685" y="224">Deployment &amp; Review</text>
+
+                <!-- Human checkpoints -->
+                <circle cx="255" cy="124" fill="#ff80ab" r="16" stroke="#fff" stroke-width="1.5"/>
+                <text fill="#fff" font-size="13" font-weight="bold" text-anchor="middle" x="255" y="129">H</text>
+                <circle cx="255" cy="294" fill="#ff80ab" r="16" stroke="#fff" stroke-width="1.5"/>
+                <text fill="#fff" font-size="13" font-weight="bold" text-anchor="middle" x="255" y="299">H</text>
+                <circle cx="565" cy="209" fill="#ff80ab" r="16" stroke="#fff" stroke-width="1.5"/>
+                <text fill="#fff" font-size="13" font-weight="bold" text-anchor="middle" x="565" y="214">H</text>
+
+                <!-- Arrows: Orchestrator → Agents -->
+                <line marker-end="url(#arr)" stroke="#a78bfa" stroke-width="1.8" x1="310" x2="230" y1="55" y2="100"/>
+                <line marker-end="url(#arr)" stroke="#a78bfa" stroke-width="1.8" x1="310" x2="230" y1="60" y2="185"/>
+                <line marker-end="url(#arr)" stroke="#a78bfa" stroke-width="1.8" x1="310" x2="230" y1="65" y2="270"/>
+                <line marker-end="url(#arr)" stroke="#a78bfa" stroke-width="1.8" x1="510" x2="590" y1="55" y2="100"/>
+                <line marker-end="url(#arr)" stroke="#a78bfa" stroke-width="1.8" x1="510" x2="590" y1="60" y2="185"/>
+
+                <!-- Context ↔ Orchestrator -->
+                <line marker-end="url(#arr)" stroke="#7c6ff7" stroke-dasharray="5,3" stroke-width="1.5" x1="410" x2="410" y1="72"
+                      y2="190"/>
+
+                <!-- Agents → LlmClient -->
+                <line marker-end="url(#arr-green)" stroke="#38bdf8" stroke-width="1.5" x1="135" x2="310" y1="333"
+                      y2="400"/>
+                <line marker-end="url(#arr-green)" stroke="#38bdf8" stroke-width="1.5" x1="685" x2="510" y1="233"
+                      y2="380"/>
+
+                <!-- Legend -->
+                <rect fill="#120f1e" height="36" rx="6" stroke="#2d2550" stroke-width="1" width="760" x="30" y="415"/>
+                <circle cx="55" cy="433" fill="#ff80ab" r="8"/>
+                <text fill="#f0eeff" font-size="11" x="68" y="437">H = Human Checkpoint</text>
+                <line marker-end="url(#arr)" stroke="#a78bfa" stroke-width="2" x1="200" x2="230" y1="433" y2="433"/>
+                <text fill="#f0eeff" font-size="11" x="237" y="437">Orchestrator dispatches</text>
+                <line marker-end="url(#arr-green)" stroke="#38bdf8" stroke-width="2" x1="420" x2="450" y1="433"
+                      y2="433"/>
+                <text fill="#f0eeff" font-size="11" x="457" y="437">LLM call</text>
+                <line marker-end="url(#arr)" stroke="#7c6ff7" stroke-dasharray="4,2" stroke-width="2" x1="540" x2="570" y1="433"
+                      y2="433"/>
+                <text fill="#f0eeff" font-size="11" x="577" y="437">Shared context</text>
+            </svg>
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: IMPLEMENTATION PLAN                -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="plan">
+        <h2>9. Implementation Plan — Phase by Phase</h2>
+        <p>
+            This plan translates all five HTML documents into a concrete build sequence.
+            Each phase is self-contained and produces testable output.
+        </p>
+
+        <div class="phase">
+            <span class="phase-num">1</span><b>Maven Project Scaffolding</b>
+            <p>Initialize the project using Maven archetype, then create all package directories.</p>
+            <div class="code-block">mvn archetype:generate \
+                -DgroupId=com.javamsdt.aidevworkflow \
+                -DartifactId=aidevworkflow \
+                -DarchetypeArtifactId=maven-archetype-quickstart \
+                -DinteractiveMode=false
+            </div>
+            <p>Add to <code>pom.xml</code>: OkHttp (or Apache HttpClient) for HTTP, Jackson (or Gson) for JSON parsing,
+                JUnit 5 for testing.</p>
+            <p><b>Output:</b> Compilable Maven project with all packages present.</p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">2</span><b>LLM Abstraction Layer</b>
+            <p>Create the pluggable LLM interface and two concrete implementations.</p>
+            <div class="code-block">// LlmClient.java
+                public interface LlmClient {
+                String completePrompt(String prompt);
+                }
+
+                // ClaudeApiClient.java — calls Anthropic Messages API
+                // OpenAiApiClient.java — calls OpenAI Chat Completions API
+            </div>
+            <p><b>Output:</b> Agents can be written against <code>LlmClient</code> without knowing which LLM is active.
+                Swap LLMs via constructor injection.</p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">3</span><b>WorkflowContext — Shared State</b>
+            <p>
+                Create the <code>WorkflowContext</code> POJO. Every agent reads from and writes to this object.
+                It travels through all 8 steps and accumulates results.
+            </p>
+            <div class="code-block">public class WorkflowContext {
+                public String ticketText;
+                public String ticketSummary;
+                public String projectSetup;
+                public String deepDive;
+                public String visualReport;
+                public String reviewNotes;
+                public String implementation;
+                public String qaReport;
+                public String deploymentStatus;
+                }
+            </div>
+            <p><b>Output:</b> Single source of truth that eliminates inter-agent direct calls.</p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">4</span><b>MarkdownLoader Utility</b>
+            <p>
+                Utility class that loads a markdown agent file from the classpath and performs
+                <code>{{variable}}</code> substitution.
+            </p>
+            <div class="code-block">public class MarkdownLoader {
+                public static String load(String resourcePath) {
+                // Load from classpath: src/main/resources/
+                InputStream is = MarkdownLoader.class
+                .getClassLoader()
+                .getResourceAsStream(resourcePath);
+                return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+                }
+                }
+            </div>
+            <p><b>Output:</b> Agents load prompts with one line:
+                <code>MarkdownLoader.load("agents/ticket_analysis.md")</code></p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">5</span><b>8 Markdown Agent Prompt Files</b>
+            <p>
+                Create one <code>.md</code> file per agent in <code>src/main/resources/agents/</code>.
+                Each file defines: Purpose, Instructions, Input variables, Expected Output format.
             </p>
             <div class="table-container">
                 <table>
                     <tr>
                         <th>File</th>
-                        <th>Title</th>
-                        <th>Theme</th>
-                        <th>Primary Contribution</th>
+                        <th>Input Variables</th>
+                        <th>Key Output</th>
                     </tr>
                     <tr>
-                        <td><b>01</b></td>
-                        <td>AI Agents Learning Path &amp; 8-Step Workflow Guide</td>
-                        <td>Dark (orange)</td>
-                        <td>Foundational concepts: agent types, learning path, 8-step workflow table, Java code basics</td>
+                        <td>ticket_analysis.md</td>
+                        <td><code>{{ticket}}</code></td>
+                        <td>Summary, requirements, clarifying questions</td>
                     </tr>
                     <tr>
-                        <td><b>02</b></td>
-                        <td>AI-Enhanced Workflow &amp; Agent System Design</td>
-                        <td>Dark (orange)</td>
-                        <td>System architecture diagrams (SVG), advanced agent concepts: stateless agents, SRP, security, observability</td>
+                        <td>project_setup.md</td>
+                        <td><code>{{ticket_summary}}</code></td>
+                        <td>Project structure plan</td>
                     </tr>
                     <tr>
-                        <td><b>03</b></td>
-                        <td>Efficient Orchestration &amp; Design</td>
-                        <td>Dark (orange)</td>
-                        <td>Optimization analysis: combine/pipeline steps, reduce to 5 LLM calls, 3 human-in-the-loop checkpoints</td>
+                        <td>deep_dive.md</td>
+                        <td><code>{{ticket_summary}}</code>, <code>{{project_setup}}</code></td>
+                        <td>Deep analysis, solution proposals</td>
                     </tr>
                     <tr>
-                        <td><b>04</b></td>
-                        <td>Modular Java Project Setup Guide</td>
-                        <td>Light (blue)</td>
-                        <td>Maven project structure, package layout, Spring-ready design, LlmClient interface, skeletons</td>
+                        <td>visual_report.md</td>
+                        <td><code>{{deep_dive}}</code></td>
+                        <td>Diagram/chart descriptions (markdown)</td>
                     </tr>
                     <tr>
-                        <td><b>05</b></td>
-                        <td>Project Generation Prompt</td>
-                        <td>Light (blue)</td>
-                        <td>Complete generation prompt with full structure, implementation details, and sample code for all components</td>
+                        <td>review.md</td>
+                        <td><code>{{deep_dive}}</code>, <code>{{visual_report}}</code></td>
+                        <td>Review notes, open questions</td>
+                    </tr>
+                    <tr>
+                        <td>implementation.md</td>
+                        <td><code>{{review_notes}}</code></td>
+                        <td>Code snippets, implementation guide</td>
+                    </tr>
+                    <tr>
+                        <td>quality_assurance.md</td>
+                        <td><code>{{implementation}}</code></td>
+                        <td>QA report, improvement suggestions</td>
+                    </tr>
+                    <tr>
+                        <td>deployment.md</td>
+                        <td><code>{{implementation}}</code>, <code>{{qa_report}}</code></td>
+                        <td>Deployment script, deployment notes</td>
                     </tr>
                 </table>
             </div>
-        </section>
+            <p><b>Output:</b> All 8 agent prompt files ready. Changing agent behavior = editing markdown, not Java.</p>
+        </div>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- FILE 01 FINDING                             -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="file01">
-            <h2>2. File 01 — Foundations &amp; 8-Step Workflow</h2>
-            <div class="finding">
-                <div class="file-tag">File 01</div>
-                <h4>Core Concepts Introduced</h4>
-                <ul>
-                    <li><b>AI Agent definition:</b> Software entity that perceives, reasons, and acts autonomously. Key traits: Perception, Reasoning, Action, Autonomy.</li>
-                    <li><b>Agent types:</b> Reactive, Deliberative, Collaborative, Hybrid — agents are language-agnostic.</li>
-                    <li><b>Markdown orchestration:</b> Claude reads <code>.md</code> files as agent instruction prompts — no language lock-in.</li>
-                    <li><b>Java role:</b> Orchestrator layer — loads markdown, substitutes variables, calls Claude API, parses responses.</li>
-                </ul>
-                <h4>The 8-Step Workflow (as defined in File 01)</h4>
-                <div class="table-container">
-                    <table>
-                        <tr><th>#</th><th>Step</th><th>Agent Role</th><th>AI Task</th></tr>
-                        <tr><td>1</td><td>Ticket Analysis</td><td>Intake Agent</td><td>Parse and summarize tickets using LLM</td></tr>
-                        <tr><td>2</td><td>Project Setup</td><td>Setup Agent</td><td>Generate project skeleton/codebase</td></tr>
-                        <tr><td>3</td><td>AI-Powered Deep Dive</td><td>Analysis Agent</td><td>Analyze requirements, suggest solutions</td></tr>
-                        <tr><td>4</td><td>Visual Analysis Report</td><td>Reporting Agent</td><td>Create charts/diagrams from data</td></tr>
-                        <tr><td>5</td><td>Review &amp; Clarification</td><td>Review Agent</td><td>Check ambiguities, ask questions</td></tr>
-                        <tr><td>6</td><td>Implementation</td><td>Coding Agent</td><td>Generate code snippets, unit tests</td></tr>
-                        <tr><td>7</td><td>Quality Assurance</td><td>QA Agent</td><td>Static analysis, suggest improvements</td></tr>
-                        <tr><td>8</td><td>Deployment &amp; Review</td><td>Deployment Agent</td><td>Automate deployment, review logs</td></tr>
-                    </table>
-                </div>
-                <h4>Java Pattern Introduced</h4>
-                <div class="code-block">// Load markdown template, fill variables, call API
-String agentMd = Files.readString(Paths.get("resources/agents/ticket_analysis.md"));
-String prompt   = agentMd.replace("{{ticket_text}}", ticketText);
-// → send prompt to Claude API, parse result</div>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- FILE 02 FINDING                             -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="file02">
-            <h2>3. File 02 — System Architecture &amp; Advanced Concepts</h2>
-            <div class="finding">
-                <div class="file-tag">File 02</div>
-                <h4>Architecture Introduced</h4>
-                <p>
-                    File 02 introduced the first <b>SVG workflow diagram</b> showing the Orchestrator at the top,
-                    dispatching to 8 agents (split left/right), with <b>Jira</b> and <b>GitHub</b> as external systems.
-                    A second, simpler architecture SVG showed: Orchestrator → Agent(s) → Claude LLM API (triangle).
-                </p>
-                <h4>Advanced Agent Concepts</h4>
-                <ul>
-                    <li><b>Stateless vs. Stateful:</b> Stateless agents process each request independently (recommended for scaling). Stateful agents maintain conversation/workflow history.</li>
-                    <li><b>Single Responsibility Principle (SRP):</b> Each agent = one workflow step. Makes agents composable and testable.</li>
-                    <li><b>Agent Communication:</b> Via orchestrator (recommended for control) or peer-to-peer (event-driven).</li>
-                    <li><b>Security:</b> Least-privilege API keys; log all actions for auditability.</li>
-                    <li><b>Error Handling:</b> Retries, fallbacks, and human escalation for robustness.</li>
-                    <li><b>Observability:</b> Monitor performance, collect metrics, log errors.</li>
-                    <li><b>Extensibility:</b> Agents as plug-ins — add/swap without breaking the workflow.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- FILE 03 FINDING                             -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="file03">
-            <h2>4. File 03 — Optimization &amp; Human-in-the-Loop</h2>
-            <div class="finding">
-                <div class="file-tag">File 03</div>
-                <h4>Optimization Analysis</h4>
-                <p>
-                    File 03 is the critical optimization layer. It analyzed which of the 8 steps could be
-                    <b>combined</b>, <b>pipelined</b>, or must remain separate, and where humans must intervene.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <tr>
-                            <th>Steps</th>
-                            <th>Strategy</th>
-                            <th>Human Checkpoint?</th>
-                            <th>Reason</th>
-                        </tr>
-                        <tr>
-                            <td>1 + 2</td>
-                            <td>Combined (one LLM call)</td>
-                            <td style="color:#ff80ab;font-weight:bold;">Yes — after</td>
-                            <td>Human approves project structure before proceeding</td>
-                        </tr>
-                        <tr>
-                            <td>3 + 4</td>
-                            <td>Pipeline (sequential)</td>
-                            <td>No</td>
-                            <td>Deep Dive feeds directly into Visual Report — automated</td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Separate</td>
-                            <td style="color:#ff80ab;font-weight:bold;">Yes — during</td>
-                            <td>Human reviews clarifications, provides feedback</td>
-                        </tr>
-                        <tr>
-                            <td>6 + 7</td>
-                            <td>Pipeline (sequential)</td>
-                            <td>No</td>
-                            <td>QA validates generated code — fully automated</td>
-                        </tr>
-                        <tr>
-                            <td>8</td>
-                            <td>Separate</td>
-                            <td style="color:#ff80ab;font-weight:bold;">Yes — before/after</td>
-                            <td>Human confirms deployment — critical safety gate</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="insight">
-                    <b>Key efficiency gain:</b> From 8 separate LLM calls down to <b>5 optimized calls</b>
-                    (1+2 combined, 3+4 piped, 6+7 piped), with 3 human gates for quality control.
-                </div>
-                <h4>Optimized Orchestrator Pseudocode (from File 03)</h4>
-                <div class="code-block">// Step 1+2: one combined LLM call
-var result12  = agents.ticketAndSetup(ctx.ticketText);
-if (!humanConfirm("Ticket &amp; Setup", ctx)) return;
-
-// Step 3+4: pipeline
-var result34 = agents.deepDiveAndVisual(ctx.ticketSummary, ctx.projectSetup);
-
-// Step 5: separate + human gate
-ctx.reviewNotes = agents.review(ctx.deepDive, ctx.visualReport);
-if (!humanConfirm("Review &amp; Clarification", ctx)) return;
-
-// Step 6+7: pipeline
-var result67 = agents.implementationAndQA(ctx.reviewNotes);
-
-// Step 8: separate + human gate
-ctx.deploymentStatus = agents.deployment(ctx.implementation, ctx.qaReport);
-humanConfirm("Deployment &amp; Review", ctx);</div>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- FILE 04 FINDING                             -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="file04">
-            <h2>5. File 04 — Maven Project Setup Guide</h2>
-            <div class="finding">
-                <div class="file-tag">File 04</div>
-                <h4>Canonical Package Structure</h4>
-                <div class="code-block">aidevworkflow/
-├── pom.xml
-└── src/
-    ├── main/
-    │   ├── java/com/javamsdt/aidevworkflow/
-    │   │   ├── agents/          ← 8 agent classes
-    │   │   ├── orchestrator/    ← WorkflowOrchestrator.java
-    │   │   ├── context/         ← WorkflowContext.java
-    │   │   ├── llm/             ← LlmClient.java + implementations
-    │   │   └── util/            ← MarkdownLoader.java
-    │   └── resources/agents/    ← 8 markdown prompt files
-    └── test/java/com/javamsdt/aidevworkflow/</div>
-                <h4>Spring-Ready Design Principles</h4>
-                <ul>
-                    <li>Interface-driven: agents and orchestrator depend on <code>LlmClient</code>, not a concrete LLM.</li>
-                    <li>Stateless agents: easy to annotate with <code>@Component</code> later.</li>
-                    <li>Orchestrator structured as a plain Java class, ready to become a Spring <code>@Service</code>.</li>
-                    <li>Human-in-the-loop via CLI / web UI / notification — pluggable.</li>
-                </ul>
-                <h4>LLM Abstraction Interface</h4>
-                <div class="code-block">package com.javamsdt.aidevworkflow.llm;
-
-public interface LlmClient {
-    String completePrompt(String prompt);
-}</div>
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- FILE 05 FINDING                             -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="file05">
-            <h2>6. File 05 — Project Generation Prompt</h2>
-            <div class="finding">
-                <div class="file-tag">File 05</div>
-                <h4>Project Metadata</h4>
-                <ul>
-                    <li><b>Artifact ID:</b> <code>aidevworkflow</code></li>
-                    <li><b>Root Package:</b> <code>com.javamsdt.aidevworkflow</code></li>
-                    <li><b>Build Tool:</b> Maven</li>
-                    <li><b>Language:</b> Java</li>
-                    <li><b>Goal:</b> Modular, extensible, Spring-ready, LLM-pluggable</li>
-                </ul>
-                <h4>Sample Agent Code (canonical form from File 05)</h4>
-                <div class="code-block">public class TicketAnalysisAgent {
-    private final LlmClient llmClient;
-
-    public TicketAnalysisAgent(LlmClient llmClient) {
-        this.llmClient = llmClient;
-    }
-
-    public String analyze(String ticketText) {
-        String prompt = MarkdownLoader
-            .load("agents/ticket_analysis.md")
-            .replace("{{ticket}}", ticketText);
-        return llmClient.completePrompt(prompt);
-    }
-}</div>
-                <h4>Key Requirements Summarized</h4>
-                <ul>
-                    <li>All agent prompts in markdown files under <code>resources/agents/</code>.</li>
-                    <li>LLM integration must be flexible and swappable (interface pattern).</li>
-                    <li>Code is idiomatic Java and Maven-based.</li>
-                    <li>Ready for Spring Boot and additional LLMs (Gemini, etc.).</li>
-                </ul>
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: KEY FINDINGS                       -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="key-findings">
-            <h2>7. Distilled Key Findings</h2>
-            <p>Synthesizing all five files, the following non-obvious insights stand out:</p>
-
-            <div class="insight">
-                <b>Finding 1 — Markdown is the Agent Contract:</b> The markdown files in
-                <code>resources/agents/</code> are not documentation — they are the actual LLM prompts.
-                Every agent class has exactly one corresponding <code>.md</code> file.
-                Changing agent behavior means editing markdown, not Java.
-            </div>
-
-            <div class="insight">
-                <b>Finding 2 — 5 LLM Calls, Not 8:</b> File 03 proved that the naive 1-step=1-call
-                design wastes tokens and latency. The optimized design combines steps 1+2, pipelines
-                3→4 and 6→7, reducing to 5 LLM calls total while preserving all workflow outputs.
-            </div>
-
-            <div class="insight">
-                <b>Finding 3 — WorkflowContext is the Backbone:</b> All agents share a single
-                <code>WorkflowContext</code> object. This is the single source of truth — it carries
-                data from step 1 all the way to step 8. Agents read from and write to it; they do not
-                call each other directly.
-            </div>
-
-            <div class="insight">
-                <b>Finding 4 — Three Human Gates:</b> Human confirmation is mandatory after
-                Steps 2, 5, and 8. This is not optional — it is the safety architecture.
-                The <code>humanConfirm()</code> method returns <code>false</code> to halt the workflow.
-            </div>
-
-            <div class="insight">
-                <b>Finding 5 — Spring Migration is Free:</b> Because agents are stateless, the
-                orchestrator is a plain class, and LLM clients are injected via interface, the entire
-                project converts to Spring Boot by adding <code>@Component</code> / <code>@Service</code>
-                annotations — no structural refactoring needed.
-            </div>
-        </section>
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: ARCHITECTURE SUMMARY               -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="arch-summary">
-            <h2>8. Architecture Summary Diagram</h2>
-            <div class="diagram">
-                <svg width="820" height="460" viewBox="0 0 820 460">
-                    <defs>
-                        <marker id="arr" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                            <polygon points="0 0,10 3.5,0 7" fill="#a78bfa"/>
-                        </marker>
-                        <marker id="arr-human" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                            <polygon points="0 0,10 3.5,0 7" fill="#ff80ab"/>
-                        </marker>
-                        <marker id="arr-green" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-                            <polygon points="0 0,10 3.5,0 7" fill="#34d399"/>
-                        </marker>
-                    </defs>
-
-                    <!-- Orchestrator -->
-                    <rect x="310" y="20" width="200" height="52" rx="12" fill="#7c6ff7" stroke="#a78bfa" stroke-width="2"/>
-                    <text x="410" y="42" text-anchor="middle" fill="#fff" font-size="14" font-weight="bold">WorkflowOrchestrator</text>
-                    <text x="410" y="60" text-anchor="middle" fill="#ddd6fe" font-size="11">(Java Service)</text>
-
-                    <!-- WorkflowContext -->
-                    <rect x="310" y="190" width="200" height="44" rx="10" fill="#2a2050" stroke="#7c6ff7" stroke-width="1.5"/>
-                    <text x="410" y="216" text-anchor="middle" fill="#c4b5fd" font-size="13" font-weight="bold">WorkflowContext</text>
-
-                    <!-- LlmClient -->
-                    <rect x="310" y="380" width="200" height="44" rx="10" fill="#1a2635" stroke="#38bdf8" stroke-width="1.5"/>
-                    <text x="410" y="400" text-anchor="middle" fill="#7dd3fc" font-size="12" font-weight="bold">LlmClient (Interface)</text>
-                    <text x="410" y="416" text-anchor="middle" fill="#93c5fd" font-size="10">Claude | OpenAI | Gemini</text>
-
-                    <!-- Agent group: left (steps 1+2, 3+4) -->
-                    <rect x="40" y="100" width="190" height="48" rx="10" fill="#1e2a1a" stroke="#34d399" stroke-width="1.5"/>
-                    <text x="135" y="122" text-anchor="middle" fill="#86efac" font-size="13" font-weight="bold">Steps 1+2</text>
-                    <text x="135" y="139" text-anchor="middle" fill="#4ade80" font-size="11">Ticket Analysis + Setup</text>
-
-                    <rect x="40" y="185" width="190" height="48" rx="10" fill="#1e2a1a" stroke="#34d399" stroke-width="1.5"/>
-                    <text x="135" y="207" text-anchor="middle" fill="#86efac" font-size="13" font-weight="bold">Steps 3+4</text>
-                    <text x="135" y="224" text-anchor="middle" fill="#4ade80" font-size="11">Deep Dive + Visual Report</text>
-
-                    <rect x="40" y="270" width="190" height="48" rx="10" fill="#1e2a1a" stroke="#34d399" stroke-width="1.5"/>
-                    <text x="135" y="292" text-anchor="middle" fill="#86efac" font-size="13" font-weight="bold">Step 5</text>
-                    <text x="135" y="309" text-anchor="middle" fill="#4ade80" font-size="11">Review &amp; Clarification</text>
-
-                    <!-- Agent group: right (6+7, 8) -->
-                    <rect x="590" y="100" width="190" height="48" rx="10" fill="#251a10" stroke="#f59e0b" stroke-width="1.5"/>
-                    <text x="685" y="122" text-anchor="middle" fill="#fcd34d" font-size="13" font-weight="bold">Steps 6+7</text>
-                    <text x="685" y="139" text-anchor="middle" fill="#fbbf24" font-size="11">Implementation + QA</text>
-
-                    <rect x="590" y="185" width="190" height="48" rx="10" fill="#251a10" stroke="#f59e0b" stroke-width="1.5"/>
-                    <text x="685" y="207" text-anchor="middle" fill="#fcd34d" font-size="13" font-weight="bold">Step 8</text>
-                    <text x="685" y="224" text-anchor="middle" fill="#fbbf24" font-size="11">Deployment &amp; Review</text>
-
-                    <!-- Human checkpoints -->
-                    <circle cx="255" cy="124" r="16" fill="#ff80ab" stroke="#fff" stroke-width="1.5"/>
-                    <text x="255" y="129" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">H</text>
-                    <circle cx="255" cy="294" r="16" fill="#ff80ab" stroke="#fff" stroke-width="1.5"/>
-                    <text x="255" y="299" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">H</text>
-                    <circle cx="565" cy="209" r="16" fill="#ff80ab" stroke="#fff" stroke-width="1.5"/>
-                    <text x="565" y="214" text-anchor="middle" fill="#fff" font-size="13" font-weight="bold">H</text>
-
-                    <!-- Arrows: Orchestrator → Agents -->
-                    <line x1="310" y1="55" x2="230" y2="100" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr)"/>
-                    <line x1="310" y1="60" x2="230" y2="185" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr)"/>
-                    <line x1="310" y1="65" x2="230" y2="270" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr)"/>
-                    <line x1="510" y1="55" x2="590" y2="100" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr)"/>
-                    <line x1="510" y1="60" x2="590" y2="185" stroke="#a78bfa" stroke-width="1.8" marker-end="url(#arr)"/>
-
-                    <!-- Context ↔ Orchestrator -->
-                    <line x1="410" y1="72" x2="410" y2="190" stroke="#7c6ff7" stroke-width="1.5" stroke-dasharray="5,3" marker-end="url(#arr)"/>
-
-                    <!-- Agents → LlmClient -->
-                    <line x1="135" y1="333" x2="310" y2="400" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arr-green)"/>
-                    <line x1="685" y1="233" x2="510" y2="380" stroke="#38bdf8" stroke-width="1.5" marker-end="url(#arr-green)"/>
-
-                    <!-- Legend -->
-                    <rect x="30" y="415" width="760" height="36" rx="6" fill="#120f1e" stroke="#2d2550" stroke-width="1"/>
-                    <circle cx="55" cy="433" r="8" fill="#ff80ab"/>
-                    <text x="68" y="437" fill="#f0eeff" font-size="11">H = Human Checkpoint</text>
-                    <line x1="200" y1="433" x2="230" y2="433" stroke="#a78bfa" stroke-width="2" marker-end="url(#arr)"/>
-                    <text x="237" y="437" fill="#f0eeff" font-size="11">Orchestrator dispatches</text>
-                    <line x1="420" y1="433" x2="450" y2="433" stroke="#38bdf8" stroke-width="2" marker-end="url(#arr-green)"/>
-                    <text x="457" y="437" fill="#f0eeff" font-size="11">LLM call</text>
-                    <line x1="540" y1="433" x2="570" y2="433" stroke="#7c6ff7" stroke-width="2" stroke-dasharray="4,2" marker-end="url(#arr)"/>
-                    <text x="577" y="437" fill="#f0eeff" font-size="11">Shared context</text>
-                </svg>
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: IMPLEMENTATION PLAN                -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="plan">
-            <h2>9. Implementation Plan — Phase by Phase</h2>
+        <div class="phase">
+            <span class="phase-num">6</span><b>8 Agent Java Classes</b>
             <p>
-                This plan translates all five HTML documents into a concrete build sequence.
-                Each phase is self-contained and produces testable output.
+                One class per agent in <code>agents/</code> package. Each class: (1) loads its markdown,
+                (2) fills variables from <code>WorkflowContext</code>, (3) calls <code>llmClient.completePrompt()</code>,
+                (4) writes result back to context.
             </p>
+            <div class="code-block">public class TicketAnalysisAgent {
+                private final LlmClient llmClient;
 
-            <div class="phase">
-                <span class="phase-num">1</span><b>Maven Project Scaffolding</b>
-                <p>Initialize the project using Maven archetype, then create all package directories.</p>
-                <div class="code-block">mvn archetype:generate \
-  -DgroupId=com.javamsdt.aidevworkflow \
-  -DartifactId=aidevworkflow \
-  -DarchetypeArtifactId=maven-archetype-quickstart \
-  -DinteractiveMode=false</div>
-                <p>Add to <code>pom.xml</code>: OkHttp (or Apache HttpClient) for HTTP, Jackson (or Gson) for JSON parsing, JUnit 5 for testing.</p>
-                <p><b>Output:</b> Compilable Maven project with all packages present.</p>
+                public TicketAnalysisAgent(LlmClient llmClient) {
+                this.llmClient = llmClient;
+                }
+
+                public void execute(WorkflowContext ctx) {
+                String prompt = MarkdownLoader
+                .load("agents/ticket_analysis.md")
+                .replace("{{ticket}}", ctx.ticketText);
+                ctx.ticketSummary = llmClient.completePrompt(prompt);
+                }
+                }
             </div>
+            <p><b>Output:</b> 8 stateless, independently testable agent classes.</p>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">2</span><b>LLM Abstraction Layer</b>
-                <p>Create the pluggable LLM interface and two concrete implementations.</p>
-                <div class="code-block">// LlmClient.java
-public interface LlmClient {
-    String completePrompt(String prompt);
-}
+        <div class="phase">
+            <span class="phase-num">7</span><b>WorkflowOrchestrator — Optimized 5-Call Flow</b>
+            <p>
+                Implement the orchestrator with combined/pipelined steps from File 03's optimization.
+                Insert the three human confirmation gates.
+            </p>
+            <div class="code-block">public class WorkflowOrchestrator {
+                private final LlmClient llmClient;
+                private final WorkflowContext ctx;
 
-// ClaudeApiClient.java — calls Anthropic Messages API
-// OpenAiApiClient.java  — calls OpenAI Chat Completions API</div>
-                <p><b>Output:</b> Agents can be written against <code>LlmClient</code> without knowing which LLM is active. Swap LLMs via constructor injection.</p>
+                // Phase 1+2: combined call (1 LLM call)
+                public boolean runTicketAndSetup() { ... }
+
+                // Phase 3+4: pipeline (1 LLM call → feeds next)
+                public void runDeepDiveAndVisual() { ... }
+
+                // Phase 5: review + human gate (1 LLM call + human)
+                public boolean runReview() { ... }
+
+                // Phase 6+7: pipeline (1 LLM call → validates self)
+                public void runImplementationAndQA() { ... }
+
+                // Phase 8: deployment + human gate (1 LLM call + human)
+                public boolean runDeployment() { ... }
+
+                // Human gate — CLI stub, replaceable with UI/Slack/email
+                private boolean humanConfirm(String step) {
+                System.out.println("[HUMAN GATE] Approve step: " + step + "? (y/n)");
+                return new Scanner(System.in).nextLine().trim().equalsIgnoreCase("y");
+                }
+                }
             </div>
+            <p><b>Output:</b> Full workflow in 5 LLM calls. Three <code>humanConfirm()</code> gates halt on rejection.
+            </p>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">3</span><b>WorkflowContext — Shared State</b>
-                <p>
-                    Create the <code>WorkflowContext</code> POJO. Every agent reads from and writes to this object.
-                    It travels through all 8 steps and accumulates results.
-                </p>
-                <div class="code-block">public class WorkflowContext {
-    public String ticketText;
-    public String ticketSummary;
-    public String projectSetup;
-    public String deepDive;
-    public String visualReport;
-    public String reviewNotes;
-    public String implementation;
-    public String qaReport;
-    public String deploymentStatus;
-}</div>
-                <p><b>Output:</b> Single source of truth that eliminates inter-agent direct calls.</p>
-            </div>
+        <div class="phase">
+            <span class="phase-num">8</span><b>Unit Tests</b>
+            <p>
+                Test each layer independently using mock <code>LlmClient</code> implementations.
+                Use JUnit 5 + Mockito.
+            </p>
+            <ul>
+                <li><code>MarkdownLoaderTest</code> — verifies template loading and variable substitution.</li>
+                <li><code>TicketAnalysisAgentTest</code> (and all other agents) — mock LlmClient, assert context writes.
+                </li>
+                <li><code>WorkflowOrchestratorTest</code> — mock agents, assert workflow sequencing and human gates.
+                </li>
+                <li><code>ClaudeApiClientTest</code> — integration test (optional, needs API key).</li>
+            </ul>
+            <p><b>Output:</b> Test suite that passes with zero real LLM calls.</p>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">4</span><b>MarkdownLoader Utility</b>
-                <p>
-                    Utility class that loads a markdown agent file from the classpath and performs
-                    <code>{{variable}}</code> substitution.
-                </p>
-                <div class="code-block">public class MarkdownLoader {
-    public static String load(String resourcePath) {
-        // Load from classpath: src/main/resources/
-        InputStream is = MarkdownLoader.class
-            .getClassLoader()
-            .getResourceAsStream(resourcePath);
-        return new String(is.readAllBytes(), StandardCharsets.UTF_8);
-    }
-}</div>
-                <p><b>Output:</b> Agents load prompts with one line: <code>MarkdownLoader.load("agents/ticket_analysis.md")</code></p>
-            </div>
+        <div class="phase">
+            <span class="phase-num">9</span><b>Spring Boot Migration Path (Optional Phase)</b>
+            <p>
+                When ready, convert to Spring Boot by:
+            </p>
+            <ul>
+                <li>Add <code>spring-boot-starter</code> to <code>pom.xml</code>.</li>
+                <li>Annotate each agent class with <code>@Component</code>.</li>
+                <li>Annotate <code>WorkflowOrchestrator</code> with <code>@Service</code>.</li>
+                <li>Annotate <code>LlmClient</code> implementations with <code>@Bean</code> / <code>@Profile</code>.
+                </li>
+                <li>Inject <code>WorkflowContext</code> as <code>@RequestScope</code> or session-scoped bean.</li>
+            </ul>
+            <p><b>Output:</b> Full Spring Boot application with zero structural refactoring — just annotations.</p>
+        </div>
+    </section>
 
-            <div class="phase">
-                <span class="phase-num">5</span><b>8 Markdown Agent Prompt Files</b>
-                <p>
-                    Create one <code>.md</code> file per agent in <code>src/main/resources/agents/</code>.
-                    Each file defines: Purpose, Instructions, Input variables, Expected Output format.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <tr><th>File</th><th>Input Variables</th><th>Key Output</th></tr>
-                        <tr><td>ticket_analysis.md</td><td><code>{{ticket}}</code></td><td>Summary, requirements, clarifying questions</td></tr>
-                        <tr><td>project_setup.md</td><td><code>{{ticket_summary}}</code></td><td>Project structure plan</td></tr>
-                        <tr><td>deep_dive.md</td><td><code>{{ticket_summary}}</code>, <code>{{project_setup}}</code></td><td>Deep analysis, solution proposals</td></tr>
-                        <tr><td>visual_report.md</td><td><code>{{deep_dive}}</code></td><td>Diagram/chart descriptions (markdown)</td></tr>
-                        <tr><td>review.md</td><td><code>{{deep_dive}}</code>, <code>{{visual_report}}</code></td><td>Review notes, open questions</td></tr>
-                        <tr><td>implementation.md</td><td><code>{{review_notes}}</code></td><td>Code snippets, implementation guide</td></tr>
-                        <tr><td>quality_assurance.md</td><td><code>{{implementation}}</code></td><td>QA report, improvement suggestions</td></tr>
-                        <tr><td>deployment.md</td><td><code>{{implementation}}</code>, <code>{{qa_report}}</code></td><td>Deployment script, deployment notes</td></tr>
-                    </table>
-                </div>
-                <p><b>Output:</b> All 8 agent prompt files ready. Changing agent behavior = editing markdown, not Java.</p>
-            </div>
+    <hr class="separator">
 
-            <div class="phase">
-                <span class="phase-num">6</span><b>8 Agent Java Classes</b>
-                <p>
-                    One class per agent in <code>agents/</code> package. Each class: (1) loads its markdown,
-                    (2) fills variables from <code>WorkflowContext</code>, (3) calls <code>llmClient.completePrompt()</code>,
-                    (4) writes result back to context.
-                </p>
-                <div class="code-block">public class TicketAnalysisAgent {
-    private final LlmClient llmClient;
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: ARCHITECTURE DECISIONS             -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="decisions">
+        <h2>10. Architecture Decision Record</h2>
 
-    public TicketAnalysisAgent(LlmClient llmClient) {
-        this.llmClient = llmClient;
-    }
-
-    public void execute(WorkflowContext ctx) {
-        String prompt = MarkdownLoader
-            .load("agents/ticket_analysis.md")
-            .replace("{{ticket}}", ctx.ticketText);
-        ctx.ticketSummary = llmClient.completePrompt(prompt);
-    }
-}</div>
-                <p><b>Output:</b> 8 stateless, independently testable agent classes.</p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">7</span><b>WorkflowOrchestrator — Optimized 5-Call Flow</b>
-                <p>
-                    Implement the orchestrator with combined/pipelined steps from File 03's optimization.
-                    Insert the three human confirmation gates.
-                </p>
-                <div class="code-block">public class WorkflowOrchestrator {
-    private final LlmClient llmClient;
-    private final WorkflowContext ctx;
-
-    // Phase 1+2: combined call (1 LLM call)
-    public boolean runTicketAndSetup() { ... }
-
-    // Phase 3+4: pipeline (1 LLM call → feeds next)
-    public void runDeepDiveAndVisual() { ... }
-
-    // Phase 5: review + human gate (1 LLM call + human)
-    public boolean runReview() { ... }
-
-    // Phase 6+7: pipeline (1 LLM call → validates self)
-    public void runImplementationAndQA() { ... }
-
-    // Phase 8: deployment + human gate (1 LLM call + human)
-    public boolean runDeployment() { ... }
-
-    // Human gate — CLI stub, replaceable with UI/Slack/email
-    private boolean humanConfirm(String step) {
-        System.out.println("[HUMAN GATE] Approve step: " + step + "? (y/n)");
-        return new Scanner(System.in).nextLine().trim().equalsIgnoreCase("y");
-    }
-}</div>
-                <p><b>Output:</b> Full workflow in 5 LLM calls. Three <code>humanConfirm()</code> gates halt on rejection.</p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">8</span><b>Unit Tests</b>
-                <p>
-                    Test each layer independently using mock <code>LlmClient</code> implementations.
-                    Use JUnit 5 + Mockito.
-                </p>
-                <ul>
-                    <li><code>MarkdownLoaderTest</code> — verifies template loading and variable substitution.</li>
-                    <li><code>TicketAnalysisAgentTest</code> (and all other agents) — mock LlmClient, assert context writes.</li>
-                    <li><code>WorkflowOrchestratorTest</code> — mock agents, assert workflow sequencing and human gates.</li>
-                    <li><code>ClaudeApiClientTest</code> — integration test (optional, needs API key).</li>
-                </ul>
-                <p><b>Output:</b> Test suite that passes with zero real LLM calls.</p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">9</span><b>Spring Boot Migration Path (Optional Phase)</b>
-                <p>
-                    When ready, convert to Spring Boot by:
-                </p>
-                <ul>
-                    <li>Add <code>spring-boot-starter</code> to <code>pom.xml</code>.</li>
-                    <li>Annotate each agent class with <code>@Component</code>.</li>
-                    <li>Annotate <code>WorkflowOrchestrator</code> with <code>@Service</code>.</li>
-                    <li>Annotate <code>LlmClient</code> implementations with <code>@Bean</code> / <code>@Profile</code>.</li>
-                    <li>Inject <code>WorkflowContext</code> as <code>@RequestScope</code> or session-scoped bean.</li>
-                </ul>
-                <p><b>Output:</b> Full Spring Boot application with zero structural refactoring — just annotations.</p>
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: ARCHITECTURE DECISIONS             -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="decisions">
-            <h2>10. Architecture Decision Record</h2>
-
-            <div class="decision">
-                <div class="decision-label">Decision 1 — Combine Steps 1 + 2</div>
-                <h4>Ticket Analysis + Project Setup as one LLM call</h4>
-                <p>
-                    <b>Rationale:</b> Both steps share the same input (ticket text) and the output of step 1
-                    (ticket summary) is immediately consumed by step 2 (project setup). Combining them into one
-                    prompt reduces latency and token overhead by eliminating a round-trip.
-                </p>
-                <p><b>Trade-off:</b> Combined prompt is slightly more complex to write. Mitigated by structured
+        <div class="decision">
+            <div class="decision-label">Decision 1 — Combine Steps 1 + 2</div>
+            <h4>Ticket Analysis + Project Setup as one LLM call</h4>
+            <p>
+                <b>Rationale:</b> Both steps share the same input (ticket text) and the output of step 1
+                (ticket summary) is immediately consumed by step 2 (project setup). Combining them into one
+                prompt reduces latency and token overhead by eliminating a round-trip.
+            </p>
+            <p><b>Trade-off:</b> Combined prompt is slightly more complex to write. Mitigated by structured
                 markdown output format (<code>## Summary</code> / <code>## Project Setup</code> sections).</p>
-            </div>
+        </div>
 
-            <div class="decision">
-                <div class="decision-label">Decision 2 — Pipeline Steps 3 + 4</div>
-                <h4>Deep Dive output feeds directly into Visual Report</h4>
-                <p>
-                    <b>Rationale:</b> The Visual Report (step 4) has no independent input — it consumes the
-                    Deep Dive analysis (step 3). Pipelining them keeps the LLM "warm" on the same context
-                    and avoids redundant context re-feeding.
-                </p>
-                <p><b>Trade-off:</b> Visual Report cannot run without Deep Dive completing first. This is acceptable
+        <div class="decision">
+            <div class="decision-label">Decision 2 — Pipeline Steps 3 + 4</div>
+            <h4>Deep Dive output feeds directly into Visual Report</h4>
+            <p>
+                <b>Rationale:</b> The Visual Report (step 4) has no independent input — it consumes the
+                Deep Dive analysis (step 3). Pipelining them keeps the LLM "warm" on the same context
+                and avoids redundant context re-feeding.
+            </p>
+            <p><b>Trade-off:</b> Visual Report cannot run without Deep Dive completing first. This is acceptable
                 since data dependency already enforces sequencing.</p>
-            </div>
+        </div>
 
-            <div class="decision">
-                <div class="decision-label">Decision 3 — Pipeline Steps 6 + 7</div>
-                <h4>QA validates the code generated by Implementation in the same call</h4>
-                <p>
-                    <b>Rationale:</b> QA (step 7) needs the implementation (step 6) output immediately.
-                    Running them in sequence with context sharing lets the QA prompt include the generated
-                    code inline, producing a self-contained analysis.
-                </p>
-                <p><b>Trade-off:</b> If implementation generates a very large code block, the combined prompt
+        <div class="decision">
+            <div class="decision-label">Decision 3 — Pipeline Steps 6 + 7</div>
+            <h4>QA validates the code generated by Implementation in the same call</h4>
+            <p>
+                <b>Rationale:</b> QA (step 7) needs the implementation (step 6) output immediately.
+                Running them in sequence with context sharing lets the QA prompt include the generated
+                code inline, producing a self-contained analysis.
+            </p>
+            <p><b>Trade-off:</b> If implementation generates a very large code block, the combined prompt
                 may approach context limits. Mitigated by limiting implementation output to code outlines
                 and key snippets, not full file dumps.</p>
-            </div>
+        </div>
 
-            <div class="decision">
-                <div class="decision-label">Decision 4 — Three Human Gates, Not More</div>
-                <h4>Human checkpoints after steps 2, 5, and 8 only</h4>
-                <p>
-                    <b>Rationale:</b> Over-checking with humans defeats the automation purpose.
-                    The three gates cover the three irreversible transitions: (1) committing to a project
-                    structure, (2) approving the analysis before writing code, (3) authorizing deployment.
-                    All other steps are safe to automate.
-                </p>
-            </div>
-
-            <div class="decision">
-                <div class="decision-label">Decision 5 — Interface-Driven LlmClient</div>
-                <h4>Agents depend on LlmClient interface, never on Claude or OpenAI directly</h4>
-                <p>
-                    <b>Rationale:</b> LLM providers change APIs, pricing, and capabilities. Isolating
-                    all agents from the concrete LLM means switching providers is a one-line change
-                    in the orchestrator's constructor (or a Spring <code>@Profile</code>).
-                </p>
-            </div>
-
-            <div class="decision">
-                <div class="decision-label">Decision 6 — Markdown as the Agent Contract</div>
-                <h4>Agent behavior defined in .md files, not in Java strings</h4>
-                <p>
-                    <b>Rationale:</b> Non-engineers (product managers, domain experts) can refine agent
-                    behavior by editing markdown files without touching Java. This separates concerns cleanly:
-                    Java handles orchestration logic; markdown handles LLM instruction.
-                </p>
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: FILE GENERATION CHECKLIST          -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="checklist">
-            <h2>11. File Generation Checklist</h2>
-            <p>All files that must be created to implement the complete project:</p>
-
-            <h3>Build Configuration</h3>
-            <ul class="checklist">
-                <li><code>pom.xml</code> <span class="tag">Maven</span></li>
-            </ul>
-
-            <h3>LLM Abstraction Layer</h3>
-            <ul class="checklist">
-                <li><code>llm/LlmClient.java</code> <span class="tag">Interface</span></li>
-                <li><code>llm/ClaudeApiClient.java</code> <span class="tag">Impl</span></li>
-                <li><code>llm/OpenAiApiClient.java</code> <span class="tag">Impl</span></li>
-            </ul>
-
-            <h3>Shared Infrastructure</h3>
-            <ul class="checklist">
-                <li><code>context/WorkflowContext.java</code> <span class="tag">POJO</span></li>
-                <li><code>util/MarkdownLoader.java</code> <span class="tag">Utility</span></li>
-                <li><code>orchestrator/WorkflowOrchestrator.java</code> <span class="tag">Orchestrator</span></li>
-            </ul>
-
-            <h3>Agent Java Classes (8 files)</h3>
-            <ul class="checklist">
-                <li><code>agents/TicketAnalysisAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/ProjectSetupAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/DeepDiveAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/VisualReportAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/ReviewAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/ImplementationAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/QualityAssuranceAgent.java</code> <span class="tag">Agent</span></li>
-                <li><code>agents/DeploymentAgent.java</code> <span class="tag">Agent</span></li>
-            </ul>
-
-            <h3>Markdown Agent Prompt Files (8 files)</h3>
-            <ul class="checklist">
-                <li><code>resources/agents/ticket_analysis.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/project_setup.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/deep_dive.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/visual_report.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/review.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/implementation.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/quality_assurance.md</code> <span class="tag">Prompt</span></li>
-                <li><code>resources/agents/deployment.md</code> <span class="tag">Prompt</span></li>
-            </ul>
-
-            <h3>Unit Tests</h3>
-            <ul class="checklist">
-                <li><code>test/.../MarkdownLoaderTest.java</code> <span class="tag">Test</span></li>
-                <li><code>test/.../TicketAnalysisAgentTest.java</code> <span class="tag">Test</span></li>
-                <li><code>test/.../WorkflowOrchestratorTest.java</code> <span class="tag">Test</span></li>
-                <li><code>test/.../ClaudeApiClientTest.java</code> <span class="tag">Integration</span></li>
-            </ul>
-
-            <div class="note">
-                <b>Total file count:</b> 1 pom.xml + 3 LLM files + 3 infrastructure files + 8 agent classes
-                + 8 markdown prompts + 4 test files = <b>27 files</b> to fully implement the workflow.
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: DESIGN V2 EVALUATION               -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="design-v2">
-            <h2>12. Design v2 Evaluation — Agent Merge Proposals</h2>
+        <div class="decision">
+            <div class="decision-label">Decision 4 — Three Human Gates, Not More</div>
+            <h4>Human checkpoints after steps 2, 5, and 8 only</h4>
             <p>
-                Four structural changes were proposed for the next iteration of the agent design.
-                Each is evaluated below for correctness, tradeoffs, and implementation risk.
+                <b>Rationale:</b> Over-checking with humans defeats the automation purpose.
+                The three gates cover the three irreversible transitions: (1) committing to a project
+                structure, (2) approving the analysis before writing code, (3) authorizing deployment.
+                All other steps are safe to automate.
             </p>
+        </div>
 
-            <h3>Proposal 1 — Merge Steps 1 + 2 + 3 into a Single Analysis Agent</h3>
-            <div class="finding">
-                <div class="file-tag">Merge Proposal</div>
-                <p>
-                    The proposal merges <b>TicketAnalysisAgent</b>, <b>ProjectSetupAgent</b>, and <b>DeepDiveAgent</b>
-                    into a single <code>AnalysisAgent</code> — fetches Jira ticket, sets up report folder,
-                    scans the codebase, and produces unified analysis output in one LLM call.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Aspect</th><th>Assessment</th></tr>
-                        <tr>
-                            <td><b>LLM call savings</b></td>
-                            <td>Reduces from 3 → 1 call for the analysis phase</td>
-                        </tr>
-                        <tr>
-                            <td><b>Context window risk</b></td>
-                            <td style="color:#ff8080;"><b>HIGH</b> — injecting full codebase scan + ticket text + setup instructions into one prompt frequently exceeds 100k token limits on repos with 40+ files</td>
-                        </tr>
-                        <tr>
-                            <td><b>Debuggability</b></td>
-                            <td style="color:#ff8080;"><b>Reduced</b> — when output is incomplete or wrong, impossible to know if ticket parsing, codebase scan, or analysis logic failed</td>
-                        </tr>
-                        <tr>
-                            <td><b>Human gate placement</b></td>
-                            <td>Gate 1 must still exist after this combined step regardless of merge</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="insight">
-                    <b>Verdict — Reject:</b> Keep the current 1+2 merge (TicketAnalysis + ProjectSetup) but
-                    <b>keep DeepDive as a separate call</b>. DeepDive injects large codebase context via
-                    <code>FileSystemUtil.readSourceFiles()</code> — combining it with ticket parsing risks context
-                    overflow and degrades analysis quality. The 3→1 call savings is not worth the reliability loss.
-                </div>
-            </div>
-
-            <h3>Proposal 2 — Make DeepDive and VisualReport Re-callable</h3>
-            <div class="finding">
-                <div class="file-tag">Reusability Proposal</div>
-                <p>
-                    Upgrade <b>DeepDiveAgent</b> and <b>VisualReportAgent</b> from single-run to re-callable,
-                    allowing a fresh analysis or updated HTML report to be triggered at any point —
-                    for example, after adding new source files or refining requirements post-review.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Aspect</th><th>Assessment</th></tr>
-                        <tr>
-                            <td><b>Architectural fit</b></td>
-                            <td style="color:#86efac;"><b>Excellent</b> — agents are already stateless. Re-calling them re-reads WorkflowContext and re-invokes the LLM with fresh codebase scan</td>
-                        </tr>
-                        <tr>
-                            <td><b>Implementation cost</b></td>
-                            <td style="color:#86efac;"><b>Very low</b> — no agent class changes needed. The orchestrator calls <code>deepDiveAgent.execute(ctx)</code> again which overwrites prior results in context</td>
-                        </tr>
-                        <tr>
-                            <td><b>HTML report</b></td>
-                            <td><code>HtmlReportWriter</code> already overwrites <code>analysis_report.html</code> on each call — safe to re-run without leftover state</td>
-                        </tr>
-                        <tr>
-                            <td><b>ReviewAgent loop</b></td>
-                            <td>Already implements up to 5 iteration rounds. Re-triggering DeepDive should reset the loop counter in ReviewAgent</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="insight">
-                    <b>Verdict — Approve:</b> Expose a <code>public void rerunAnalysis()</code> method in
-                    <code>WorkflowOrchestrator</code> that re-executes Steps 3+4 (DeepDive → VisualReport)
-                    and resets the ReviewAgent iteration counter. No agent class changes required —
-                    purely an orchestrator-level addition.
-                </div>
-            </div>
-
-            <h3>Proposal 3 — Merge Steps 6 + 7 with Per-Step Approval</h3>
-            <div class="finding">
-                <div class="file-tag">Merge Proposal</div>
-                <p>
-                    Merge <b>ImplementationAgent</b> and <b>QualityAssuranceAgent</b> so that code is
-                    generated one file at a time, immediately QA-reviewed, and optionally approved by the
-                    developer before moving to the next file.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Aspect</th><th>Assessment</th></tr>
-                        <tr>
-                            <td><b>Current behavior</b></td>
-                            <td>ImplementationAgent writes all <code>// FILE:</code> blocks to disk, then QA reads and reviews in batch</td>
-                        </tr>
-                        <tr>
-                            <td><b>Quality improvement</b></td>
-                            <td style="color:#86efac;"><b>Real</b> — per-file QA catches issues before they propagate into dependent files</td>
-                        </tr>
-                        <tr>
-                            <td><b>LLM call cost</b></td>
-                            <td style="color:#ff8080;"><b>Multiplied</b> — one QA call per file vs. one batch. On 10 generated files: 10 QA calls vs. 1 currently</td>
-                        </tr>
-                        <tr>
-                            <td><b>Optimal middle ground</b></td>
-                            <td>Per-file write with console preview (already partially done via <code>// FILE:</code> parsing), single batch QA after all files written</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="insight">
-                    <b>Verdict — Partial Approve:</b> Implement the per-file write loop with console confirmation
-                    per file in <code>ImplementationAgent</code> (already parses <code>// FILE:</code> blocks).
-                    Keep QA as a single batch review after all files are written — this preserves efficiency.
-                    Add an <code>interactiveMode</code> flag to the orchestrator for the per-file confirmation gate;
-                    set it <code>false</code> in automated runs.
-                </div>
-            </div>
-
-            <h3>Proposal 4 — Step-by-Step Commits, Push+PR on Final Approval, PR Comment Listener</h3>
-            <div class="finding">
-                <div class="file-tag">Deployment Proposal</div>
-                <p>
-                    Redesign <b>DeploymentAgent</b> to: (1) create one local commit per logical file group,
-                    (2) push and open the PR only on final human approval,
-                    (3) poll or listen for PR review comments and feed them back into the workflow.
-                </p>
-                <div class="table-container">
-                    <table>
-                        <tr><th>Aspect</th><th>Assessment</th></tr>
-                        <tr>
-                            <td><b>Step-by-step local commits</b></td>
-                            <td style="color:#86efac;"><b>Excellent</b> — aligns with conventional commit best practices; each logical group gets a meaningful commit message generated by the LLM</td>
-                        </tr>
-                        <tr>
-                            <td><b>Push on approval only</b></td>
-                            <td style="color:#86efac;"><b>Excellent</b> — critical safety gate. <code>GitClient.push()</code> must only be called after the final human confirmation</td>
-                        </tr>
-                        <tr>
-                            <td><b>PR comment live listener</b></td>
-                            <td style="color:#fcd34d;"><b>Medium risk</b> — background polling requires thread management, GitHub rate limit handling, auth token refresh, and PR lifecycle events</td>
-                        </tr>
-                        <tr>
-                            <td><b>Comment-to-workflow feedback</b></td>
-                            <td>PR comments re-triggering ReviewAgent or ImplementationAgent requires a new cycle re-entry path not yet modeled in the orchestrator</td>
-                        </tr>
-                    </table>
-                </div>
-                <div class="insight">
-                    <b>Verdict — Approve core, defer listener:</b> Implement step-by-step commits and
-                    push-on-approval immediately — low risk, high value, GitClient already supports it.
-                    For PR comments: implement as a <i>one-shot fetch</i> triggered by a new human gate
-                    (<i>"Check for PR review comments? [y/n]"</i>), append to HTML report, and offer to
-                    re-run the workflow from Step 3. Full async polling is a future Phase 2 enhancement.
-                </div>
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: PROMPT TO AGENT MAPPING            -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="prompt-mapping">
-            <h2>13. Prompt Library → Agent Mapping (07-prompts.html)</h2>
+        <div class="decision">
+            <div class="decision-label">Decision 5 — Interface-Driven LlmClient</div>
+            <h4>Agents depend on LlmClient interface, never on Claude or OpenAI directly</h4>
             <p>
-                The prompt library in <code>07-prompts.html</code> contains 7 hand-crafted prompts for
-                AI-assisted development. Each maps to one or more agents in the workflow. The table shows
-                current coverage and what needs updating.
+                <b>Rationale:</b> LLM providers change APIs, pricing, and capabilities. Isolating
+                all agents from the concrete LLM means switching providers is a one-line change
+                in the orchestrator's constructor (or a Spring <code>@Profile</code>).
+            </p>
+        </div>
+
+        <div class="decision">
+            <div class="decision-label">Decision 6 — Markdown as the Agent Contract</div>
+            <h4>Agent behavior defined in .md files, not in Java strings</h4>
+            <p>
+                <b>Rationale:</b> Non-engineers (product managers, domain experts) can refine agent
+                behavior by editing markdown files without touching Java. This separates concerns cleanly:
+                Java handles orchestration logic; markdown handles LLM instruction.
+            </p>
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: FILE GENERATION CHECKLIST          -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="checklist">
+        <h2>11. File Generation Checklist</h2>
+        <p>All files that must be created to implement the complete project:</p>
+
+        <h3>Build Configuration</h3>
+        <ul class="checklist">
+            <li><code>pom.xml</code> <span class="tag">Maven</span></li>
+        </ul>
+
+        <h3>LLM Abstraction Layer</h3>
+        <ul class="checklist">
+            <li><code>llm/LlmClient.java</code> <span class="tag">Interface</span></li>
+            <li><code>llm/ClaudeApiClient.java</code> <span class="tag">Impl</span></li>
+            <li><code>llm/OpenAiApiClient.java</code> <span class="tag">Impl</span></li>
+        </ul>
+
+        <h3>Shared Infrastructure</h3>
+        <ul class="checklist">
+            <li><code>context/WorkflowContext.java</code> <span class="tag">POJO</span></li>
+            <li><code>util/MarkdownLoader.java</code> <span class="tag">Utility</span></li>
+            <li><code>orchestrator/WorkflowOrchestrator.java</code> <span class="tag">Orchestrator</span></li>
+        </ul>
+
+        <h3>Agent Java Classes (8 files)</h3>
+        <ul class="checklist">
+            <li><code>agents/TicketAnalysisAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/ProjectSetupAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/DeepDiveAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/VisualReportAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/ReviewAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/ImplementationAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/QualityAssuranceAgent.java</code> <span class="tag">Agent</span></li>
+            <li><code>agents/DeploymentAgent.java</code> <span class="tag">Agent</span></li>
+        </ul>
+
+        <h3>Markdown Agent Prompt Files (8 files)</h3>
+        <ul class="checklist">
+            <li><code>resources/agents/ticket_analysis.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/project_setup.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/deep_dive.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/visual_report.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/review.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/implementation.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/quality_assurance.md</code> <span class="tag">Prompt</span></li>
+            <li><code>resources/agents/deployment.md</code> <span class="tag">Prompt</span></li>
+        </ul>
+
+        <h3>Unit Tests</h3>
+        <ul class="checklist">
+            <li><code>test/.../MarkdownLoaderTest.java</code> <span class="tag">Test</span></li>
+            <li><code>test/.../TicketAnalysisAgentTest.java</code> <span class="tag">Test</span></li>
+            <li><code>test/.../WorkflowOrchestratorTest.java</code> <span class="tag">Test</span></li>
+            <li><code>test/.../ClaudeApiClientTest.java</code> <span class="tag">Integration</span></li>
+        </ul>
+
+        <div class="note">
+            <b>Total file count:</b> 1 pom.xml + 3 LLM files + 3 infrastructure files + 8 agent classes
+            + 8 markdown prompts + 4 test files = <b>27 files</b> to fully implement the workflow.
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: DESIGN V2 EVALUATION               -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="design-v2">
+        <h2>12. Design v2 Evaluation — Agent Merge Proposals</h2>
+        <p>
+            Four structural changes were proposed for the next iteration of the agent design.
+            Each is evaluated below for correctness, tradeoffs, and implementation risk.
+        </p>
+
+        <h3>Proposal 1 — Merge Steps 1 + 2 + 3 into a Single Analysis Agent</h3>
+        <div class="finding">
+            <div class="file-tag">Merge Proposal</div>
+            <p>
+                The proposal merges <b>TicketAnalysisAgent</b>, <b>ProjectSetupAgent</b>, and <b>DeepDiveAgent</b>
+                into a single <code>AnalysisAgent</code> — fetches Jira ticket, sets up report folder,
+                scans the codebase, and produces unified analysis output in one LLM call.
             </p>
             <div class="table-container">
                 <table>
                     <tr>
-                        <th>#</th>
-                        <th>Prompt Name</th>
-                        <th>Primary Agent</th>
-                        <th>Secondary Agent</th>
-                        <th>Status</th>
+                        <th>Aspect</th>
+                        <th>Assessment</th>
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td><b>Requirements Generation</b></td>
-                        <td>TicketAnalysisAgent<br><code>ticket_analysis.md</code></td>
-                        <td>DeepDiveAgent<br><code>deep_dive.md</code></td>
-                        <td style="color:#86efac;">✓ <b>Covered</b> — ticket analysis handles requirements + clarifying questions; deep dive covers codebase impact, edge cases, and incremental steps</td>
+                        <td><b>LLM call savings</b></td>
+                        <td>Reduces from 3 → 1 call for the analysis phase</td>
                     </tr>
                     <tr>
-                        <td>2</td>
-                        <td><b>HTML Generation Breakdown</b></td>
-                        <td>VisualReportAgent<br><code>visual_report.md</code></td>
-                        <td>—</td>
-                        <td style="color:#fcd34d;">⚠ <b>Partial</b> — agent exists but <code>visual_report.md</code> does not yet instruct incremental HTML building. The skeleton→styling→findings-one-at-a-time strategy from Prompt 2 must be embedded in the prompt</td>
+                        <td><b>Context window risk</b></td>
+                        <td style="color:#ff8080;"><b>HIGH</b> — injecting full codebase scan + ticket text + setup
+                            instructions into one prompt frequently exceeds 100k token limits on repos with 40+ files
+                        </td>
                     </tr>
                     <tr>
-                        <td>3</td>
-                        <td><b>Test Cases (JUnit 5)</b></td>
-                        <td>QualityAssuranceAgent<br><code>quality_assurance.md</code></td>
-                        <td>—</td>
-                        <td style="color:#fcd34d;">⚠ <b>Partial</b> — QA agent reviews code but does not yet generate <code>@Nested</code> / Given-When-Then test classes. Add test generation output section to <code>quality_assurance.md</code></td>
+                        <td><b>Debuggability</b></td>
+                        <td style="color:#ff8080;"><b>Reduced</b> — when output is incomplete or wrong, impossible to
+                            know if ticket parsing, codebase scan, or analysis logic failed
+                        </td>
                     </tr>
                     <tr>
-                        <td>4</td>
-                        <td><b>Code Review</b></td>
-                        <td>ReviewAgent<br><code>review.md</code></td>
-                        <td>QualityAssuranceAgent</td>
-                        <td style="color:#86efac;">✓ <b>Covered</b> — ReviewAgent handles the 5-category review (Quality, Correctness, Security, Performance, Maintainability) with severity labels matching Prompt 4 exactly</td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td><b>Commit Message Generator</b></td>
-                        <td>DeploymentAgent<br><code>deployment.md</code></td>
-                        <td>—</td>
-                        <td style="color:#fcd34d;">⚠ <b>Partial</b> — deployment.md generates a PR title but not per-commit messages in conventional format. Add commit message generation for each file group to <code>deployment.md</code></td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td><b>Documentation Comments</b></td>
-                        <td>ImplementationAgent<br><code>implementation.md</code></td>
-                        <td>—</td>
-                        <td style="color:#ff8080;">✗ <b>Gap</b> — ImplementationAgent generates code but not Javadoc. Add a documentation pass to <code>implementation.md</code>: after each generated method, also produce the Javadoc comment with @param, @return, and @throws</td>
-                    </tr>
-                    <tr>
-                        <td>7</td>
-                        <td><b>Refactoring Guide</b></td>
-                        <td>— (no agent)</td>
-                        <td>ImplementationAgent</td>
-                        <td style="color:#ff8080;">✗ <b>Gap</b> — no agent handles safe incremental refactoring. Create a dedicated <code>RefactoringAgent</code> + <code>refactoring.md</code>, triggered when the Jira ticket type is <i>Refactoring</i></td>
+                        <td><b>Human gate placement</b></td>
+                        <td>Gate 1 must still exist after this combined step regardless of merge</td>
                     </tr>
                 </table>
             </div>
-
-            <div class="note">
-                <b>Gap Summary:</b> Prompts 6 and 7 have no current agent coverage.
-                Prompts 2, 3, and 5 are partially covered but need their markdown prompt files updated.
-                Prompts 1 and 4 are fully handled by existing agents.
-            </div>
-
-            <h3>Actionable Markdown Prompt Updates</h3>
-
-            <div class="phase">
-                <span class="phase-num">A</span><b>Update <code>visual_report.md</code> — Incremental HTML Building</b>
-                <p>
-                    Add to instructions: <i>"Build the HTML page incrementally — first the skeleton structure,
-                    then apply styling, then add each finding one at a time. After each addition, verify all
-                    prior findings are still present and context is preserved before continuing."</i>
-                    This directly embeds the latency-mitigation strategy from Prompt 2.
-                </p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">B</span><b>Update <code>quality_assurance.md</code> — Add Test Generation</b>
-                <p>
-                    Add a second output section: <i>"For each reviewed class, generate a JUnit 5 test class using
-                    <code>@Nested</code> for grouped tests, <code>@DisplayName</code> for clarity, Given-When-Then
-                    pattern, AssertJ fluent assertions, and <code>@Mock</code> / <code>@InjectMocks</code> for
-                    dependencies. Use descriptive method names: <code>should_ReturnResult_When_ConditionMet()</code>."</i>
-                </p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">C</span><b>Update <code>deployment.md</code> — Per-Commit Conventional Messages</b>
-                <p>
-                    Add to instructions: <i>"For each logical file group, generate a conventional commit message:
-                    <code>&lt;type&gt;(&lt;scope&gt;): &lt;summary under 72 chars&gt;</code>. Types: feat | fix |
-                    refactor | test | docs | chore. Body explains WHY, not WHAT. Use imperative mood: 'add', 'fix',
-                    'update' — not 'added', 'fixed'."</i>
-                </p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">D</span><b>Update <code>implementation.md</code> — Javadoc Generation</b>
-                <p>
-                    Add to instructions: <i>"For each generated method or class, add the appropriate Javadoc comment.
-                    Document: what the method does (not how), each @param with type and valid values, @return type
-                    and meaning, @throws exceptions and conditions, and any non-obvious preconditions or side effects.
-                    Do not add comments for trivial getters/setters unless behavior is non-obvious."</i>
-                </p>
-            </div>
-
-            <div class="phase">
-                <span class="phase-num">E</span><b>Create <code>refactoring.md</code> + <code>RefactoringAgent.java</code></b>
-                <p>
-                    Create <code>resources/agents/refactoring.md</code> modeled on Prompt 7: safe incremental
-                    refactoring plan with before/after code, behavior preservation confirmation, and regression risk
-                    flags. Trigger from a new <code>RefactoringAgent</code> in the orchestrator when
-                    <code>ctx.getJiraTicket().issueType()</code> equals <i>"Refactoring"</i>.
-                    No changes to the main 8-agent pipeline for other ticket types.
-                </p>
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: RECOMMENDATIONS                    -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="design-recommendations">
-            <h2>14. Design Recommendations — Prioritized Action List</h2>
-
-            <div class="decision">
-                <div class="decision-label">Priority 1 — Immediate (Zero Risk, High Value)</div>
-                <h4>Update 4 markdown prompt files with content from 07-prompts.html</h4>
-                <ul>
-                    <li>Add incremental HTML building instructions to <code>visual_report.md</code></li>
-                    <li>Add JUnit 5 / Given-When-Then test generation section to <code>quality_assurance.md</code></li>
-                    <li>Add conventional commit message format and per-group generation to <code>deployment.md</code></li>
-                    <li>Add Javadoc generation pass instructions to <code>implementation.md</code></li>
-                </ul>
-                <p><b>Effort:</b> 1–2 hours. <b>Risk:</b> None — markdown-only changes, zero Java changes required.</p>
-            </div>
-
-            <div class="decision">
-                <div class="decision-label">Priority 2 — Short Term (Low Risk, High Value)</div>
-                <h4>Implement step-by-step commits + push-on-approval in DeploymentAgent</h4>
-                <ul>
-                    <li>Modify <code>runGitOps()</code> to call <code>gitClient.commitAll(message)</code> after each file group, where message is generated by the LLM per Prompt 5</li>
-                    <li>Move <code>gitClient.push()</code> and <code>gitHubClient.createPullRequest()</code> behind the final human gate</li>
-                    <li>Replace live PR comment polling with one-shot fetch triggered by a new <i>"Check for PR comments? [y/n]"</i> human gate</li>
-                </ul>
-                <p><b>Effort:</b> 3–4 hours. <b>Risk:</b> Low — GitClient API already supports all needed operations.</p>
-            </div>
-
-            <div class="decision">
-                <div class="decision-label">Priority 3 — Short Term (No Risk, Medium Value)</div>
-                <h4>Expose rerunAnalysis() in WorkflowOrchestrator</h4>
-                <ul>
-                    <li>Add <code>public void rerunAnalysis()</code> that re-executes Steps 3+4 (DeepDive → VisualReport) with a fresh codebase scan</li>
-                    <li>Resets the ReviewAgent iteration counter so the developer can do another round of browser-based feedback</li>
-                    <li>No agent class changes needed — purely an orchestrator method addition</li>
-                </ul>
-                <p><b>Effort:</b> 30 minutes. <b>Risk:</b> None.</p>
-            </div>
-
-            <div class="decision">
-                <div class="decision-label">Priority 4 — Medium Term (Low Risk, Medium Value)</div>
-                <h4>Create RefactoringAgent + refactoring.md (Prompt 7 coverage)</h4>
-                <ul>
-                    <li>Create <code>agents/RefactoringAgent.java</code> following the existing stateless agent pattern</li>
-                    <li>Create <code>resources/agents/refactoring.md</code> based directly on Prompt 7: step-by-step plan, before/after code, behavior preservation, regression risk flags</li>
-                    <li>Trigger conditionally in orchestrator based on Jira ticket <code>issueType</code> — no impact on non-refactoring workflows</li>
-                </ul>
-                <p><b>Effort:</b> 2–3 hours. <b>Risk:</b> Low — follows the established agent pattern with no orchestrator restructuring.</p>
-            </div>
-
-            <div class="decision">
-                <div class="decision-label">Priority 5 — Defer (Risky for Low Return)</div>
-                <h4>Do NOT fully merge Steps 1+2+3 or merge Steps 6+7 into single classes</h4>
-                <p>
-                    The context window risk of a 3-step analysis merge outweighs the 1-call savings.
-                    The current 1+2 merge is the optimal balance point.
-                    DeepDive must remain a separate call to safely inject large codebase context.
-                </p>
-                <p>
-                    For Steps 6+7: the pipeline approach (Implementation → batch QA) is already implemented
-                    and efficient. Per-file confirmation is better added as an <code>interactiveMode</code>
-                    flag on the orchestrator than as a class merge that multiplies LLM call count by the
-                    number of generated files.
-                </p>
-            </div>
-
-            <div class="note">
-                <b>Overall Assessment:</b> The v2 design has two strong proposals (reusable analysis re-run,
-                step-by-step deployment) and two over-aggressive ones (3-step analysis merge, per-file QA loop).
-                The 4 markdown prompt file updates deliver the most immediate value with zero risk.
-                Following this priority list captures all the real gains from v2 while avoiding the reliability
-                and cost pitfalls of the aggressive merges.
-            </div>
-        </section>
-
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: Q&A — LLM CACHING                  -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="qa-caching">
-            <h2>15. Q&amp;A — Can the LLM Remember the Codebase Between Calls?</h2>
-            <p>
-                <b>Short answer — No by default, but Yes with explicit caching support.</b>
-                LLMs are completely stateless; every API call is independent with zero memory of prior calls.
-                When <code>DeepDiveAgent</code> injects the 40-file codebase scan, that context lives only
-                inside that one request. The next agent call starts from zero.
-            </p>
-
-            <h3>Strategy A — Store Once in WorkflowContext, Re-inject Cheaply</h3>
-            <div class="finding">
-                <div class="file-tag">Recommended — Phase 1</div>
-                <p>
-                    <code>FileSystemUtil.readSourceFiles()</code> is the expensive part (filesystem I/O).
-                    The result is a plain String — store it once in <code>WorkflowContext</code> and every
-                    subsequent agent reads from there instead of re-scanning disk.
-                    Filesystem cost is paid once, but token cost is still paid on every LLM call that injects the snapshot.
-                </p>
-                <div class="code-block">// In WorkflowContext — add this field
-private String codebaseSnapshot;  // set once by DeepDiveAgent, reused by QA/Implementation
-
-// In DeepDiveAgent.execute()
-if (ctx.getCodebaseSnapshot() == null) {
-    ctx.setCodebaseSnapshot(
-        FileSystemUtil.readSourceFiles(ctx.getProjectRootPath(), EXTENSIONS, 40)
-    );
-}
-String prompt = MarkdownLoader.load("agents/deep_dive.md")
-    .replace("{{codebase_context}}", ctx.getCodebaseSnapshot());</div>
-            </div>
-
-            <h3>Strategy B — Anthropic Prompt Caching (~90% Token Cost Reduction)</h3>
-            <div class="finding">
-                <div class="file-tag">Phase 2</div>
-                <p>
-                    Anthropic supports server-side prompt caching via a <code>cache_control</code> marker.
-                    If you send the same large prefix (the codebase scan) in consecutive calls within 5 minutes,
-                    Anthropic caches it and charges ~10% of normal input token cost on cache hits.
-                </p>
-                <div class="decision">
-                    <div class="decision-label">Catch — LlmClient Interface Must Be Extended</div>
-                    <p>
-                        The current <code>LlmClient</code> interface only accepts a single <code>String prompt</code> —
-                        it has no way to pass cache markers. Extending it affects all three LLM implementations
-                        (Claude, OpenAI, Ollama). This is a Phase 2 enhancement.
-                    </p>
-                </div>
-                <div class="code-block">// Extended LlmClient interface (Phase 2)
-public interface LlmClient {
-    String completePrompt(String prompt);                          // current — unchanged
-    String completePrompt(String systemPrompt, String userPrompt,  // Phase 2 overload
-                          boolean cacheSystemPrompt);
-}
-
-// In ClaudeApiClient — mark codebase snapshot block as cacheable
-// POST body: "cache_control": {"type": "ephemeral"}
-// on the content block containing the codebase scan</div>
-            </div>
-
             <div class="insight">
-                <b>Impact on Steps 6+7:</b> Once the codebase snapshot is stored in WorkflowContext (Strategy A),
-                ImplementationAgent and QualityAssuranceAgent reuse it without re-scanning disk.
-                Add Strategy B (Prompt Caching) and the large codebase prefix costs ~90% less on every
-                QA and Implementation call — making Steps 6+7 genuinely cheap to re-run or iterate on.
+                <b>Verdict — Reject:</b> Keep the current 1+2 merge (TicketAnalysis + ProjectSetup) but
+                <b>keep DeepDive as a separate call</b>. DeepDive injects large codebase context via
+                <code>FileSystemUtil.readSourceFiles()</code> — combining it with ticket parsing risks context
+                overflow and degrades analysis quality. The 3→1 call savings is not worth the reliability loss.
             </div>
-        </section>
+        </div>
 
-        <hr class="separator">
-
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: Q&A — PROGRESS TRACKING            -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="qa-progress">
-            <h2>16. Q&amp;A — Can Agents Track Implementation Progress?</h2>
+        <h3>Proposal 2 — Make DeepDive and VisualReport Re-callable</h3>
+        <div class="finding">
+            <div class="file-tag">Reusability Proposal</div>
             <p>
-                <b>Yes — <code>WorkflowContext</code> is the right place.</b>
-                Currently it only stores final text outputs per step. Adding progress-tracking fields
-                enables the orchestrator to know exactly which files have been written, reviewed, and
-                committed — and resume from the correct point if something fails.
+                Upgrade <b>DeepDiveAgent</b> and <b>VisualReportAgent</b> from single-run to re-callable,
+                allowing a fresh analysis or updated HTML report to be triggered at any point —
+                for example, after adding new source files or refining requirements post-review.
             </p>
-
-            <div class="finding">
-                <div class="file-tag">WorkflowContext Extension</div>
-                <div class="code-block">// Add these fields to WorkflowContext
-private List&lt;String&gt; writtenFiles    = new ArrayList&lt;&gt;();  // files written to disk
-private List&lt;String&gt; pendingFiles    = new ArrayList&lt;&gt;();  // parsed but not yet written
-private Map&lt;String,String&gt; fileQaStatus = new LinkedHashMap&lt;&gt;(); // file → PASS/FAIL/PENDING
-private List&lt;String&gt; committedFiles  = new ArrayList&lt;&gt;();  // files in a local git commit
-private int implementationStep = 0;                          // which FILE: block we are on</div>
-            </div>
-
-            <h3>Which Agents Get This Capability</h3>
             <div class="table-container">
                 <table>
-                    <tr><th>Agent</th><th>Tracks</th><th>Why Needed</th></tr>
                     <tr>
-                        <td><code>ImplementationAgent</code></td>
-                        <td><code>writtenFiles</code>, <code>pendingFiles</code>, <code>implementationStep</code></td>
-                        <td>Already parses <code>// FILE:</code> blocks one-by-one; needs to record which succeeded so a retry skips already-written files</td>
+                        <th>Aspect</th>
+                        <th>Assessment</th>
                     </tr>
                     <tr>
-                        <td><code>QualityAssuranceAgent</code></td>
-                        <td><code>fileQaStatus</code> per file</td>
-                        <td>Per-file review result lets the orchestrator decide whether to proceed or re-implement specific failing files</td>
+                        <td><b>Architectural fit</b></td>
+                        <td style="color:#86efac;"><b>Excellent</b> — agents are already stateless. Re-calling them
+                            re-reads WorkflowContext and re-invokes the LLM with fresh codebase scan
+                        </td>
                     </tr>
                     <tr>
-                        <td><code>DeploymentAgent</code></td>
-                        <td><code>committedFiles</code></td>
-                        <td>Step-by-step commits require knowing what is already committed vs. pending push</td>
+                        <td><b>Implementation cost</b></td>
+                        <td style="color:#86efac;"><b>Very low</b> — no agent class changes needed. The orchestrator
+                            calls <code>deepDiveAgent.execute(ctx)</code> again which overwrites prior results in
+                            context
+                        </td>
                     </tr>
                     <tr>
-                        <td><code>WorkflowOrchestrator</code></td>
-                        <td>All of the above via <code>ctx</code></td>
-                        <td>Coordinator reads progress fields to decide: proceed, retry a specific file, or halt</td>
+                        <td><b>HTML report</b></td>
+                        <td><code>HtmlReportWriter</code> already overwrites <code>analysis_report.html</code> on each
+                            call — safe to re-run without leftover state
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>ReviewAgent loop</b></td>
+                        <td>Already implements up to 5 iteration rounds. Re-triggering DeepDive should reset the loop
+                            counter in ReviewAgent
+                        </td>
                     </tr>
                 </table>
             </div>
+            <div class="insight">
+                <b>Verdict — Approve:</b> Expose a <code>public void rerunAnalysis()</code> method in
+                <code>WorkflowOrchestrator</code> that re-executes Steps 3+4 (DeepDive → VisualReport)
+                and resets the ReviewAgent iteration counter. No agent class changes required —
+                purely an orchestrator-level addition.
+            </div>
+        </div>
 
+        <h3>Proposal 3 — Merge Steps 6 + 7 with Per-Step Approval</h3>
+        <div class="finding">
+            <div class="file-tag">Merge Proposal</div>
+            <p>
+                Merge <b>ImplementationAgent</b> and <b>QualityAssuranceAgent</b> so that code is
+                generated one file at a time, immediately QA-reviewed, and optionally approved by the
+                developer before moving to the next file.
+            </p>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Assessment</th>
+                    </tr>
+                    <tr>
+                        <td><b>Current behavior</b></td>
+                        <td>ImplementationAgent writes all <code>// FILE:</code> blocks to disk, then QA reads and
+                            reviews in batch
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Quality improvement</b></td>
+                        <td style="color:#86efac;"><b>Real</b> — per-file QA catches issues before they propagate into
+                            dependent files
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>LLM call cost</b></td>
+                        <td style="color:#ff8080;"><b>Multiplied</b> — one QA call per file vs. one batch. On 10
+                            generated files: 10 QA calls vs. 1 currently
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Optimal middle ground</b></td>
+                        <td>Per-file write with console preview (already partially done via <code>// FILE:</code>
+                            parsing), single batch QA after all files written
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="insight">
+                <b>Verdict — Partial Approve:</b> Implement the per-file write loop with console confirmation
+                per file in <code>ImplementationAgent</code> (already parses <code>// FILE:</code> blocks).
+                Keep QA as a single batch review after all files are written — this preserves efficiency.
+                Add an <code>interactiveMode</code> flag to the orchestrator for the per-file confirmation gate;
+                set it <code>false</code> in automated runs.
+            </div>
+        </div>
+
+        <h3>Proposal 4 — Step-by-Step Commits, Push+PR on Final Approval, PR Comment Listener</h3>
+        <div class="finding">
+            <div class="file-tag">Deployment Proposal</div>
+            <p>
+                Redesign <b>DeploymentAgent</b> to: (1) create one local commit per logical file group,
+                (2) push and open the PR only on final human approval,
+                (3) poll or listen for PR review comments and feed them back into the workflow.
+            </p>
+            <div class="table-container">
+                <table>
+                    <tr>
+                        <th>Aspect</th>
+                        <th>Assessment</th>
+                    </tr>
+                    <tr>
+                        <td><b>Step-by-step local commits</b></td>
+                        <td style="color:#86efac;"><b>Excellent</b> — aligns with conventional commit best practices;
+                            each logical group gets a meaningful commit message generated by the LLM
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Push on approval only</b></td>
+                        <td style="color:#86efac;"><b>Excellent</b> — critical safety gate.
+                            <code>GitClient.push()</code> must only be called after the final human confirmation
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>PR comment live listener</b></td>
+                        <td style="color:#fcd34d;"><b>Medium risk</b> — background polling requires thread management,
+                            GitHub rate limit handling, auth token refresh, and PR lifecycle events
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Comment-to-workflow feedback</b></td>
+                        <td>PR comments re-triggering ReviewAgent or ImplementationAgent requires a new cycle re-entry
+                            path not yet modeled in the orchestrator
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="insight">
+                <b>Verdict — Approve core, defer listener:</b> Implement step-by-step commits and
+                push-on-approval immediately — low risk, high value, GitClient already supports it.
+                For PR comments: implement as a <i>one-shot fetch</i> triggered by a new human gate
+                (<i>"Check for PR review comments? [y/n]"</i>), append to HTML report, and offer to
+                re-run the workflow from Step 3. Full async polling is a future Phase 2 enhancement.
+            </div>
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: PROMPT TO AGENT MAPPING            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="prompt-mapping">
+        <h2>13. Prompt Library → Agent Mapping (07-prompts.html)</h2>
+        <p>
+            The prompt library in <code>07-prompts.html</code> contains 7 hand-crafted prompts for
+            AI-assisted development. Each maps to one or more agents in the workflow. The table shows
+            current coverage and what needs updating.
+        </p>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>#</th>
+                    <th>Prompt Name</th>
+                    <th>Primary Agent</th>
+                    <th>Secondary Agent</th>
+                    <th>Status</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td><b>Requirements Generation</b></td>
+                    <td>TicketAnalysisAgent<br><code>ticket_analysis.md</code></td>
+                    <td>DeepDiveAgent<br><code>deep_dive.md</code></td>
+                    <td style="color:#86efac;">✓ <b>Covered</b> — ticket analysis handles requirements + clarifying
+                        questions; deep dive covers codebase impact, edge cases, and incremental steps
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td><b>HTML Generation Breakdown</b></td>
+                    <td>VisualReportAgent<br><code>visual_report.md</code></td>
+                    <td>—</td>
+                    <td style="color:#fcd34d;">⚠ <b>Partial</b> — agent exists but <code>visual_report.md</code> does
+                        not yet instruct incremental HTML building. The skeleton→styling→findings-one-at-a-time strategy
+                        from Prompt 2 must be embedded in the prompt
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td><b>Test Cases (JUnit 5)</b></td>
+                    <td>QualityAssuranceAgent<br><code>quality_assurance.md</code></td>
+                    <td>—</td>
+                    <td style="color:#fcd34d;">⚠ <b>Partial</b> — QA agent reviews code but does not yet generate <code>@Nested</code>
+                        / Given-When-Then test classes. Add test generation output section to
+                        <code>quality_assurance.md</code></td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td><b>Code Review</b></td>
+                    <td>ReviewAgent<br><code>review.md</code></td>
+                    <td>QualityAssuranceAgent</td>
+                    <td style="color:#86efac;">✓ <b>Covered</b> — ReviewAgent handles the 5-category review (Quality,
+                        Correctness, Security, Performance, Maintainability) with severity labels matching Prompt 4
+                        exactly
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td><b>Commit Message Generator</b></td>
+                    <td>DeploymentAgent<br><code>deployment.md</code></td>
+                    <td>—</td>
+                    <td style="color:#fcd34d;">⚠ <b>Partial</b> — deployment.md generates a PR title but not per-commit
+                        messages in conventional format. Add commit message generation for each file group to <code>deployment.md</code>
+                    </td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td><b>Documentation Comments</b></td>
+                    <td>ImplementationAgent<br><code>implementation.md</code></td>
+                    <td>—</td>
+                    <td style="color:#ff8080;">✗ <b>Gap</b> — ImplementationAgent generates code but not Javadoc. Add a
+                        documentation pass to <code>implementation.md</code>: after each generated method, also produce
+                        the Javadoc comment with @param, @return, and @throws
+                    </td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td><b>Refactoring Guide</b></td>
+                    <td>— (no agent)</td>
+                    <td>ImplementationAgent</td>
+                    <td style="color:#ff8080;">✗ <b>Gap</b> — no agent handles safe incremental refactoring. Create a
+                        dedicated <code>RefactoringAgent</code> + <code>refactoring.md</code>, triggered when the Jira
+                        ticket type is <i>Refactoring</i></td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="note">
+            <b>Gap Summary:</b> Prompts 6 and 7 have no current agent coverage.
+            Prompts 2, 3, and 5 are partially covered but need their markdown prompt files updated.
+            Prompts 1 and 4 are fully handled by existing agents.
+        </div>
+
+        <h3>Actionable Markdown Prompt Updates</h3>
+
+        <div class="phase">
+            <span class="phase-num">A</span><b>Update <code>visual_report.md</code> — Incremental HTML Building</b>
+            <p>
+                Add to instructions: <i>"Build the HTML page incrementally — first the skeleton structure,
+                then apply styling, then add each finding one at a time. After each addition, verify all
+                prior findings are still present and context is preserved before continuing."</i>
+                This directly embeds the latency-mitigation strategy from Prompt 2.
+            </p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">B</span><b>Update <code>quality_assurance.md</code> — Add Test Generation</b>
+            <p>
+                Add a second output section: <i>"For each reviewed class, generate a JUnit 5 test class using
+                <code>@Nested</code> for grouped tests, <code>@DisplayName</code> for clarity, Given-When-Then
+                pattern, AssertJ fluent assertions, and <code>@Mock</code> / <code>@InjectMocks</code> for
+                dependencies. Use descriptive method names: <code>should_ReturnResult_When_ConditionMet()</code>."</i>
+            </p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">C</span><b>Update <code>deployment.md</code> — Per-Commit Conventional Messages</b>
+            <p>
+                Add to instructions: <i>"For each logical file group, generate a conventional commit message:
+                <code>&lt;type&gt;(&lt;scope&gt;): &lt;summary under 72 chars&gt;</code>. Types: feat | fix |
+                refactor | test | docs | chore. Body explains WHY, not WHAT. Use imperative mood: 'add', 'fix',
+                'update' — not 'added', 'fixed'."</i>
+            </p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">D</span><b>Update <code>implementation.md</code> — Javadoc Generation</b>
+            <p>
+                Add to instructions: <i>"For each generated method or class, add the appropriate Javadoc comment.
+                Document: what the method does (not how), each @param with type and valid values, @return type
+                and meaning, @throws exceptions and conditions, and any non-obvious preconditions or side effects.
+                Do not add comments for trivial getters/setters unless behavior is non-obvious."</i>
+            </p>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">E</span><b>Create <code>refactoring.md</code> +
+            <code>RefactoringAgent.java</code></b>
+            <p>
+                Create <code>resources/agents/refactoring.md</code> modeled on Prompt 7: safe incremental
+                refactoring plan with before/after code, behavior preservation confirmation, and regression risk
+                flags. Trigger from a new <code>RefactoringAgent</code> in the orchestrator when
+                <code>ctx.getJiraTicket().issueType()</code> equals <i>"Refactoring"</i>.
+                No changes to the main 8-agent pipeline for other ticket types.
+            </p>
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: RECOMMENDATIONS                    -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="design-recommendations">
+        <h2>14. Design Recommendations — Prioritized Action List</h2>
+
+        <div class="decision">
+            <div class="decision-label">Priority 1 — Immediate (Zero Risk, High Value)</div>
+            <h4>Update 4 markdown prompt files with content from 07-prompts.html</h4>
+            <ul>
+                <li>Add incremental HTML building instructions to <code>visual_report.md</code></li>
+                <li>Add JUnit 5 / Given-When-Then test generation section to <code>quality_assurance.md</code></li>
+                <li>Add conventional commit message format and per-group generation to <code>deployment.md</code></li>
+                <li>Add Javadoc generation pass instructions to <code>implementation.md</code></li>
+            </ul>
+            <p><b>Effort:</b> 1–2 hours. <b>Risk:</b> None — markdown-only changes, zero Java changes required.</p>
+        </div>
+
+        <div class="decision">
+            <div class="decision-label">Priority 2 — Short Term (Low Risk, High Value)</div>
+            <h4>Implement step-by-step commits + push-on-approval in DeploymentAgent</h4>
+            <ul>
+                <li>Modify <code>runGitOps()</code> to call <code>gitClient.commitAll(message)</code> after each file
+                    group, where message is generated by the LLM per Prompt 5
+                </li>
+                <li>Move <code>gitClient.push()</code> and <code>gitHubClient.createPullRequest()</code> behind the
+                    final human gate
+                </li>
+                <li>Replace live PR comment polling with one-shot fetch triggered by a new <i>"Check for PR comments?
+                    [y/n]"</i> human gate
+                </li>
+            </ul>
+            <p><b>Effort:</b> 3–4 hours. <b>Risk:</b> Low — GitClient API already supports all needed operations.</p>
+        </div>
+
+        <div class="decision">
+            <div class="decision-label">Priority 3 — Short Term (No Risk, Medium Value)</div>
+            <h4>Expose rerunAnalysis() in WorkflowOrchestrator</h4>
+            <ul>
+                <li>Add <code>public void rerunAnalysis()</code> that re-executes Steps 3+4 (DeepDive → VisualReport)
+                    with a fresh codebase scan
+                </li>
+                <li>Resets the ReviewAgent iteration counter so the developer can do another round of browser-based
+                    feedback
+                </li>
+                <li>No agent class changes needed — purely an orchestrator method addition</li>
+            </ul>
+            <p><b>Effort:</b> 30 minutes. <b>Risk:</b> None.</p>
+        </div>
+
+        <div class="decision">
+            <div class="decision-label">Priority 4 — Medium Term (Low Risk, Medium Value)</div>
+            <h4>Create RefactoringAgent + refactoring.md (Prompt 7 coverage)</h4>
+            <ul>
+                <li>Create <code>agents/RefactoringAgent.java</code> following the existing stateless agent pattern</li>
+                <li>Create <code>resources/agents/refactoring.md</code> based directly on Prompt 7: step-by-step plan,
+                    before/after code, behavior preservation, regression risk flags
+                </li>
+                <li>Trigger conditionally in orchestrator based on Jira ticket <code>issueType</code> — no impact on
+                    non-refactoring workflows
+                </li>
+            </ul>
+            <p><b>Effort:</b> 2–3 hours. <b>Risk:</b> Low — follows the established agent pattern with no orchestrator
+                restructuring.</p>
+        </div>
+
+        <div class="decision">
+            <div class="decision-label">Priority 5 — Defer (Risky for Low Return)</div>
+            <h4>Do NOT fully merge Steps 1+2+3 or merge Steps 6+7 into single classes</h4>
+            <p>
+                The context window risk of a 3-step analysis merge outweighs the 1-call savings.
+                The current 1+2 merge is the optimal balance point.
+                DeepDive must remain a separate call to safely inject large codebase context.
+            </p>
+            <p>
+                For Steps 6+7: the pipeline approach (Implementation → batch QA) is already implemented
+                and efficient. Per-file confirmation is better added as an <code>interactiveMode</code>
+                flag on the orchestrator than as a class merge that multiplies LLM call count by the
+                number of generated files.
+            </p>
+        </div>
+
+        <div class="note">
+            <b>Overall Assessment:</b> The v2 design has two strong proposals (reusable analysis re-run,
+            step-by-step deployment) and two over-aggressive ones (3-step analysis merge, per-file QA loop).
+            The 4 markdown prompt file updates deliver the most immediate value with zero risk.
+            Following this priority list captures all the real gains from v2 while avoiding the reliability
+            and cost pitfalls of the aggressive merges.
+        </div>
+    </section>
+
+    <hr class="separator">
+
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: Q&A — LLM CACHING                  -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="qa-caching">
+        <h2>15. Q&amp;A — Can the LLM Remember the Codebase Between Calls?</h2>
+        <p>
+            <b>Short answer — No by default, but Yes with explicit caching support.</b>
+            LLMs are completely stateless; every API call is independent with zero memory of prior calls.
+            When <code>DeepDiveAgent</code> injects the 40-file codebase scan, that context lives only
+            inside that one request. The next agent call starts from zero.
+        </p>
+
+        <h3>Strategy A — Store Once in WorkflowContext, Re-inject Cheaply</h3>
+        <div class="finding">
+            <div class="file-tag">Recommended — Phase 1</div>
+            <p>
+                <code>FileSystemUtil.readSourceFiles()</code> is the expensive part (filesystem I/O).
+                The result is a plain String — store it once in <code>WorkflowContext</code> and every
+                subsequent agent reads from there instead of re-scanning disk.
+                Filesystem cost is paid once, but token cost is still paid on every LLM call that injects the snapshot.
+            </p>
+            <div class="code-block">// In WorkflowContext — add this field
+                private String codebaseSnapshot; // set once by DeepDiveAgent, reused by QA/Implementation
+
+                // In DeepDiveAgent.execute()
+                if (ctx.getCodebaseSnapshot() == null) {
+                ctx.setCodebaseSnapshot(
+                FileSystemUtil.readSourceFiles(ctx.getProjectRootPath(), EXTENSIONS, 40)
+                );
+                }
+                String prompt = MarkdownLoader.load("agents/deep_dive.md")
+                .replace("{{codebase_context}}", ctx.getCodebaseSnapshot());
+            </div>
+        </div>
+
+        <h3>Strategy B — Anthropic Prompt Caching (~90% Token Cost Reduction)</h3>
+        <div class="finding">
+            <div class="file-tag">Phase 2</div>
+            <p>
+                Anthropic supports server-side prompt caching via a <code>cache_control</code> marker.
+                If you send the same large prefix (the codebase scan) in consecutive calls within 5 minutes,
+                Anthropic caches it and charges ~10% of normal input token cost on cache hits.
+            </p>
             <div class="decision">
-                <div class="decision-label">Persistence Caveat</div>
+                <div class="decision-label">Catch — LlmClient Interface Must Be Extended</div>
                 <p>
-                    WorkflowContext is in-memory only. If the JVM exits between steps, progress is lost.
-                    For true resumable workflows, serialize WorkflowContext to JSON after each agent completes
-                    (e.g. <code>reports/{ticketId}/workflow_state.json</code>).
-                    This is a natural Phase 2 addition using Jackson's ObjectMapper.
+                    The current <code>LlmClient</code> interface only accepts a single <code>String prompt</code> —
+                    it has no way to pass cache markers. Extending it affects all three LLM implementations
+                    (Claude, OpenAI, Ollama). This is a Phase 2 enhancement.
                 </p>
             </div>
+            <div class="code-block">// Extended LlmClient interface (Phase 2)
+                public interface LlmClient {
+                String completePrompt(String prompt); // current — unchanged
+                String completePrompt(String systemPrompt, String userPrompt, // Phase 2 overload
+                boolean cacheSystemPrompt);
+                }
 
-            <div class="insight">
-                <b>Combined Effect:</b> With <code>codebaseSnapshot</code> stored once (Q1) and per-file progress
-                tracked (Q2), ImplementationAgent can be re-run on only the failing files, and
-                QualityAssuranceAgent can skip files already marked PASS — making the entire Steps 6+7 loop
-                genuinely incremental and context-efficient.
+                // In ClaudeApiClient — mark codebase snapshot block as cacheable
+                // POST body: "cache_control": {"type": "ephemeral"}
+                // on the content block containing the codebase scan
             </div>
-        </section>
+        </div>
 
-        <hr class="separator">
+        <div class="insight">
+            <b>Impact on Steps 6+7:</b> Once the codebase snapshot is stored in WorkflowContext (Strategy A),
+            ImplementationAgent and QualityAssuranceAgent reuse it without re-scanning disk.
+            Add Strategy B (Prompt Caching) and the large codebase prefix costs ~90% less on every
+            QA and Implementation call — making Steps 6+7 genuinely cheap to re-run or iterate on.
+        </div>
+    </section>
 
-        <!-- ═══════════════════════════════════════════ -->
-        <!-- SECTION: IMPLEMENTATION PLAN                -->
-        <!-- ═══════════════════════════════════════════ -->
-        <section id="impl-plan">
-            <h2>17. Implementation Plan — Ordered Action List</h2>
-            <p>Work top-to-bottom. Each item is independently committable.</p>
+    <hr class="separator">
 
-            <div class="phase">
-                <span class="phase-num">1</span><b>Update 4 markdown prompt files</b>
-                <span style="background:#2d2550;color:#a78bfa;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Markdown only — zero Java changes</span>
-                <ul style="margin-top:.6rem;">
-                    <li><code>visual_report.md</code> — add incremental HTML building: skeleton → styling → findings one-at-a-time with verification after each addition</li>
-                    <li><code>quality_assurance.md</code> — add JUnit 5 test generation: <code>@Nested</code>, Given-When-Then, AssertJ, Mockito <code>@Mock/@InjectMocks</code></li>
-                    <li><code>deployment.md</code> — add conventional commit message generation per file group: <code>&lt;type&gt;(&lt;scope&gt;): &lt;summary&gt;</code>, imperative mood, body explains WHY</li>
-                    <li><code>implementation.md</code> — add Javadoc generation pass: @param, @return, @throws, non-obvious preconditions, no trivial getter comments</li>
-                </ul>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: Q&A — PROGRESS TRACKING            -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="qa-progress">
+        <h2>16. Q&amp;A — Can Agents Track Implementation Progress?</h2>
+        <p>
+            <b>Yes — <code>WorkflowContext</code> is the right place.</b>
+            Currently it only stores final text outputs per step. Adding progress-tracking fields
+            enables the orchestrator to know exactly which files have been written, reviewed, and
+            committed — and resume from the correct point if something fails.
+        </p>
+
+        <div class="finding">
+            <div class="file-tag">WorkflowContext Extension</div>
+            <div class="code-block">// Add these fields to WorkflowContext
+                private List&lt;String&gt; writtenFiles = new ArrayList&lt;&gt;(); // files written to disk
+                private List&lt;String&gt; pendingFiles = new ArrayList&lt;&gt;(); // parsed but not yet written
+                private Map&lt;String,String&gt; fileQaStatus = new LinkedHashMap&lt;&gt;(); // file → PASS/FAIL/PENDING
+                private List&lt;String&gt; committedFiles = new ArrayList&lt;&gt;(); // files in a local git commit
+                private int implementationStep = 0; // which FILE: block we are on
             </div>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">2</span><b>Add <code>codebaseSnapshot</code> to WorkflowContext</b>
-                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
-                <p>Scan filesystem once; all agents reuse the cached string.</p>
-                <ul>
-                    <li>Add <code>private String codebaseSnapshot</code> + getter/setter to <code>WorkflowContext</code></li>
-                    <li>Update <code>DeepDiveAgent</code>: scan only if <code>ctx.getCodebaseSnapshot() == null</code></li>
-                    <li>Update <code>QualityAssuranceAgent</code>: use <code>ctx.getCodebaseSnapshot()</code> instead of calling <code>readSourceFiles()</code> again</li>
-                </ul>
-            </div>
+        <h3>Which Agents Get This Capability</h3>
+        <div class="table-container">
+            <table>
+                <tr>
+                    <th>Agent</th>
+                    <th>Tracks</th>
+                    <th>Why Needed</th>
+                </tr>
+                <tr>
+                    <td><code>ImplementationAgent</code></td>
+                    <td><code>writtenFiles</code>, <code>pendingFiles</code>, <code>implementationStep</code></td>
+                    <td>Already parses <code>// FILE:</code> blocks one-by-one; needs to record which succeeded so a
+                        retry skips already-written files
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>QualityAssuranceAgent</code></td>
+                    <td><code>fileQaStatus</code> per file</td>
+                    <td>Per-file review result lets the orchestrator decide whether to proceed or re-implement specific
+                        failing files
+                    </td>
+                </tr>
+                <tr>
+                    <td><code>DeploymentAgent</code></td>
+                    <td><code>committedFiles</code></td>
+                    <td>Step-by-step commits require knowing what is already committed vs. pending push</td>
+                </tr>
+                <tr>
+                    <td><code>WorkflowOrchestrator</code></td>
+                    <td>All of the above via <code>ctx</code></td>
+                    <td>Coordinator reads progress fields to decide: proceed, retry a specific file, or halt</td>
+                </tr>
+            </table>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">3</span><b>Add progress tracking fields to WorkflowContext</b>
-                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
-                <ul style="margin-top:.6rem;">
-                    <li>Add <code>writtenFiles</code>, <code>pendingFiles</code>, <code>committedFiles</code> (List&lt;String&gt;) with getters/setters</li>
-                    <li>Add <code>fileQaStatus</code> (Map&lt;String,String&gt;: file path → PASS/FAIL/PENDING)</li>
-                    <li>Update <code>ImplementationAgent</code>: populate <code>writtenFiles</code> / <code>pendingFiles</code> per <code>// FILE:</code> block</li>
-                    <li>Update <code>QualityAssuranceAgent</code>: write to <code>fileQaStatus</code>, skip files already marked PASS on re-run</li>
-                    <li>Update <code>DeploymentAgent</code>: populate <code>committedFiles</code> after each local commit</li>
-                </ul>
-            </div>
+        <div class="decision">
+            <div class="decision-label">Persistence Caveat</div>
+            <p>
+                WorkflowContext is in-memory only. If the JVM exits between steps, progress is lost.
+                For true resumable workflows, serialize WorkflowContext to JSON after each agent completes
+                (e.g. <code>reports/{ticketId}/workflow_state.json</code>).
+                This is a natural Phase 2 addition using Jackson's ObjectMapper.
+            </p>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">4</span><b>Redesign DeploymentAgent — step-by-step commits, push on approval only</b>
-                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
-                <ul style="margin-top:.6rem;">
-                    <li>After each file group is written, call <code>gitClient.commitAll(llmGeneratedMessage)</code> — one commit per logical group</li>
-                    <li>Move <code>gitClient.push()</code> and <code>gitHubClient.createPullRequest()</code> behind the final human approval gate</li>
-                    <li>Replace live PR comment polling with a one-shot fetch: new human gate <em>"Check for PR review comments? [y/n]"</em></li>
-                    <li>If comments fetched: append to HTML report and offer to re-run workflow from Step 3</li>
-                </ul>
-            </div>
+        <div class="insight">
+            <b>Combined Effect:</b> With <code>codebaseSnapshot</code> stored once (Q1) and per-file progress
+            tracked (Q2), ImplementationAgent can be re-run on only the failing files, and
+            QualityAssuranceAgent can skip files already marked PASS — making the entire Steps 6+7 loop
+            genuinely incremental and context-efficient.
+        </div>
+    </section>
 
-            <div class="phase">
-                <span class="phase-num">5</span><b>Expose <code>rerunAnalysis()</code> in WorkflowOrchestrator</b>
-                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
-                <ul style="margin-top:.6rem;">
-                    <li>Add <code>public void rerunAnalysis()</code> — clears <code>codebaseSnapshot</code> first for a fresh scan, then re-runs DeepDiveAgent → VisualReportAgent</li>
-                    <li>Reset ReviewAgent iteration counter to 0</li>
-                    <li>No agent class changes required</li>
-                </ul>
-            </div>
+    <hr class="separator">
 
-            <div class="phase">
-                <span class="phase-num">6</span><b>Create RefactoringAgent + <code>refactoring.md</code></b>
-                <span style="background:#2d2550;color:#a78bfa;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Markdown</span>
-                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.3rem;">Java</span>
-                <ul style="margin-top:.6rem;">
-                    <li>Create <code>resources/agents/refactoring.md</code>: step-by-step plan, before/after code, behavior preservation check, regression risk flags, no external interface changes</li>
-                    <li>Create <code>agents/RefactoringAgent.java</code> following the existing stateless agent pattern</li>
-                    <li>Trigger conditionally when <code>ctx.getJiraTicket().issueType().equalsIgnoreCase("Refactoring")</code></li>
-                </ul>
-            </div>
+    <!-- ═══════════════════════════════════════════ -->
+    <!-- SECTION: IMPLEMENTATION PLAN                -->
+    <!-- ═══════════════════════════════════════════ -->
+    <section id="impl-plan">
+        <h2>17. Implementation Plan — Ordered Action List</h2>
+        <p>Work top-to-bottom. Each item is independently committable.</p>
 
-            <div class="phase">
-                <span class="phase-num">7</span><b>WorkflowContext persistence — serialize to JSON on disk</b>
-                <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
-                <span style="background:#261f10;color:#f59e0b;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.3rem;">Architecture</span>
-                <ul style="margin-top:.6rem;">
-                    <li>Add <code>WorkflowContextSerializer</code> utility: <code>save(ctx, reportFolderPath)</code> writes <code>workflow_state.json</code> using Jackson ObjectMapper</li>
-                    <li>Add <code>load(reportFolderPath)</code> to restore context and resume from last completed step</li>
-                    <li>Call <code>save()</code> in WorkflowOrchestrator after each agent completes successfully</li>
-                    <li>Add <code>resumeWorkflow(String reportFolderPath)</code> entry point to the orchestrator</li>
-                </ul>
-            </div>
+        <div class="phase">
+            <span class="phase-num">1</span><b>Update 4 markdown prompt files</b>
+            <span style="background:#2d2550;color:#a78bfa;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Markdown only — zero Java changes</span>
+            <ul style="margin-top:.6rem;">
+                <li><code>visual_report.md</code> — add incremental HTML building: skeleton → styling → findings
+                    one-at-a-time with verification after each addition
+                </li>
+                <li><code>quality_assurance.md</code> — add JUnit 5 test generation: <code>@Nested</code>,
+                    Given-When-Then, AssertJ, Mockito <code>@Mock/@InjectMocks</code></li>
+                <li><code>deployment.md</code> — add conventional commit message generation per file group: <code>&lt;type&gt;(&lt;scope&gt;):
+                    &lt;summary&gt;</code>, imperative mood, body explains WHY
+                </li>
+                <li><code>implementation.md</code> — add Javadoc generation pass: @param, @return, @throws, non-obvious
+                    preconditions, no trivial getter comments
+                </li>
+            </ul>
+        </div>
 
-            <div class="phase">
-                <span class="phase-num">8</span><b>Extend LlmClient for Anthropic Prompt Caching</b>
-                <span style="background:#1a2635;color:#38bdf8;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Phase 2</span>
-                <p>~90% token cost reduction on repeated large codebase-context calls. Implement after Step 2 is stable and there is measurable API cost to justify the effort.</p>
-                <ul>
-                    <li>Extend <code>LlmClient</code>: add <code>completePrompt(String systemPrompt, String userPrompt, boolean cacheSystem)</code></li>
-                    <li>Implement in <code>ClaudeApiClient</code>: mark system prompt block with <code>"cache_control": {"type": "ephemeral"}</code></li>
-                    <li>Keep existing <code>completePrompt(String prompt)</code> unchanged — no breaking change for OpenAI/Ollama</li>
-                    <li>Update DeepDiveAgent, QualityAssuranceAgent, ImplementationAgent to use the caching overload</li>
-                </ul>
-            </div>
+        <div class="phase">
+            <span class="phase-num">2</span><b>Add <code>codebaseSnapshot</code> to WorkflowContext</b>
+            <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+            <p>Scan filesystem once; all agents reuse the cached string.</p>
+            <ul>
+                <li>Add <code>private String codebaseSnapshot</code> + getter/setter to <code>WorkflowContext</code>
+                </li>
+                <li>Update <code>DeepDiveAgent</code>: scan only if <code>ctx.getCodebaseSnapshot() == null</code></li>
+                <li>Update <code>QualityAssuranceAgent</code>: use <code>ctx.getCodebaseSnapshot()</code> instead of
+                    calling <code>readSourceFiles()</code> again
+                </li>
+            </ul>
+        </div>
 
-            <div class="note">
-                <b>Starting point:</b> Item 1 (markdown-only changes) and Item 2 (<code>codebaseSnapshot</code>)
-                can be done in any order and have zero risk. Items 3 and 4 build on Item 2.
-                Items 7 and 8 are Phase 2 — do not block on them.
-            </div>
-        </section>
+        <div class="phase">
+            <span class="phase-num">3</span><b>Add progress tracking fields to WorkflowContext</b>
+            <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+            <ul style="margin-top:.6rem;">
+                <li>Add <code>writtenFiles</code>, <code>pendingFiles</code>, <code>committedFiles</code> (List&lt;String&gt;)
+                    with getters/setters
+                </li>
+                <li>Add <code>fileQaStatus</code> (Map&lt;String,String&gt;: file path → PASS/FAIL/PENDING)</li>
+                <li>Update <code>ImplementationAgent</code>: populate <code>writtenFiles</code> /
+                    <code>pendingFiles</code> per <code>// FILE:</code> block
+                </li>
+                <li>Update <code>QualityAssuranceAgent</code>: write to <code>fileQaStatus</code>, skip files already
+                    marked PASS on re-run
+                </li>
+                <li>Update <code>DeploymentAgent</code>: populate <code>committedFiles</code> after each local commit
+                </li>
+            </ul>
+        </div>
 
-    </main>
+        <div class="phase">
+            <span class="phase-num">4</span><b>Redesign DeploymentAgent — step-by-step commits, push on approval
+            only</b>
+            <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+            <ul style="margin-top:.6rem;">
+                <li>After each file group is written, call <code>gitClient.commitAll(llmGeneratedMessage)</code> — one
+                    commit per logical group
+                </li>
+                <li>Move <code>gitClient.push()</code> and <code>gitHubClient.createPullRequest()</code> behind the
+                    final human approval gate
+                </li>
+                <li>Replace live PR comment polling with a one-shot fetch: new human gate <em>"Check for PR review
+                    comments? [y/n]"</em></li>
+                <li>If comments fetched: append to HTML report and offer to re-run workflow from Step 3</li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">5</span><b>Expose <code>rerunAnalysis()</code> in WorkflowOrchestrator</b>
+            <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+            <ul style="margin-top:.6rem;">
+                <li>Add <code>public void rerunAnalysis()</code> — clears <code>codebaseSnapshot</code> first for a
+                    fresh scan, then re-runs DeepDiveAgent → VisualReportAgent
+                </li>
+                <li>Reset ReviewAgent iteration counter to 0</li>
+                <li>No agent class changes required</li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">6</span><b>Create RefactoringAgent + <code>refactoring.md</code></b>
+            <span style="background:#2d2550;color:#a78bfa;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Markdown</span>
+            <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.3rem;">Java</span>
+            <ul style="margin-top:.6rem;">
+                <li>Create <code>resources/agents/refactoring.md</code>: step-by-step plan, before/after code, behavior
+                    preservation check, regression risk flags, no external interface changes
+                </li>
+                <li>Create <code>agents/RefactoringAgent.java</code> following the existing stateless agent pattern</li>
+                <li>Trigger conditionally when
+                    <code>ctx.getJiraTicket().issueType().equalsIgnoreCase("Refactoring")</code></li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">7</span><b>WorkflowContext persistence — serialize to JSON on disk</b>
+            <span style="background:#1a2a1e;color:#34d399;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Java</span>
+            <span style="background:#261f10;color:#f59e0b;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.3rem;">Architecture</span>
+            <ul style="margin-top:.6rem;">
+                <li>Add <code>WorkflowContextSerializer</code> utility: <code>save(ctx, reportFolderPath)</code> writes
+                    <code>workflow_state.json</code> using Jackson ObjectMapper
+                </li>
+                <li>Add <code>load(reportFolderPath)</code> to restore context and resume from last completed step</li>
+                <li>Call <code>save()</code> in WorkflowOrchestrator after each agent completes successfully</li>
+                <li>Add <code>resumeWorkflow(String reportFolderPath)</code> entry point to the orchestrator</li>
+            </ul>
+        </div>
+
+        <div class="phase">
+            <span class="phase-num">8</span><b>Extend LlmClient for Anthropic Prompt Caching</b>
+            <span style="background:#1a2635;color:#38bdf8;font-size:.75rem;padding:.1rem .6rem;border-radius:10px;margin-left:.5rem;">Phase 2</span>
+            <p>~90% token cost reduction on repeated large codebase-context calls. Implement after Step 2 is stable and
+                there is measurable API cost to justify the effort.</p>
+            <ul>
+                <li>Extend <code>LlmClient</code>: add <code>completePrompt(String systemPrompt, String userPrompt,
+                    boolean cacheSystem)</code></li>
+                <li>Implement in <code>ClaudeApiClient</code>: mark system prompt block with <code>"cache_control":
+                    {"type": "ephemeral"}</code></li>
+                <li>Keep existing <code>completePrompt(String prompt)</code> unchanged — no breaking change for
+                    OpenAI/Ollama
+                </li>
+                <li>Update DeepDiveAgent, QualityAssuranceAgent, ImplementationAgent to use the caching overload</li>
+            </ul>
+        </div>
+
+        <div class="note">
+            <b>Starting point:</b> Item 1 (markdown-only changes) and Item 2 (<code>codebaseSnapshot</code>)
+            can be done in any order and have zero risk. Items 3 and 4 build on Item 2.
+            Items 7 and 8 are Phase 2 — do not block on them.
+        </div>
+    </section>
+
+</main>
 </body>
 </html>

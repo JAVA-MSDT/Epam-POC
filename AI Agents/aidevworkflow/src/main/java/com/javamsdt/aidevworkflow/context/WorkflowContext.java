@@ -16,10 +16,14 @@ import java.util.Map;
 public class WorkflowContext {
 
     // ── External inputs (set before workflow starts) ───────────────
-    /** Jira ticket ID (e.g. "PROJ-123"). Used by TicketAnalysisAgent to fetch from Jira. */
+    /**
+     * Jira ticket ID (e.g. "PROJ-123"). Used by TicketAnalysisAgent to fetch from Jira.
+     */
     private String jiraTicketId;
 
-    /** The root path of the target project being analyzed (used by DeepDiveAgent for code scanning). */
+    /**
+     * The root path of the target project being analyzed (used by DeepDiveAgent for code scanning).
+     */
     private String projectRootPath;
 
     // ── Step 0: ticket input ───────────────────────────────────────
@@ -31,7 +35,9 @@ public class WorkflowContext {
     // ── Step 2 output: Project Setup ──────────────────────────────
     private String projectSetup;
 
-    /** Absolute path to the report folder created by ProjectSetupAgent. */
+    /**
+     * Absolute path to the report folder created by ProjectSetupAgent.
+     */
     private String reportFolderPath;
 
     // ── Step 3 output: Deep Dive Analysis ─────────────────────────
@@ -45,10 +51,14 @@ public class WorkflowContext {
     private String codebaseSnapshot;
 
     // ── Progress tracking (populated during Step 6 implementation) ─
-    /** Absolute paths of files successfully written to disk by ImplementationAgent. */
+    /**
+     * Absolute paths of files successfully written to disk by ImplementationAgent.
+     */
     private List<String> writtenFiles = new ArrayList<>();
 
-    /** Relative paths extracted from LLM response not yet written (decrements as files are written). */
+    /**
+     * Relative paths extracted from LLM response not yet written (decrements as files are written).
+     */
     private List<String> pendingFiles = new ArrayList<>();
 
     /**
@@ -57,16 +67,22 @@ public class WorkflowContext {
      */
     private Map<String, String> fileQaStatus = new LinkedHashMap<>();
 
-    /** Absolute paths of files included in a local git commit by DeploymentAgent. */
+    /**
+     * Absolute paths of files included in a local git commit by DeploymentAgent.
+     */
     private List<String> committedFiles = new ArrayList<>();
 
-    /** Monotonically increasing counter incremented each time ImplementationAgent writes a file. */
+    /**
+     * Monotonically increasing counter incremented each time ImplementationAgent writes a file.
+     */
     private int implementationStep = 0;
 
     // ── Step 4 output: Visual Analysis Report ─────────────────────
     private String visualReport;
 
-    /** Absolute path to the HTML report file written by VisualReportAgent. */
+    /**
+     * Absolute path to the HTML report file written by VisualReportAgent.
+     */
     private String htmlReportPath;
 
     // ── Step 5 output: Review & Clarification ─────────────────────
@@ -84,37 +100,78 @@ public class WorkflowContext {
     // ── Step 8 output: Deployment & Review ────────────────────────
     private String deploymentStatus;
 
-    /** Git feature branch created by DeploymentAgent; stored so the orchestrator can push after approval. */
+    /**
+     * Git feature branch created by DeploymentAgent; stored so the orchestrator can push after approval.
+     */
     private String featureBranchName;
 
-    /** URL of the GitHub PR created by DeploymentAgent. */
+    /**
+     * URL of the GitHub PR created by DeploymentAgent.
+     */
     private String prUrl;
 
-    /** Raw PR comments fetched from GitHub, used to update the HTML report. */
+    /**
+     * Raw PR comments fetched from GitHub, used to update the HTML report.
+     */
     private String prComments;
 
     // ── Getters & Setters ──────────────────────────────────────────
 
-    public String getJiraTicketId() { return jiraTicketId; }
-    public void setJiraTicketId(String jiraTicketId) { this.jiraTicketId = jiraTicketId; }
+    public String getJiraTicketId() {
+        return jiraTicketId;
+    }
 
-    public String getProjectRootPath() { return projectRootPath; }
-    public void setProjectRootPath(String projectRootPath) { this.projectRootPath = projectRootPath; }
+    public void setJiraTicketId(String jiraTicketId) {
+        this.jiraTicketId = jiraTicketId;
+    }
 
-    public String getReportFolderPath() { return reportFolderPath; }
-    public void setReportFolderPath(String reportFolderPath) { this.reportFolderPath = reportFolderPath; }
+    public String getProjectRootPath() {
+        return projectRootPath;
+    }
 
-    public String getHtmlReportPath() { return htmlReportPath; }
-    public void setHtmlReportPath(String htmlReportPath) { this.htmlReportPath = htmlReportPath; }
+    public void setProjectRootPath(String projectRootPath) {
+        this.projectRootPath = projectRootPath;
+    }
 
-    public String getFeatureBranchName() { return featureBranchName; }
-    public void setFeatureBranchName(String featureBranchName) { this.featureBranchName = featureBranchName; }
+    public String getReportFolderPath() {
+        return reportFolderPath;
+    }
 
-    public String getPrUrl() { return prUrl; }
-    public void setPrUrl(String prUrl) { this.prUrl = prUrl; }
+    public void setReportFolderPath(String reportFolderPath) {
+        this.reportFolderPath = reportFolderPath;
+    }
 
-    public String getPrComments() { return prComments; }
-    public void setPrComments(String prComments) { this.prComments = prComments; }
+    public String getHtmlReportPath() {
+        return htmlReportPath;
+    }
+
+    public void setHtmlReportPath(String htmlReportPath) {
+        this.htmlReportPath = htmlReportPath;
+    }
+
+    public String getFeatureBranchName() {
+        return featureBranchName;
+    }
+
+    public void setFeatureBranchName(String featureBranchName) {
+        this.featureBranchName = featureBranchName;
+    }
+
+    public String getPrUrl() {
+        return prUrl;
+    }
+
+    public void setPrUrl(String prUrl) {
+        this.prUrl = prUrl;
+    }
+
+    public String getPrComments() {
+        return prComments;
+    }
+
+    public void setPrComments(String prComments) {
+        this.prComments = prComments;
+    }
 
     public String getTicketText() {
         return ticketText;
@@ -188,8 +245,13 @@ public class WorkflowContext {
         this.qaReport = qaReport;
     }
 
-    public String getRefactoringPlan() { return refactoringPlan; }
-    public void setRefactoringPlan(String refactoringPlan) { this.refactoringPlan = refactoringPlan; }
+    public String getRefactoringPlan() {
+        return refactoringPlan;
+    }
+
+    public void setRefactoringPlan(String refactoringPlan) {
+        this.refactoringPlan = refactoringPlan;
+    }
 
     public String getDeploymentStatus() {
         return deploymentStatus;
@@ -199,20 +261,45 @@ public class WorkflowContext {
         this.deploymentStatus = deploymentStatus;
     }
 
-    public List<String> getWrittenFiles() { return writtenFiles; }
-    public void setWrittenFiles(List<String> writtenFiles) { this.writtenFiles = writtenFiles; }
+    public List<String> getWrittenFiles() {
+        return writtenFiles;
+    }
 
-    public List<String> getPendingFiles() { return pendingFiles; }
-    public void setPendingFiles(List<String> pendingFiles) { this.pendingFiles = pendingFiles; }
+    public void setWrittenFiles(List<String> writtenFiles) {
+        this.writtenFiles = writtenFiles;
+    }
 
-    public Map<String, String> getFileQaStatus() { return fileQaStatus; }
-    public void setFileQaStatus(Map<String, String> fileQaStatus) { this.fileQaStatus = fileQaStatus; }
+    public List<String> getPendingFiles() {
+        return pendingFiles;
+    }
 
-    public List<String> getCommittedFiles() { return committedFiles; }
-    public void setCommittedFiles(List<String> committedFiles) { this.committedFiles = committedFiles; }
+    public void setPendingFiles(List<String> pendingFiles) {
+        this.pendingFiles = pendingFiles;
+    }
 
-    public int getImplementationStep() { return implementationStep; }
-    public void setImplementationStep(int implementationStep) { this.implementationStep = implementationStep; }
+    public Map<String, String> getFileQaStatus() {
+        return fileQaStatus;
+    }
+
+    public void setFileQaStatus(Map<String, String> fileQaStatus) {
+        this.fileQaStatus = fileQaStatus;
+    }
+
+    public List<String> getCommittedFiles() {
+        return committedFiles;
+    }
+
+    public void setCommittedFiles(List<String> committedFiles) {
+        this.committedFiles = committedFiles;
+    }
+
+    public int getImplementationStep() {
+        return implementationStep;
+    }
+
+    public void setImplementationStep(int implementationStep) {
+        this.implementationStep = implementationStep;
+    }
 
     @Override
     public String toString() {
