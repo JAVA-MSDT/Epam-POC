@@ -7,7 +7,6 @@
 package com.javamsdt.masking.dto;
 
 
-import com.javamsdt.masking.maskme.condition.BalanceMaskingCondition;
 import com.javamsdt.masking.maskme.condition.PhoneMaskingCondition;
 import io.github.javamsdt.maskme.api.annotation.MaskMe;
 import io.github.javamsdt.maskme.implementation.condition.AlwaysMaskMeCondition;
@@ -29,7 +28,6 @@ public record UserDto(
         LocalDate birthDate,
         String genderId,
         String genderName,
-        @MaskMe(conditions = {BalanceMaskingCondition.class})
         BigDecimal balance,
         Instant createdAt
 ) {
