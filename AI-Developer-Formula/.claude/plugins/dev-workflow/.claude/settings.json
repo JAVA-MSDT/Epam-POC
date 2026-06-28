@@ -1,0 +1,52 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(*)",
+      "Write(*)",
+      "Edit(*)",
+      "Bash(curl:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git revert:*)",
+      "Bash(git log:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git stash:*)",
+      "Bash(mkdir:*)",
+      "Bash(cat:*)",
+      "Bash(echo:*)"
+    ]
+  },
+  "hooks": {
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo \"[$(date '+%Y-%m-%d %H:%M:%S')] Agent finished\""
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agent=$(cat | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('agent_name','unknown'))\" 2>/dev/null || echo 'unknown'); echo \"[$(date '+%Y-%m-%d %H:%M:%S')] >>> Subagent STARTED: $agent\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "agent=$(cat | python3 -c \"import sys,json; d=json.load(sys.stdin); print(d.get('agent_name','unknown'))\" 2>/dev/null || echo 'unknown'); echo \"[$(date '+%Y-%m-%d %H:%M:%S')] <<< Subagent FINISHED: $agent\""
+          }
+        ]
+      }
+    ]
+  }
+}
